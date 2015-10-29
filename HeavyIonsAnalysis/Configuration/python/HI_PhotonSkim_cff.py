@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 # HLT photon trigger
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 hltPhotonHI = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-hltPhotonHI.HLTPaths = ["HLT_HIPhoton20"]
+hltPhotonHI.HLTPaths = ["HLT_HISinglePhoton50_Eta1p5_v1"]
 hltPhotonHI.throw = False
 hltPhotonHI.andOr = True
 
@@ -45,7 +45,7 @@ photonSkimSequence = cms.Sequence(hltPhotonHI
                                   )
 
 # selection of valid vertex
-primaryVertexFilterForZEE = cms.EDFilter("VertexSelector",
+primaryVertexFilterForZEEPhoton = cms.EDFilter("VertexSelector",
     src = cms.InputTag("hiSelectedVertex"),
     cut = cms.string("!isFake && abs(z) <= 25 && position.Rho <= 2"), 
     filter = cms.bool(True),   # otherwise it won't filter the events
@@ -77,8 +77,8 @@ rechits = cms.Sequence(siPixelRecHits*siStripMatchedRecHits)
 electrons = cms.Sequence(rechits*hiPrimSeeds*hiElectronSequence)
 
 # Z->ee skim sequence
-zEESkimSequence = cms.Sequence(hltPhotonHI
-                               * primaryVertexFilterForZEE
+zEEPhotonSkimSequence = cms.Sequence(hltPhotonHI
+                               * primaryVertexFilterForZEEPhoton
                                * goodPhotonsForZEE
                                * twoPhotonFilter
                                * hiPhotonCleaningSequence
@@ -87,4 +87,3 @@ zEESkimSequence = cms.Sequence(hltPhotonHI
                                * photonPairCounter
                                * electrons
                                )
-

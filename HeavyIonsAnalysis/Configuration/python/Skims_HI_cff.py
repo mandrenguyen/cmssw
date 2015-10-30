@@ -27,15 +27,6 @@ SKIMStreamPhoton = cms.FilteredStream(
     dataTier = cms.untracked.string('AOD')
     )
 
-zEEPhotonSkimPath = cms.Path( zEEPhotonSkimSequence )
-SKIMStreamZEEPhoton = cms.FilteredStream(
-    responsible = 'HI PAG',
-    name = 'ZEEPHOTON',
-    paths = (zEEPhotonSkimPath),
-    content = skimAODContent.outputCommands,
-    selectEvents = cms.untracked.PSet(),
-    dataTier = cms.untracked.string('AOD')
-    )
 
 #####################
 

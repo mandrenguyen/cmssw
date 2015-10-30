@@ -19,3 +19,30 @@ SKIMStreamHighPtJet = cms.FilteredStream(
     dataTier = cms.untracked.string('RECO')
     )
 
+#####################
+
+from HeavyIonsAnalysis.Configuration.PP_ZMMSkim_cff import *
+zMMSkimPath = cms.Path( zMMSkimSequence )
+SKIMStreamHighPtJet = cms.FilteredStream(
+    responsible = 'HI PAG',
+    name = 'ZMM',
+    paths = (zMMSkimPath),
+    content = skimRECOContent.outputCommands,
+    selectEvents = cms.untracked.PSet(),
+    dataTier = cms.untracked.string('RECO')
+    )
+
+#####################
+
+from HeavyIonsAnalysis.Configuration.PP_OniaSkim_cff import *
+oniaSkimPath = cms.Path( oniaSkimSequence )
+SKIMStreamOnia = cms.FilteredStream(
+    responsible = 'HI PAG',
+    name = 'ONIA',
+    paths = (oniaSkimPath),
+    content = skimRECOContent.outputCommands,
+    selectEvents = cms.untracked.PSet(),
+    dataTier = cms.untracked.string('RECO')
+    )
+
+#####################

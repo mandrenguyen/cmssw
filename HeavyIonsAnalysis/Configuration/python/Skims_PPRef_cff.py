@@ -1,10 +1,14 @@
 import FWCore.ParameterSet.Config as cms
 
-from Configuration.EventContent.EventContent_cff import RECOEventContent
+from Configuration.EventContent.EventContent_cff import RECOEventContent, FEVTEventContent
 
 skimRECOContent = RECOEventContent.clone()
 skimRECOContent.outputCommands.append("drop *_MEtoEDMConverter_*_*")
 skimRECOContent.outputCommands.append("drop *_*_*_SKIM")
+
+skimFEVTContent = FEVTEventContent.clone()
+skimFEVTContent.outputCommands.append("drop *_MEtoEDMConverter_*_*")
+skimFEVTContent.outputCommands.append("drop *_*_*_SKIM")
 
 #####################
 
@@ -27,9 +31,9 @@ SKIMStreamHighPtJet = cms.FilteredStream(
     responsible = 'HI PAG',
     name = 'ZMM',
     paths = (zMMSkimPath),
-    content = skimRECOContent.outputCommands,
+    content = skimFEVTContent.outputCommands,
     selectEvents = cms.untracked.PSet(),
-    dataTier = cms.untracked.string('RECO')
+    dataTier = cms.untracked.string('RAW-RECO')
     )
 
 #####################

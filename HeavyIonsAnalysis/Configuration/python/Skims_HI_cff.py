@@ -49,9 +49,9 @@ SKIMStreamZMM = cms.FilteredStream(
     responsible = 'HI PAG',
     name = 'ZMM',
     paths = (zMMSkimPath),
-    content = skimAODContent.outputCommands,
+    content = skimFEVTContent.outputCommands,
     selectEvents = cms.untracked.PSet(),
-    dataTier = cms.untracked.string('AOD')
+    dataTier = cms.untracked.string('RAW-RECO')
     )
 
 #####################

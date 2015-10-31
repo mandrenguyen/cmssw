@@ -125,7 +125,7 @@ from HeavyIonsAnalysis.Configuration.HI_SingleTrackSkim_cff import *
 singleTrackSkimPath = cms.Path( singleTrackSkimSequence )
 SKIMStreamSingleTrack = cms.FilteredStream(
     responsible = 'HI PAG',
-    name = 'ONIACENTRAL',
+    name = 'SINGLETRACK',
     paths = (singleTrackSkimPath),
     content = skimAODContent.outputCommands,
     selectEvents = cms.untracked.PSet(),
@@ -133,3 +133,16 @@ SKIMStreamSingleTrack = cms.FilteredStream(
     )
 
 #####################     
+
+from HeavyIonsAnalysis.Configuration.HI_MinBiasSkim_cff import *
+minBiasSkimPath = cms.Path( minBiasSkimSequence )
+SKIMStreamMinBias = cms.FilteredStream(
+    responsible = 'HI PAG',
+    name = 'MINBIAS',
+    paths = (minBiasSkimPath),
+    content = skimAODContent.outputCommands,
+    selectEvents = cms.untracked.PSet(),
+    dataTier = cms.untracked.string('AOD')
+    )
+
+#####################      

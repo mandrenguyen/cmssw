@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 # HLT dimuon trigger
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 hltCentralOniaMMHI = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-hltCentralOniaMMHI.HLTPaths = ["HLT_HIL3DoubleMu0_OS_JpsiPsi*","HLT_HIL3DoubleMu0_OS_Upsilon*"] 
+hltCentralOniaMMHI.HLTPaths = ["HLT_HIL3DoubleMu0_OS_JpsiPsi_v*","HLT_HIL3DoubleMu0_OS_Upsilon_v*"] 
 hltCentralOniaMMHI.throw = False
 hltCentralOniaMMHI.andOr = True
 

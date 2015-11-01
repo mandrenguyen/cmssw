@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 # HLT jet trigger
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 hltJetHI = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-hltJetHI.HLTPaths = ["HLT_PuAK4CalobJet80Eta2p1_v1"]
+hltJetHI.HLTPaths = ["HLT_PuAK4CalobJet80Eta2p1_v*"]
 hltJetHI.throw = False
 hltJetHI.andOr = True
 

@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 # HLT photon trigger
 import HLTrigger.HLTfilters.hltHighLevel_cfi
 hltPhotonHI = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
-hltPhotonHI.HLTPaths = ["HLT_HISinglePhoton50_Eta1p5_v1"]
+hltPhotonHI.HLTPaths = ["HLT_HISinglePhoton50_Eta1p5_v*"]
 hltPhotonHI.throw = False
 hltPhotonHI.andOr = True
 

@@ -21,31 +21,14 @@ akPu4PFJetsL2L3 = cms.EDProducer('PFJetCorrectionProducer',
     correctors = cms.vstring('ak4PFL2L3')
     )
 
-# leading jet E_T filter
-jetEtFilter = cms.EDFilter("EtMinPFJetCountFilter",
+hiPtBJet = cms.EDFilter("PFJetSelector",
     src = cms.InputTag("akPu4PFJetsL2L3"),
-    etMin = cms.double(110.0),
-    minNumber = cms.uint32(1)
-    )
-
-# Offline jet selection - not activated
-leadingPFJet = cms.EDFilter( "LargestEtPFJetSelector",
-    src = cms.InputTag( "akPu4PFJetsL2L3" ),
-    filter = cms.bool( False ),
-    maxNumber = cms.uint32( 1 )
-    )
-
-goodLeadingJet = cms.EDFilter("PFJetSelector",
-    src = cms.InputTag("leadingPFJet"),
-    cut = cms.string("et > 150")
+    cut = cms.string("pt > 110")
     )
 
 # dijet skim sequence
 bJetSkimSequence = cms.Sequence(hltJetHI
                                  * primaryVertexFilterForBJets
-                                 * jetEtFilter
                                  * akPu4PFJetsL2L3
-                                 * jetEtFilter
-                                 * leadingPFJet
-                                 * goodLeadingJet
+                                 * hiPtBJet
                                  )

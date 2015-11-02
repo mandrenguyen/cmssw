@@ -146,3 +146,17 @@ SKIMStreamMinBias = cms.FilteredStream(
     )
 
 #####################      
+
+
+from HeavyIonsAnalysis.Configuration.HI_OniaUPCSkim_cff import *
+oniaUPCSkimPath = cms.Path( oniaUPCSkimSequence )
+SKIMStreamOniaUPC = cms.FilteredStream(
+    responsible = 'HI PAG',
+    name = 'ONIAUPC',
+    paths = (oniaUPCSkimPath),
+    content = skimFEVContent.outputCommands,
+    selectEvents = cms.untracked.PSet(),
+    dataTier = cms.untracked.string('RAW-RECO')
+    )
+
+#####################      

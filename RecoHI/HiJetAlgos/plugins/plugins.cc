@@ -3,6 +3,7 @@
 #include "RecoHI/HiJetAlgos/interface/ParametrizedSubtractor.h"
 #include "RecoHI/HiJetAlgos/interface/ReflectedIterator.h"
 #include "RecoHI/HiJetAlgos/interface/VoronoiSubtractor.h"
+#include "RecoHI/HiJetAlgos/interface/PuWithNtuple.h"
 
 #include "FWCore/PluginManager/interface/ModuleDef.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
@@ -14,6 +15,7 @@ DEFINE_EDM_PLUGIN(PileUpSubtractorFactory,MultipleAlgoIterator,"MultipleAlgoIter
 DEFINE_EDM_PLUGIN(PileUpSubtractorFactory,ParametrizedSubtractor,"ParametrizedSubtractor");
 DEFINE_EDM_PLUGIN(PileUpSubtractorFactory,ReflectedIterator,"ReflectedIterator");
 DEFINE_EDM_PLUGIN(PileUpSubtractorFactory,VoronoiSubtractor,"VoronoiSubtractor");
+DEFINE_EDM_PLUGIN(PileUpSubtractorFactory,PuWithNtuple,"PuWithNtuple");
 
 
 

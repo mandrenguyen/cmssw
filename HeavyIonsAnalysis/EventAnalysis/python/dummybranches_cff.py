@@ -277,6 +277,11 @@ def addHLTdummybranches( process):
       ,"HLT_EcalCalibration_v1"
       ,"HLT_HcalCalibration_v1"
       ,"HLT_HIPhysicsNoZS_v1"
+      ,"HLT_HIL1MinimumBiasHF2AND_v1"
+      ,"HLT_HIL1Centralityext30100MinimumumBiasHF2AND_v1"
+      ,"HLT_HIL1Centralityext30100HFplusANDminusTH0_v1"
+      ,"HLT_HIL1Centralityext50100HFplusANDminusTH0_v1"
+      ,"HLT_HIL1Centralityext70100HFplusANDminusTH0_v1"
       ])
 
 def addHLTdummybranchesForPP( process):

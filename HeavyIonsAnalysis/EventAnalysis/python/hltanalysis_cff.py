@@ -1,6 +1,5 @@
 import FWCore.ParameterSet.Config as cms
 
-from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import *
 from HLTrigger.HLTanalyzers.HLTBitAnalyser_cfi import *
 
 hltbitanalysis.UseTFileService = cms.untracked.bool(True)
@@ -19,10 +18,8 @@ hltanalysis = hltbitanalysis.clone(
 
 skimanalysis = cms.EDAnalyzer("FilterAnalyzer",
                               hltresults = cms.InputTag("TriggerResults","","HiForest"),
-                              superFilters = cms.vstring(""),
-                              useHBHENoiseProducer = cms.bool(True),
-                              HBHENoiseProducer = cms.string("HBHENoiseFilterResultProducer")
-                              )
+                              superFilters = cms.vstring("")
+)
 
 
 

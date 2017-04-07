@@ -25,8 +25,9 @@ process.HiForest.HiForestVersion = cms.string(version)
 
 process.source = cms.Source("PoolSource",
                             fileNames = cms.untracked.vstring(
-                                '/store/data/Run2015E/HighPtJet80/AOD/PromptReco-v1/000/262/173/00000/3E8293B5-9894-E511-90E8-02163E011FA1.root'                        
-                                #'/store/data/Run2015E/HighPtJet80/AOD/PromptReco-v1/000/262/272/00000/803A4255-7696-E511-B178-02163E0142DD.root'
+        '/store/data/Run2015E/DoubleMu/AOD/PromptReco-v1/000/262/163/00000/100EECED-D491-E511-8BBA-02163E013451.root'
+        #'/store/data/Run2015E/HighPtJet80/AOD/PromptReco-v1/000/262/173/00000/3E8293B5-9894-E511-90E8-02163E011FA1.root'                        
+        #'/store/data/Run2015E/HighPtJet80/AOD/PromptReco-v1/000/262/272/00000/803A4255-7696-E511-B178-02163E0142DD.root'
                             )
 )
 
@@ -75,6 +76,7 @@ from RecoJets.JetProducers.ak5PFJets_cfi import ak5PFJets
 ak5PFJets.doAreaFastjet = True
 process.ak5PFJets = ak5PFJets
 process.ak3PFJets = ak5PFJets.clone(rParam = 0.3)
+process.ak4PFJets = ak5PFJets.clone(rParam = 0.4)
 
 process.load('HeavyIonsAnalysis.JetAnalysis.jets.ak4CaloJetSequence_pp_data_cff')
 
@@ -90,13 +92,14 @@ process.highPurityTracks = cms.EDFilter("TrackSelector",
 
 
 process.jetSequences = cms.Sequence(
-    process.ak3PFJets +
-    process.ak5PFJets +
+    #process.ak3PFJets +
+    process.ak4PFJets +
+    #process.ak5PFJets +
     process.highPurityTracks +
-    process.ak4CaloJetSequence +
-    process.ak3PFJetSequence +
-    process.ak4PFJetSequence +
-    process.ak5PFJetSequence
+    #process.ak4CaloJetSequence +
+    #process.ak3PFJetSequence +
+    process.ak4PFJetSequence #+
+    #process.ak5PFJetSequence
     )
 
 # How to turn on the jet constituents 
@@ -181,22 +184,30 @@ process.load("HeavyIonsAnalysis.VectorBosonAnalysis.tupelSequence_pp_cff")
 
 #####################################################################################
 
+
+from HiAnalysis.HiOnia.oniaTreeAnalyzer_cff import oniaTreeAnalyzer
+oniaTreeAnalyzer(process, isPbPb=False, isMC=False, applyEventSel=False, muonSelection="GlbTrk", outputFileName="HiForestAOD.root")
+
 #########################
 # Main analysis list
 #########################
 
+process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
+process.ak4PFJets.src = 'pfCandComposites'
 
 process.ana_step = cms.Path(process.hltanalysis *
 			    process.hltobject *
                             process.hiEvtAnalyzer *
+                            process.oniaTreeAna *
+                            process.pfCandComposites *
                             process.jetSequences +
-                            process.egmGsfElectronIDSequence + #Should be added in the path for VID module
-                            process.ggHiNtuplizer +
-                            process.ggHiNtuplizerGED +
-                            process.pfcandAnalyzer +
-                            process.HiForest +
-                            process.trackSequencesPP +
-                            process.tupelPatSequence
+                            #process.egmGsfElectronIDSequence + #Should be added in the path for VID module
+                            #process.ggHiNtuplizer +
+                            #process.ggHiNtuplizerGED +
+                            #process.pfcandAnalyzer +
+                            process.HiForest #+
+                            #process.trackSequencesPP +
+                            #process.tupelPatSequence
                             )
 
 #####################################################################################

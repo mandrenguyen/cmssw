@@ -26,7 +26,8 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
                             duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
                             fileNames = cms.untracked.vstring(
-                                "root://eoscms.cern.ch//eos/cms/store/cmst3/group/hintt/CMSSW_7_5_8_patch2/TTbar/RECO/Events_1.root"
+        #"root://eoscms.cern.ch//eos/cms/store/cmst3/group/hintt/CMSSW_7_5_8_patch2/TTbar/RECO/Events_1.root"
+                                '/store/user/mnguyen//ppBjet/Pythia6_TuneZ2_5020GeV/Pythia6_bjet80_TuneZ2_5020GeV_RECO_v2/160205_072451/0000/step3_99.root'
                             )
 )
 
@@ -217,3 +218,18 @@ process.pVertexFilterCutEandG = cms.Path(process.pileupVertexFilterCutEandG)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
+process.akSoftDrop4PFPatJetFlavourAssociation.jets="ak4PFJets"
+process.akSoftDrop4PFPatJetFlavourAssociation.groomedJets=cms.InputTag("akSoftDrop4PFJets")
+process.akSoftDrop4PFPatJetFlavourAssociation.subjets= cms.InputTag('akSoftDrop4PFJets','SubJets')
+process.akSoftDrop4PFJets.useSoftDrop = True
+process.akSoftDrop4PFpatJetsWithBtagging.getJetMCFlavour = cms.bool(False)
+
+process.printEventAKSoftDrop4PFJets = cms.EDAnalyzer("printJetFlavourInfo",
+                                                     jetFlavourInfos    = cms.InputTag("akSoftDrop4PFPatJetFlavourAssociation"),
+                                                     subjetFlavourInfos = cms.InputTag("akSoftDrop4PFPatJetFlavourAssociation","SubJets"),
+                                                     groomedJets        = cms.InputTag("akSoftDrop4PFJets"),
+                                                     )
+
+
+process.ana_step *= process.printEventAKSoftDrop4PFJets
+

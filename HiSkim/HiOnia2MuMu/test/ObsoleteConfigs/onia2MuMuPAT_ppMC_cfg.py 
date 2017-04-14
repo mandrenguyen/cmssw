@@ -1,0 +1,63 @@
+# for the list of used tags please see:
+# https://twiki.cern.ch/twiki/bin/view/CMS/Onia2MuMuSamples
+
+import FWCore.ParameterSet.Config as cms
+
+# set up process
+process = cms.Process("Onia2MuMuPAT")
+
+process.load('Configuration.StandardSequences.Services_cff')
+process.load('FWCore.MessageService.MessageLogger_cfi')
+process.load("Configuration.StandardSequences.Geometry_cff")
+process.load("Configuration.StandardSequences.MagneticField_38T_cff")
+
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+process.GlobalTag.globaltag = 'MCRUN2_74_V9::All'
+
+# produce missing l1extraParticles
+process.load('Configuration.StandardSequences.L1Reco_cff')
+process.L1Reco_step = cms.Path(process.l1extraParticles)
+
+# HLT dimuon trigger
+import HLTrigger.HLTfilters.hltHighLevel_cfi
+process.hltOniaHI = HLTrigger.HLTfilters.hltHighLevel_cfi.hltHighLevel.clone()
+process.hltOniaHI.HLTPaths = ["HLT_HIL1DoubleMu0_HighQ_v1",
+                              "HLT_HIL2Mu3_NHitQ_v1",
+                              "HLT_HIL2Mu7_v1","HLT_HIL2Mu15_v1",
+                              "HLT_HIL2DoubleMu0_NHitQ_v1",
+                              "HLT_HIL2DoubleMu3_v1",
+                              "HLT_HIL3Mu3_v1",
+                              "HLT_HIL3DoubleMuOpen_v1","HLT_HIL3DoubleMuOpen_Mgt2_OS_NoCowboy_v1"
+                              ]
+process.hltOniaHI.throw = False
+process.hltOniaHI.andOr = True
+
+from HiSkim.HiOnia2MuMu.onia2MuMuPAT_cff import *
+
+onia2MuMuPAT(process, GlobalTag=process.GlobalTag.globaltag, MC=True, HLT="HLT", Filter=False)
+
+process.onia2MuMuPatGlbGlb.addMuonlessPrimaryVertex = False
+process.onia2MuMuPatGlbGlb.resolvePileUpAmbiguity = False
+process.onia2MuMuPatGlbGlb.primaryVertexTag = cms.InputTag("offlinePrimaryVertices"),
+
+process.source.fileNames = cms.untracked.vstring(
+    '/store/relval/CMSSW_7_4_0/RelValUpsilon1SToMuMu_13/GEN-SIM-RECO/MCRUN2_74_V7D_pxBest_gs7115-v1/00000/80DBF108-F5E6-E411-A9C2-002618943910.root'
+
+    )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.outOnia2MuMu.fileName = cms.untracked.string( 'onia2MuMuPAT_MC.root' )
+process.outTnP.fileName = cms.untracked.string( 'tnp_MC.root' )
+
+# add event plane information
+process.outTnP.outputCommands.extend(cms.untracked.vstring('keep *_generator_*_*'))
+
+process.e = cms.EndPath(process.outOnia2MuMu)
+
+
+process.patMuonSequence = cms.Sequence(#process.genMuons *
+                                       process.patMuonsWithTriggerSequence)
+
+process.schedule = cms.Schedule(process.Onia2MuMuPAT,
+process.e)
+
+

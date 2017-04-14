@@ -163,7 +163,8 @@ class bTaggers:
             rParam = rParam,
             bHadrons = cms.InputTag(jetname+"PatJetPartons","bHadrons"),
             cHadrons = cms.InputTag(jetname+"PatJetPartons","cHadrons"),
-            partons = cms.InputTag(jetname+"PatJetPartons","partons")
+            partons = cms.InputTag(jetname+"PatJetPartons","algorithmicPartons"),
+            leptons = cms.InputTag(jetname+"PatJetPartons","leptons"),
             )
 
         self.PatJetFlavourId               = cms.Sequence(self.PatJetPartons*self.PatJetFlavourAssociation)

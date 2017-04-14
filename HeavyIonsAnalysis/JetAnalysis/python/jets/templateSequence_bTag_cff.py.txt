@@ -83,9 +83,9 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJE
 ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeSoftPFMuonByPtBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PositiveSoftPFMuonByPtBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy)
-#Not working with our PU sub, but keep it here for reference
-#ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociation
-#ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartons*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation)
+#Not working with our PU sub
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociation
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartons*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation)
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingIP       = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos *
             (ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighEffBJetTags +
@@ -139,10 +139,11 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_patJetsWithBtagging = patJets.clone(jetSource = cms
         genJetMatch          = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_match"),
         genPartonMatch       = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_parton"),
         jetCorrFactorsSource = cms.VInputTag(cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_corr")),
-        JetPartonMapSource   = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy"),
+        #JetPartonMapSource   = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy"),
+        JetPartonMapSource   = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation"),
 	JetFlavourInfoSource   = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation"),
         trackAssociationSource = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex"),
-	useLegacyJetMCFlavour = True,
+	useLegacyJetMCFlavour = False,
         discriminatorSources = cms.VInputTag(cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighEffBJetTags"),
             cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighPurBJetTags"),
             cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSecondaryVertexBJetTags"),
@@ -215,9 +216,9 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_JetSequence_mc = cms.Sequence(
                                                   *
                                                   #ALGO_SUB_GROOM_RADIUS_OBJECT_JetID
                                                   #*
-                                                  ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy
+                                                  #ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy  # works for PbPb
                                                   #*
-			                          #ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId  # Use legacy algo till PU implemented
+			                          ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId  # doesn't work for PbPb yet
                                                   *
                                                   ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex
                                                   *

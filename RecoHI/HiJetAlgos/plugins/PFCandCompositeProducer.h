@@ -20,6 +20,7 @@
 
 #include "TMath.h"
 #include "TRandom.h"
+#include <string>
 
 
 
@@ -32,11 +33,15 @@ class PFCandCompositeProducer : public edm::EDProducer {
   virtual void beginJob() ;
   virtual void produce(edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
+  bool selJpsiCand(const pat::CompositeCandidate* jpsiCand);
+  bool selMuonCand(const pat::CompositeCandidate* jpsiCand, const char* muonName);
   
   // ----------member data ---------------------------
 
   edm::EDGetTokenT<reco::PFCandidateCollection> pfCandToken_;
   edm::EDGetTokenT<pat::CompositeCandidateCollection> compositeToken_;
+  std::string jpsiTriggFilter_;
+  bool isHI_;
 
  
   

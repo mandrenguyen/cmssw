@@ -38,6 +38,7 @@
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/VertexReco/interface/Vertex.h"
 
 #include "TMath.h"
 
@@ -62,6 +63,8 @@ PFCandCompositeProducer::PFCandCompositeProducer(const edm::ParameterSet& iConfi
   pfCandToken_ = consumes<reco::PFCandidateCollection>(iConfig.getParameter<edm::InputTag>("pfCandTag"));
   compositeToken_ = consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("compositeTag"));
   //PI = TMath::Pi();
+  jpsiTriggFilter_ = iConfig.getParameter<std::string>("jpsiTrigFilter");
+  isHI_ = iConfig.getParameter<bool>("isHI");
   
   produces<reco::PFCandidateCollection>();
 
@@ -111,8 +114,8 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
      
      const pat::CompositeCandidate* cand = &(*it);
      
-     // apply some selections on the j/psi candidates here (FIXME)     
-     if(cand->pt()>6. && cand->mass() > 2.){
+     // apply some selections on the j/psi candidates here
+     if( selJpsiCand(cand) && selMuonCand(cand,"muon1") && selMuonCand(cand,"muon2") ){
        selectedComposites.push_back(true);
        nSelComposites++;
      }
@@ -220,10 +223,65 @@ PFCandCompositeProducer::endJob() {
 }
 
 
+bool
+PFCandCompositeProducer::selJpsiCand(const pat::CompositeCandidate* jpsiCand){
+  bool isSelected = true;
+  
+  double vtxProb = jpsiCand->userFloat("vProb");
+  
+  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(jpsiCand->daughter("muon1"));
+  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(jpsiCand->daughter("muon2"));
+  
+  bool isOS = (muon1->charge() == muon2->charge()) ? true : false;
+  
+  isSelected = isSelected && (jpsiCand->pt() > 6. && fabs(jpsiCand->rapidity()) < 2.4); // Kinematic cuts
+  isSelected = isSelected && (jpsiCand->mass() > 2. && jpsiCand->mass() < 4.); // Mass cuts
+  isSelected = isSelected && (vtxProb > 0.01); // Vertex probability cut
+  isSelected = isSelected && isOS; // Opposite sign cut
+  
+  return isSelected;
+}
 
-
-
-
+bool
+PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, const char* muonName){
+  bool isSelected = true;
+  
+  const pat::Muon* muon = dynamic_cast<const pat::Muon*>(jpsiCand->daughter(muonName));
+  
+  math::XYZPoint RefVtx;
+  if (isHI_) RefVtx = (*jpsiCand->userData<reco::Vertex>("PVwithmuons")).position();
+  else RefVtx = (*jpsiCand->userData<reco::Vertex>("muonlessPV")).position();
+  
+  reco::TrackRef iTrack = muon->innerTrack();
+  
+  const pat::TriggerObjectStandAloneCollection muHLTMatchesFilter = muon->triggerObjectMatchesByFilter(jpsiTriggFilter_);
+  
+  bool isTriggerMatched = muHLTMatchesFilter.size() > 0;
+  bool isGoodMuon = muon::isGoodMuon(*muon, muon::TMOneStationTight);
+//  bool isGlobalMuon = muon->isGlobalMuon();
+  bool isTrackerMuon = muon->isTrackerMuon();
+  int nTrkWMea = iTrack->hitPattern().trackerLayersWithMeasurement();
+  int nPixWMea = iTrack->hitPattern().pixelLayersWithMeasurement();
+  double dxy = fabs(iTrack->dxy(RefVtx));
+  double dz = fabs(iTrack->dz(RefVtx));
+  double eta = muon->eta();
+  double pt = muon->pt();
+  bool isMuonInAcc = (fabs(eta) < 2.4 && ((fabs(eta) < 1.2 && pt >= 3.5) ||
+                     (1.2 <= fabs(eta) && fabs(eta) < 2.1 && pt >= 5.77-1.89*fabs(eta)) ||
+                     (2.1 <= fabs(eta) && pt >= 1.8)));
+  
+  isSelected = isSelected && isMuonInAcc; // Acceptance cut
+  isSelected = isSelected && isTrackerMuon; // Is tracker muon
+//  isSelected = isSelected && isGlobalMuon; // Is global muon
+  isSelected = isSelected && isTriggerMatched; // Trigger matching
+  isSelected = isSelected && isGoodMuon; // Is good muon
+  isSelected = isSelected && (nTrkWMea > 5); // Minimum tracking layers with measurement
+  isSelected = isSelected && (nPixWMea > 0); // Minimum pixel layers with measurement
+  isSelected = isSelected && (dxy < 0.3); // Maximum distance to PV in xy
+  isSelected = isSelected && (dz < 20); // Maximum distance to PV in z
+  
+  return isSelected;
+}
 
     //define this as a plug-in
 DEFINE_FWK_MODULE(PFCandCompositeProducer);

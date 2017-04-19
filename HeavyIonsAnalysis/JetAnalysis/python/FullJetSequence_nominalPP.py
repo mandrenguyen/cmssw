@@ -5,6 +5,7 @@ import FWCore.ParameterSet.Config as cms
 from RecoJets.JetProducers.ak5PFJets_cfi import ak5PFJets
 ak5PFJets.doAreaFastjet = True
 ak3PFJets = ak5PFJets.clone(rParam = 0.3)
+ak4PFJets = ak5PFJets.clone(rParam = 0.4)
 from RecoJets.JetProducers.ak5GenJets_cfi import ak5GenJets
 ak3GenJets = ak5GenJets.clone(rParam = 0.3)
 ak4GenJets = ak5GenJets.clone(rParam = 0.4)
@@ -67,22 +68,23 @@ highPurityTracks = cms.EDFilter("TrackSelector",
 jetSequences = cms.Sequence(
     myPartons +
     genParticlesForJets +
-    ak3GenJets +
+    #ak3GenJets +
     ak4GenJets +
-    ak5GenJets +
-    ak3PFJets +
-    ak5PFJets +
-    akSoftDrop4PFJets +
-    akSoftDrop5PFJets +
-    akFilter4PFJets +
-    akFilter5PFJets +
-    akSoftDrop4GenJets +
-    akSoftDrop5GenJets +
+    #ak5GenJets +
+    #ak3PFJets +
+    ak4PFJets +
+    #ak5PFJets +
+    #akSoftDrop4PFJets +
+    #akSoftDrop5PFJets +
+    #akFilter4PFJets +
+    #akFilter5PFJets +
+    #akSoftDrop4GenJets +
+    #akSoftDrop5GenJets +
     highPurityTracks +
-    ak3PFJetSequence +
-    ak4PFJetSequence +
-    ak5PFJetSequence +
-    ak4CaloJetSequence +
-    akSoftDrop4PFJetSequence +
-    akSoftDrop5PFJetSequence
+    #ak3PFJetSequence +
+    ak4PFJetSequence #+
+    #ak5PFJetSequence +
+    #ak4CaloJetSequence +
+    #akSoftDrop4PFJetSequence +
+    #akSoftDrop5PFJetSequence
 )

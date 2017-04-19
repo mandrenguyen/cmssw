@@ -187,7 +187,8 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 	   
 	 }	   
 
-
+	 //delete muon1;
+	 //delete muon2;
 	 /*  // I wish this worked:
 	 if(muonTrack1 == pfTrack || muonTrack2 == pfTrack) {
 	   writeCand= false;
@@ -200,6 +201,7 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
      }
    
      if(writeCand) prod->push_back(*pfOut);
+     delete pfOut;
    }
    
    
@@ -239,6 +241,8 @@ PFCandCompositeProducer::selJpsiCand(const pat::CompositeCandidate* jpsiCand){
   isSelected = isSelected && (vtxProb > 0.01); // Vertex probability cut
   isSelected = isSelected && isOS; // Opposite sign cut
   
+  //delete muon1;
+  //delete muon2;
   return isSelected;
 }
 
@@ -254,9 +258,9 @@ PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, co
   
   reco::TrackRef iTrack = muon->innerTrack();
   
-  const pat::TriggerObjectStandAloneCollection muHLTMatchesFilter = muon->triggerObjectMatchesByFilter(jpsiTriggFilter_);
+  //const pat::TriggerObjectStandAloneCollection muHLTMatchesFilter = muon->triggerObjectMatchesByFilter(jpsiTriggFilter_);
   
-  bool isTriggerMatched = muHLTMatchesFilter.size() > 0;
+  //bool isTriggerMatched = muHLTMatchesFilter.size() > 0;
   bool isGoodMuon = muon::isGoodMuon(*muon, muon::TMOneStationTight);
 //  bool isGlobalMuon = muon->isGlobalMuon();
   bool isTrackerMuon = muon->isTrackerMuon();
@@ -264,6 +268,7 @@ PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, co
   int nPixWMea = iTrack->hitPattern().pixelLayersWithMeasurement();
   double dxy = fabs(iTrack->dxy(RefVtx));
   double dz = fabs(iTrack->dz(RefVtx));
+  /*
   double eta = muon->eta();
   double pt = muon->pt();
   bool isMuonInAcc = (fabs(eta) < 2.4 && ((fabs(eta) < 1.2 && pt >= 3.5) ||
@@ -271,15 +276,16 @@ PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, co
                      (2.1 <= fabs(eta) && pt >= 1.8)));
   
   isSelected = isSelected && isMuonInAcc; // Acceptance cut
+  */
   isSelected = isSelected && isTrackerMuon; // Is tracker muon
 //  isSelected = isSelected && isGlobalMuon; // Is global muon
-  isSelected = isSelected && isTriggerMatched; // Trigger matching
+  //isSelected = isSelected && isTriggerMatched; // Trigger matching
   isSelected = isSelected && isGoodMuon; // Is good muon
   isSelected = isSelected && (nTrkWMea > 5); // Minimum tracking layers with measurement
   isSelected = isSelected && (nPixWMea > 0); // Minimum pixel layers with measurement
   isSelected = isSelected && (dxy < 0.3); // Maximum distance to PV in xy
   isSelected = isSelected && (dz < 20); // Maximum distance to PV in z
-  
+
   return isSelected;
 }
 

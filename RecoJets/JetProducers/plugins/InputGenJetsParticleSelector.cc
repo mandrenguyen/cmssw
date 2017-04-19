@@ -64,6 +64,8 @@ InputGenJetsParticleSelector::InputGenJetsParticleSelector(const edm::ParameterS
     edm::LogError("PartonicFinalStateFromMiniAOD") << "Partonic final state not supported for MiniAOD. Falling back to the stable particle selection.";
     partonicFinalState = false;
   }
+  
+  storeJMM = params.getUntrackedParameter<bool>("storeJMM", false);
 
   produces <reco::CandidatePtrVector> ();
 
@@ -238,7 +240,7 @@ bool InputGenJetsParticleSelector::hasPartonChildren(ParticleBitmap &invalid,
 //function NEEDED and called per EVENT by FRAMEWORK:
 void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSetup &evtSetup){
 
- 
+  //std::cout<<"storeJMM "<<storeJMM<<std::endl;
   std::auto_ptr<reco::CandidatePtrVector> selected_ (new reco::CandidatePtrVector);
     
   ParticleVector particles;
@@ -275,8 +277,18 @@ void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSet
     const reco::Candidate *particle = particles[i];
     if (invalid[i])
       continue;
-    if (particle->status() == 1) // selecting stable particles
+    if (particle->status() == 1){ // selecting stable particles
+      if(storeJMM&& particle->numberOfMothers() >0&& abs(particle->pdgId()) == 13){
+	if(abs(particle->mother(0)->pdgId())==443 ) continue;	
+      }
+
       selected[i] = true;
+      
+    }
+    else if(storeJMM && abs(particle->pdgId()) == 443){
+      selected[i] = true;
+    }
+
     if (partonicFinalState && isParton(particle->pdgId())) {
 	  
       if (particle->numberOfDaughters()==0 &&
@@ -295,6 +307,14 @@ void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSet
 
   for(size_t idx = 0; idx < size; ++idx){ 
     const reco::Candidate *particle = particles[idx];
+    /*
+    if(storeJMM){
+      if(abs(particle->pdgId())==443) cout<<" hi, I'm a j/psi "<<endl;
+      if(particle->numberOfMothers()>0){
+	if(abs(particle->mother(0)->pdgId())==443) cout<<" mom was a j/psi "<<endl;
+      }
+    }
+    */
     if (!selected[idx] || invalid[idx]){
       continue;
     }
@@ -314,6 +334,14 @@ void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSet
     if (particle->pt() >= ptMin){
       selected_->push_back(genParticles->ptrAt(particlePtrIdxMap[particle]));
       //cout<<"Finally we have: ["<<setw(4)<<idx<<"] "<<setw(4)<<particle->pdgId()<<" "<<particle->pt()<<endl;
+      /*
+	if(storeJMM){
+	if(abs(particle->pdgId())==443) cout<<" this j/psi made it to the jet "<<endl;
+	if(particle->numberOfMothers()>0){
+	if(abs(particle->mother(0)->pdgId())==443) cout<<" this muon stowed away "<<endl;
+	  }
+      }
+      */
     }
   }
   evt.put(selected_);

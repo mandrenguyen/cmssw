@@ -91,6 +91,7 @@ class InputGenJetsParticleSelector : public edm::EDProducer {
   bool			excludeResonances;
   bool			tausAsJets;
   bool			isMiniAOD;
+  bool			storeJMM;
   double		ptMin;
   
   edm::EDGetTokenT<reco::CandidateView> input_genpartcoll_token_;

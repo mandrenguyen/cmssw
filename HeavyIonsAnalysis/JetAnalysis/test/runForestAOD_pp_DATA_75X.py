@@ -33,7 +33,7 @@ process.source = cms.Source("PoolSource",
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1))
+    input = cms.untracked.int32(1000))
 
 
 #####################################################################################
@@ -252,3 +252,21 @@ process.pVertexFilterCutEandG = cms.Path(process.pileupVertexFilterCutEandG)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
+process.hltobject.triggerNames = cms.vstring(
+    'HLT_AK4CaloJet100_Eta5p1_v', 
+    'HLT_AK4CaloJet40_Eta5p1_v', 
+    'HLT_AK4CaloJet60_Eta5p1_v', 
+    'HLT_AK4CaloJet80_Eta5p1_v', 
+    'HLT_AK4PFJet100_Eta5p1_v', 
+    'HLT_AK4PFJet40_Eta5p1_v', 
+    'HLT_AK4PFJet60_Eta5p1_v', 
+    'HLT_AK4PFJet80_Eta5p1_v', 
+    'HLT_HIL1DoubleMu0_v', 
+    'HLT_HIL1DoubleMu10_v', 
+    'HLT_HIL2DoubleMu0_NHitQ_v', 
+    'HLT_HIL2Mu3_NHitQ10_v', 
+    'HLT_HIL2Mu5_NHitQ10_v', 
+    'HLT_HIL2Mu7_NHitQ10_v', 
+    'HLT_HIL3Mu3_NHitQ15_v', 
+    'HLT_HIL3Mu5_NHitQ15_v', 
+    'HLT_HIL3Mu7_NHitQ15_v', )

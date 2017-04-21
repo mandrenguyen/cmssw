@@ -1,0 +1,65 @@
+// vim:set ts=4 sw=4 fdm=marker et:
+// Ntuplt creator for D meson related analysis.
+// Maintain and contact: ta-wei wang
+// Email: "tawei@mit.edu" or "ta-wei.wang@cern.ch"
+#include "Bfinder/Bfinder/interface/format.h"
+#include "Bfinder/Bfinder/interface/Dntuple.h"
+#include "Bfinder/Bfinder/interface/utilities.h"
+
+//#include "FWCore/Framework/interface/EDProducer.h"
+
+
+//
+// class declaration
+//
+
+class Dfinder : public edm::EDProducer
+{//{{{
+    public:
+        explicit Dfinder(const edm::ParameterSet&);
+        ~Dfinder();
+ 
+    private:
+        virtual void beginJob() ;
+        virtual void produce(edm::Event&, const edm::EventSetup&);
+        virtual void endJob() ;
+ 
+        virtual std::vector< std::vector< std::pair<float, int> > > GetPermu(std::vector< std::pair<float, int> > InVec);
+        virtual std::vector< std::vector< std::pair<float, int> > > DelDuplicate(std::vector< std::vector< std::pair<float, int> > > InVec);
+
+
+        
+};//}}}
+
+void Dfinder::beginJob()
+{
+
+}
+
+void Dfinder::endJob()
+{
+
+}
+
+Dfinder::Dfinder(const edm::ParameterSet& iConfig)
+{
+
+}
+
+Dfinder::~Dfinder()
+{//{{{
+   // do anything here that needs to be done at desctruction time
+   // (e.g. close files, deallocate resources etc.)
+}//}}}
+
+//
+// member functions
+//
+void
+Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
+{  
+}
+
+
+//define this as a plug-in
+DEFINE_FWK_MODULE(Dfinder);

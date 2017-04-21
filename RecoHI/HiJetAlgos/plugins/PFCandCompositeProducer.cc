@@ -37,6 +37,7 @@
 #include "DataFormats/HcalDetId/interface/HcalDetId.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/GenericParticle.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 
@@ -63,10 +64,15 @@ PFCandCompositeProducer::PFCandCompositeProducer(const edm::ParameterSet& iConfi
   pfCandToken_ = consumes<reco::PFCandidateCollection>(iConfig.getParameter<edm::InputTag>("pfCandTag"));
   compositeToken_ = consumes<pat::CompositeCandidateCollection>(iConfig.getParameter<edm::InputTag>("compositeTag"));
   //PI = TMath::Pi();
-  jpsiTriggFilter_ = iConfig.getParameter<std::string>("jpsiTrigFilter");
+  //jpsiTriggFilter_ = iConfig.getParameter<std::string>("jpsiTrigFilter");
   isHI_ = iConfig.getParameter<bool>("isHI");
+  removeJMM_ = iConfig.getParameter<bool>("removeJMM");
+  removeDKPi_ = iConfig.getParameter<bool>("removeDKPi");
   
   produces<reco::PFCandidateCollection>();
+
+  if(!removeJMM_ && !removeDKPi_) std::cout<<" PFCandCompositeProducer ain't doing jack "<<std::endl;
+  if(removeJMM_ && removeDKPi_) std::cout<<" removing multiple species not yet supported "<<std::endl;
 
 }
 
@@ -98,50 +104,60 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
    iEvent.getByToken(compositeToken_, composites);
       
    if (not composites.isValid()) {
-     std::cout << "Warning: no meson candidates ..." << std::endl;
+     std::cout << "Warning: no composite candidates ..." << std::endl;
      return;
    }
 
-   std::vector<bool> selectedComposites; 
-   int nSelComposites=0;
+   std::vector<pat::CompositeCandidate> selComposites;
 
    std::auto_ptr<reco::PFCandidateCollection> prod(new reco::PFCandidateCollection());
    
    // first pass over composite candidates, apply selections and check for presence in PF candidates 
+   
+   if(composites->size()>0)std::cout<<" # of composites "<<composites->size()<<std::endl;
 
    for (std::vector<pat::CompositeCandidate>::const_iterator it=composites->begin();
 	it!=composites->end(); ++it) {
      
      const pat::CompositeCandidate* cand = &(*it);
      
-     // apply some selections on the j/psi candidates here
-     if( selJpsiCand(cand) && selMuonCand(cand,"muon1") && selMuonCand(cand,"muon2") ){
-       selectedComposites.push_back(true);
-       nSelComposites++;
+     if(removeDKPi_){  // only selection is pt > 3 GeV for now
+       
+       if( seld0Cand(cand) ){	 
+	 bool isDup = false;
+	 for(unsigned i=0;i<selComposites.size();i++){
+	   if(checkDupTrack(cand,&selComposites[i])) isDup = true;
+	 }
+	 if(!isDup) selComposites.push_back(*cand);
+       }
+
      }
-     else selectedComposites.push_back(false);
+     else if(removeJMM_){
 
+       // apply some selections on the j/psi candidates here
+       if( selJpsiCand(cand) && selMuonCand(cand,"muon1") && selMuonCand(cand,"muon2") ){
+	 bool isDup = false;
+	 for(unsigned i=0;i<selComposites.size();i++){
+	   if(checkDupMuon(cand,&selComposites[i])) isDup = true;
+	 }
+	 if(!isDup) selComposites.push_back(*cand);
+       }
 
-     // in case the muons are needed as well
-	/*
-     // cout << "Now checking candidate of type " << theJpsiCat << " with pt = " << cand->pt() << endl;
-     const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(cand->daughter("muon1"));
-     const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(cand->daughter("muon2"));
-     
-     reco::TrackRef muonTrack1 = muon1->innerTrack(); 
-     reco::TrackRef muonTrack2 = muon2->innerTrack(); 
-	*/
+     }
      
      
      // add composites as PF candidates     
      reco::Particle::LorentzVector p4(cand->px(),cand->py(),cand->pz(),cand->energy());
      // charge, LorentzVector, type (reco::PFCandidate::ParticleType::X )
-     reco::PFCandidate newPFCand(1,p4,reco::PFCandidate::ParticleType::mu);
+     reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h0);
      prod->push_back(newPFCand);     
           
      
    }
    
+   for(unsigned i=0;i<selComposites.size();i++){
+     std::cout<<" pt "<<selComposites[i].pt()<<" mass "<<selComposites[i].mass()<<std::endl;
+   }
    int replacedCands = 0;
 
    // now loop over PF candidates and remove ones that are part of composites
@@ -160,54 +176,78 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
        reco::TrackRef pfTrack = particle.trackRef();
        
        
-       int i = 0;
-       for (std::vector<pat::CompositeCandidate>::const_iterator it=composites->begin();
-	    it!=composites->end(); ++it, i++) {
 	 
-	 if(!selectedComposites[i]) continue;
+       for(std::vector<pat::CompositeCandidate>::const_iterator it=selComposites.begin();
+	   it!=selComposites.end(); ++it) {
+	 
 	 
 	 const pat::CompositeCandidate* cand = &(*it);
-	 // cout << "Now checking candidate of type " << theJpsiCat << " with pt = " << cand->pt() << endl;
-	 const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(cand->daughter("muon1"));
-	 const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(cand->daughter("muon2"));
+
+	 double pfPt = pfTrack->pt();
+	 double pfEta = pfTrack->eta();
+	 double pfPhi = pfTrack->phi();
 	 
-	 reco::TrackRef muonTrack1 = muon1->innerTrack(); 
-	 reco::TrackRef muonTrack2 = muon2->innerTrack(); 
+	 double eps = 0.0001;                                                                                                                                                   
 	 
-	 //std::cout<<" PF track, pT = "<<pfTrack->pt()<<", eta "<<pfTrack->eta()<<", phi "<<pfTrack->eta()<<std::endl;
-	 //std::cout<<" muon track 1, pT = "<<muonTrack1->pt()<<", eta "<<muonTrack1->eta()<<", phi "<<muonTrack1->eta()<<std::endl;
-	 //std::cout<<" muon track 2, pT = "<<muonTrack2->pt()<<", eta "<<muonTrack2->eta()<<", phi "<<muonTrack2->eta()<<std::endl;
-	 
-	 double eps = 0.0001;
-	 if((fabs(pfTrack->pt()-muonTrack1->pt() ) < eps && fabs(pfTrack->eta()-muonTrack1->eta() ) < eps && fabs(pfTrack->phi()-muonTrack1->phi() ) < eps )  ||
-	    
-	    (fabs(pfTrack->pt()-muonTrack2->pt() ) < eps && fabs(pfTrack->eta()-muonTrack2->eta() ) < eps && fabs(pfTrack->phi()-muonTrack2->phi() ) < eps ) ){
-	   writeCand= false;                                                                                                                                            
-           replacedCands++; 
+	 if(removeDKPi_){
+	   	   
+	   double dau1Pt = cand->daughter("track1")->pt();
+	   double dau1Eta = cand->daughter("track1")->eta();
+	   double dau1Phi = cand->daughter("track1")->phi();
 	   
-	 }	   
+	   double dau2Pt = cand->daughter("track2")->pt();
+	   double dau2Eta = cand->daughter("track2")->eta();
+	   double dau2Phi = cand->daughter("track2")->phi();
 
-	 //delete muon1;
-	 //delete muon2;
-	 /*  // I wish this worked:
-	 if(muonTrack1 == pfTrack || muonTrack2 == pfTrack) {
-	   writeCand= false;
-	   replacedCands++;
+	   if((fabs(dau1Pt-pfPt) < eps && fabs(dau1Eta-pfEta) < eps  && fabs(dau1Phi-pfPhi) < eps) ||
+	      (fabs(dau2Pt-pfPt) < eps && fabs(dau2Eta-pfEta) < eps  && fabs(dau2Phi-pfPhi) < eps)) {
+	     writeCand= false;                                                                                                                                                
+	     replacedCands++;                                                                                                                                                 
+	   }		
 	 }
-	 */
+	 else if(removeJMM_){
+	   
+	   // cout << "Now checking candidate of type " << theJpsiCat << " with pt = " << cand->pt() << endl;
 
+
+	   const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(cand->daughter("muon1"));
+	   const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(cand->daughter("muon2"));
+	   
+	   reco::TrackRef muonTrack1 = muon1->innerTrack(); 
+	   reco::TrackRef muonTrack2 = muon2->innerTrack(); 
+	   
+	   //std::cout<<" PF track, pT = "<<pfTrack->pt()<<", eta "<<pfTrack->eta()<<", phi "<<pfTrack->eta()<<std::endl;
+	   //std::cout<<" muon track 1, pT = "<<muonTrack1->pt()<<", eta "<<muonTrack1->eta()<<", phi "<<muonTrack1->eta()<<std::endl;
+	   //std::cout<<" muon track 2, pT = "<<muonTrack2->pt()<<", eta "<<muonTrack2->eta()<<", phi "<<muonTrack2->eta()<<std::endl;
+	   
+	   if((fabs(pfTrack->pt()-muonTrack1->pt() ) < eps && fabs(pfTrack->eta()-muonTrack1->eta() ) < eps && fabs(pfTrack->phi()-muonTrack1->phi() ) < eps )  ||	      
+	      (fabs(pfTrack->pt()-muonTrack2->pt() ) < eps && fabs(pfTrack->eta()-muonTrack2->eta() ) < eps && fabs(pfTrack->phi()-muonTrack2->phi() ) < eps ) ){
+	     writeCand= false;                                                                                                                                            
+	     replacedCands++; 
+	     
+	     /*  // I wish this worked:
+		 if(muonTrack1 == pfTrack || muonTrack2 == pfTrack) {
+		 writeCand= false;
+		 replacedCands++;
+		 }
+	     */
+	     
+	   }	   
+	   
+	 }
+	 
 
        }
      }
    
      if(writeCand) prod->push_back(*pfOut);
-     delete pfOut;
+     //delete pfOut;
    }
    
    
-   if(nSelComposites>0) std::cout<<" # of selected composites "<<nSelComposites<<" replaced candidates "<<replacedCands<<std::endl;
+   if(selComposites.size()>0) std::cout<<" # of selected composites "<<selComposites.size()<<" replaced candidates "<<replacedCands<<std::endl;
    
-   
+   //std::sort(prod->begin(),prod->end(),vPComparator_);
    iEvent.put(prod);
    
    
@@ -226,48 +266,52 @@ PFCandCompositeProducer::endJob() {
 
 
 bool
+PFCandCompositeProducer::seld0Cand(const pat::CompositeCandidate* d0Cand){
+  if(d0Cand->pt() < 3.) return false;
+  return true;
+}
+
+bool
 PFCandCompositeProducer::selJpsiCand(const pat::CompositeCandidate* jpsiCand){
-  bool isSelected = true;
+
+  if(jpsiCand->pt() < 6.) return false;
+  if(jpsiCand->mass() < 2.) return false;
+  if(jpsiCand->mass() > 4.) return false;
+  if(jpsiCand->userFloat("vProb") < 0.01) return false; 
+  if(fabs(jpsiCand->rapidity()) > 2.4) return false;
+
+  const pat::Muon *muon1 = dynamic_cast< const pat::Muon* >(jpsiCand->daughter("muon1") );
+  const pat::Muon* muon2 = dynamic_cast< const pat::Muon* >(jpsiCand->daughter("muon2") );
   
-  double vtxProb = jpsiCand->userFloat("vProb");
-  
-  const pat::Muon* muon1 = dynamic_cast<const pat::Muon*>(jpsiCand->daughter("muon1"));
-  const pat::Muon* muon2 = dynamic_cast<const pat::Muon*>(jpsiCand->daughter("muon2"));
-  
-  bool isOS = (muon1->charge() == muon2->charge()) ? true : false;
-  
-  isSelected = isSelected && (jpsiCand->pt() > 6. && fabs(jpsiCand->rapidity()) < 2.4); // Kinematic cuts
-  isSelected = isSelected && (jpsiCand->mass() > 2. && jpsiCand->mass() < 4.); // Mass cuts
-  isSelected = isSelected && (vtxProb > 0.01); // Vertex probability cut
-  isSelected = isSelected && isOS; // Opposite sign cut
-  
-  //delete muon1;
-  //delete muon2;
-  return isSelected;
+  if(muon1->charge() == muon2->charge()) return false;
+    
+
+  return true;
 }
 
 bool
 PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, const char* muonName){
-  bool isSelected = true;
   
   const pat::Muon* muon = dynamic_cast<const pat::Muon*>(jpsiCand->daughter(muonName));
-  
+
+  if(!muon::isGoodMuon(*muon, muon::TMOneStationTight)) return false;
+  if(!muon->isTrackerMuon()) return false;
+
   math::XYZPoint RefVtx;
   if (isHI_) RefVtx = (*jpsiCand->userData<reco::Vertex>("PVwithmuons")).position();
   else RefVtx = (*jpsiCand->userData<reco::Vertex>("muonlessPV")).position();
   
   reco::TrackRef iTrack = muon->innerTrack();
-  
-  //const pat::TriggerObjectStandAloneCollection muHLTMatchesFilter = muon->triggerObjectMatchesByFilter(jpsiTriggFilter_);
-  
+  if(fabs(iTrack->dz(RefVtx)) > 20) return false;
+  if(fabs(iTrack->dxy(RefVtx)) > 0.3) return false;
+  if(iTrack->hitPattern().trackerLayersWithMeasurement() < 6) return false;
+  if(iTrack->hitPattern().pixelLayersWithMeasurement() < 1) return false;
+
+  return true;
+  //const pat::TriggerObjectStandAloneCollection muHLTMatchesFilter = muon->triggerObjectMatchesByFilter(jpsiTriggFilter_);  
   //bool isTriggerMatched = muHLTMatchesFilter.size() > 0;
-  bool isGoodMuon = muon::isGoodMuon(*muon, muon::TMOneStationTight);
 //  bool isGlobalMuon = muon->isGlobalMuon();
-  bool isTrackerMuon = muon->isTrackerMuon();
-  int nTrkWMea = iTrack->hitPattern().trackerLayersWithMeasurement();
-  int nPixWMea = iTrack->hitPattern().pixelLayersWithMeasurement();
-  double dxy = fabs(iTrack->dxy(RefVtx));
-  double dz = fabs(iTrack->dz(RefVtx));
+
   /*
   double eta = muon->eta();
   double pt = muon->pt();
@@ -277,16 +321,35 @@ PFCandCompositeProducer::selMuonCand(const pat::CompositeCandidate* jpsiCand, co
   
   isSelected = isSelected && isMuonInAcc; // Acceptance cut
   */
-  isSelected = isSelected && isTrackerMuon; // Is tracker muon
+
 //  isSelected = isSelected && isGlobalMuon; // Is global muon
   //isSelected = isSelected && isTriggerMatched; // Trigger matching
-  isSelected = isSelected && isGoodMuon; // Is good muon
-  isSelected = isSelected && (nTrkWMea > 5); // Minimum tracking layers with measurement
-  isSelected = isSelected && (nPixWMea > 0); // Minimum pixel layers with measurement
-  isSelected = isSelected && (dxy < 0.3); // Maximum distance to PV in xy
-  isSelected = isSelected && (dz < 20); // Maximum distance to PV in z
 
-  return isSelected;
+}
+
+bool
+PFCandCompositeProducer::checkDupTrack(const pat::CompositeCandidate* cand1, const pat::CompositeCandidate* cand2){
+  
+  double eps = 0.0001;
+  if(fabs(cand1->daughter("track1")->pt() - cand2->daughter("track1")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("track1")->pt() - cand2->daughter("track2")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("track2")->pt() - cand2->daughter("track1")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("track2")->pt() - cand2->daughter("track2")->pt() ) < eps) return true;
+
+  return false;
+}
+
+
+bool
+PFCandCompositeProducer::checkDupMuon(const pat::CompositeCandidate* cand1, const pat::CompositeCandidate* cand2){
+  
+  double eps = 0.0001;
+  if(fabs(cand1->daughter("muon1")->pt() - cand2->daughter("muon1")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("muon1")->pt() - cand2->daughter("muon2")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("muon2")->pt() - cand2->daughter("muon1")->pt() ) < eps) return true;
+  if(fabs(cand1->daughter("muon2")->pt() - cand2->daughter("muon2")->pt() ) < eps) return true;
+
+  return false;
 }
 
     //define this as a plug-in

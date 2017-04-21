@@ -66,6 +66,7 @@ InputGenJetsParticleSelector::InputGenJetsParticleSelector(const edm::ParameterS
   }
   
   storeJMM = params.getUntrackedParameter<bool>("storeJMM", false);
+  storeDKPi = params.getUntrackedParameter<bool>("storeDKPi", false);
 
   produces <reco::CandidatePtrVector> ();
 
@@ -229,6 +230,59 @@ InputGenJetsParticleSelector::fromResonance(ParticleBitmap &invalid,
 return kNo;
 }
 
+
+bool InputGenJetsParticleSelector::isJMM(const reco::Candidate *particle) 
+{
+  
+  if(abs(particle->pdgId())!=443) return false;
+  if(particle->numberOfDaughters()!=2) return false;
+  if(abs(particle->daughter(0)->pdgId())!=13) return false;
+  
+  return true;
+}
+
+
+bool InputGenJetsParticleSelector::isFromJMM(const reco::Candidate *particle) 
+{
+
+  if(abs(particle->pdgId())!=13) return false;  
+  int nMom = particle->numberOfMothers();
+  if(nMom!=1) return false;
+  if(particle->mother(0)->numberOfDaughters()!=2) return false;
+  if(abs(particle->mother(0)->pdgId())==443) return true;
+  
+  return false;
+}
+
+bool InputGenJetsParticleSelector::isDKPi(const reco::Candidate *particle) 
+{
+  
+  if(abs(particle->pdgId())!=421) return false;
+  if(particle->numberOfDaughters()!=2) return false;
+  int pidDau1 = abs(particle->daughter(0)->pdgId());
+  int pidDau2 = abs(particle->daughter(1)->pdgId());
+  
+  if( !(pidDau1 == 321 || pidDau2 == 321) ) return false;
+  if( !(pidDau1 == 211 || pidDau2 == 211) ) return false;
+  
+  return true;
+}
+
+
+bool InputGenJetsParticleSelector::isFromDKPi(const reco::Candidate *particle) 
+{
+  
+  if(abs(particle->pdgId())!=211 && abs(particle->pdgId())!=321) return false;  
+  int nMom = particle->numberOfMothers();
+  if(nMom!=1) return false;
+  if(particle->mother(0)->numberOfDaughters()!=2) return false;
+  
+  if(abs(particle->mother(0)->pdgId())==421) return true;
+  
+  return false;
+}
+
+
     
 bool InputGenJetsParticleSelector::hasPartonChildren(ParticleBitmap &invalid,
 						     const ParticleVector &p,
@@ -240,7 +294,6 @@ bool InputGenJetsParticleSelector::hasPartonChildren(ParticleBitmap &invalid,
 //function NEEDED and called per EVENT by FRAMEWORK:
 void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSetup &evtSetup){
 
-  //std::cout<<"storeJMM "<<storeJMM<<std::endl;
   std::auto_ptr<reco::CandidatePtrVector> selected_ (new reco::CandidatePtrVector);
     
   ParticleVector particles;
@@ -278,19 +331,16 @@ void InputGenJetsParticleSelector::produce (edm::Event &evt, const edm::EventSet
     if (invalid[i])
       continue;
     if (particle->status() == 1){ // selecting stable particles
-      if(storeJMM&& particle->numberOfMothers() >0&& abs(particle->pdgId()) == 13){
-	if(abs(particle->mother(0)->pdgId())==443 ) continue;	
-      }
-
-      selected[i] = true;
-      
+      if(storeJMM && isFromJMM(particle)) continue;      
+      if(storeDKPi && isFromDKPi(particle)) continue;      
+      selected[i] = true;      
     }
-    else if(storeJMM && abs(particle->pdgId()) == 443){
-      selected[i] = true;
-    }
-
+    else if(storeJMM && isJMM(particle)) selected[i] = true;
+    else if(storeDKPi && isDKPi(particle)) selected[i] = true;
+    
+    
     if (partonicFinalState && isParton(particle->pdgId())) {
-	  
+      
       if (particle->numberOfDaughters()==0 &&
 	  particle->status() != 1) {
 	// some brokenness in event...

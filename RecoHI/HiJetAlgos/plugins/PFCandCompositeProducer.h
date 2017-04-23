@@ -33,11 +33,11 @@ class PFCandCompositeProducer : public edm::EDProducer {
   virtual void beginJob() ;
   virtual void produce(edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
-  bool seld0Cand(const pat::CompositeCandidate* d0Cand);
-  bool selJpsiCand(const pat::CompositeCandidate* jpsiCand);
-  bool selMuonCand(const pat::CompositeCandidate* jpsiCand, const char* muonName);
-  bool checkDupTrack(const pat::CompositeCandidate* cand1, const pat::CompositeCandidate* cand2);
-  bool checkDupMuon(const pat::CompositeCandidate* cand1, const pat::CompositeCandidate* cand2);
+  bool seld0Cand(const pat::CompositeCandidate d0Cand);
+  bool selJpsiCand(const pat::CompositeCandidate jpsiCand);
+  bool selMuonCand(const pat::CompositeCandidate jpsiCand, const char* muonName);
+  bool checkDupTrack(const pat::CompositeCandidate cand1, const pat::CompositeCandidate cand2);
+  bool checkDupMuon(const pat::CompositeCandidate cand1, const pat::CompositeCandidate cand2);
   
   // ----------member data ---------------------------
 

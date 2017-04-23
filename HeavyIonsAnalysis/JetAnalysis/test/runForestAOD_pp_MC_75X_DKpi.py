@@ -7,6 +7,8 @@ import FWCore.ParameterSet.Config as cms
 process = cms.Process('HiForest')
 process.options = cms.untracked.PSet()
 
+process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck")
+
 #####################################################################################
 # HiForest labelling info
 #####################################################################################
@@ -26,13 +28,15 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
                             duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
                             fileNames = cms.untracked.vstring(
-        '/store/himc/HINppWinter16DR/Pythia8_prompt_D0pt0p0_Pthat15_pp502_TuneCUETP8M1/AODSIM/75X_mcRun2_asymptotic_ppAt5TeV_v3-v1/00000/247A6488-340D-E611-95BD-0025905C975E.root'
+        '/store/himc/HINppWinter16DR/Pythia8_prompt_D0pt0p0_Pthat30_pp502_TuneCUETP8M1/AODSIM/75X_mcRun2_asymptotic_ppAt5TeV_v3-v1/00000/64CB089B-370D-E611-B83E-0025904C4F9E.root'
+
+        #'/store/himc/HINppWinter16DR/Pythia8_prompt_D0pt0p0_Pthat15_pp502_TuneCUETP8M1/AODSIM/75X_mcRun2_asymptotic_ppAt5TeV_v3-v1/00000/247A6488-340D-E611-95BD-0025905C975E.root'
                             )
 )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100))
+    input = cms.untracked.int32(-1))
 
 
 #####################################################################################
@@ -92,25 +96,25 @@ process.hiEvtAnalyzer.doEvtPlane = cms.bool(False)
 process.hiEvtAnalyzer.doMC = cms.bool(True) #general MC info
 process.hiEvtAnalyzer.doHiMC = cms.bool(False) #HI specific MC info
 
-process.load('HeavyIonsAnalysis.JetAnalysis.HiGenAnalyzer_cfi')
-process.HiGenParticleAna.genParticleSrc = cms.untracked.InputTag("genParticles")
-process.HiGenParticleAna.doHI = False
-process.load('HeavyIonsAnalysis.EventAnalysis.runanalyzer_cff')
-process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_pp_cfi")
-process.pfcandAnalyzer.skipCharged = False
-process.pfcandAnalyzer.pfPtMin = 0
-process.pfcandAnalyzer.pfCandidateLabel = cms.InputTag("particleFlow")
-process.pfcandAnalyzer.doVS = cms.untracked.bool(False)
-process.pfcandAnalyzer.doUEraw_ = cms.untracked.bool(False)
-process.pfcandAnalyzer.genLabel = cms.InputTag("genParticles")
+#process.load('HeavyIonsAnalysis.JetAnalysis.HiGenAnalyzer_cfi')
+#process.HiGenParticleAna.genParticleSrc = cms.untracked.InputTag("genParticles")
+#process.HiGenParticleAna.doHI = False
+#process.load('HeavyIonsAnalysis.EventAnalysis.runanalyzer_cff')
+#process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_pp_cfi")
+#process.pfcandAnalyzer.skipCharged = False
+#process.pfcandAnalyzer.pfPtMin = 0
+#process.pfcandAnalyzer.pfCandidateLabel = cms.InputTag("particleFlow")
+#process.pfcandAnalyzer.doVS = cms.untracked.bool(False)
+#process.pfcandAnalyzer.doUEraw_ = cms.untracked.bool(False)
+#process.pfcandAnalyzer.genLabel = cms.InputTag("genParticles")
 
 #####################################################################################
 
 #########################
 # Track Analyzer
 #########################
-process.load('HeavyIonsAnalysis.JetAnalysis.ExtraTrackReco_cff')
-process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
+#process.load('HeavyIonsAnalysis.JetAnalysis.ExtraTrackReco_cff')
+#process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 
 # Use this instead for track corrections
 ## process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_Corr_cff')
@@ -120,33 +124,33 @@ process.load('HeavyIonsAnalysis.JetAnalysis.TrkAnalyzers_cff')
 #####################
 # photons
 ######################
-process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
-process.ggHiNtuplizer.gsfElectronLabel   = cms.InputTag("gedGsfElectrons")
-process.ggHiNtuplizer.recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerpp')
-process.ggHiNtuplizer.VtxLabel           = cms.InputTag("offlinePrimaryVertices")
-process.ggHiNtuplizer.particleFlowCollection = cms.InputTag("particleFlow")
-process.ggHiNtuplizer.doVsIso            = cms.bool(False)
-process.ggHiNtuplizer.doElectronVID      = cms.bool(True)
-process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(recoPhotonSrc = cms.InputTag('gedPhotons'),
-                                                       recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
+#process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
+#process.ggHiNtuplizer.gsfElectronLabel   = cms.InputTag("gedGsfElectrons")
+#process.ggHiNtuplizer.recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerpp')
+#process.ggHiNtuplizer.VtxLabel           = cms.InputTag("offlinePrimaryVertices")
+#process.ggHiNtuplizer.particleFlowCollection = cms.InputTag("particleFlow")
+#process.ggHiNtuplizer.doVsIso            = cms.bool(False)
+#process.ggHiNtuplizer.doElectronVID      = cms.bool(True)
+#process.ggHiNtuplizerGED = process.ggHiNtuplizer.clone(recoPhotonSrc = cms.InputTag('gedPhotons'),
+#                                                       recoPhotonHiIsolationMap = cms.InputTag('photonIsolationHIProducerppGED'))
 
 ####################################################################################
 #####################
 # Electron ID
 #####################
 
-from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
+#from PhysicsTools.SelectorUtils.tools.vid_id_tools import *
 # turn on VID producer, indicate data format to be processed
 # DataFormat.AOD or DataFormat.MiniAOD
-dataFormat = DataFormat.AOD
-switchOnVIDElectronIdProducer(process, dataFormat)
+#dataFormat = DataFormat.AOD
+#switchOnVIDElectronIdProducer(process, dataFormat)
 
 # define which IDs we want to produce. Check here https://twiki.cern.ch/twiki/bin/viewauth/CMS/CutBasedElectronIdentificationRun2#Recipe_for_regular_users_for_7_4
-my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
+#my_id_modules = ['RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff']
 
 #add them to the VID producer
-for idmod in my_id_modules:
-    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
+#for idmod in my_id_modules:
+#    setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 ####################################################################################
 
 
@@ -154,7 +158,7 @@ for idmod in my_id_modules:
 # tupel and necessary PAT sequences
 #####################
 
-process.load("HeavyIonsAnalysis.VectorBosonAnalysis.tupelSequence_pp_mc_cff")
+#process.load("HeavyIonsAnalysis.VectorBosonAnalysis.tupelSequence_pp_mc_cff")
 
 #####################################################################################
 
@@ -175,6 +179,9 @@ process.Dfinder.alphaCut = cms.vdouble(0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 9
 process.Dfinder.svpvDistanceCut_lowptD = cms.vdouble(2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 
+process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
+
+
 #########################
 # Main analysis list
 #########################
@@ -182,6 +189,7 @@ process.ana_step = cms.Path(process.hltanalysis *
                             process.hiEvtAnalyzer *
                             #process.HiGenParticleAna*
                             process.DfinderSequence +
+                            process.pfCandComposites +
                             process.jetSequences +
                             #process.egmGsfElectronIDSequence + #Should be added in the path for VID module
                             #process.ggHiNtuplizer +
@@ -236,12 +244,8 @@ process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
 
-
 process.genParticlesForJets.storeDKpi = cms.untracked.bool(True)
-
-process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
 process.pfCandComposites.compositeTag = cms.InputTag('Dfinder')
 process.pfCandComposites.removeDKPi = True
 process.ak4PFJets.src = 'pfCandComposites'
-process.jetSequences.insert(0,process.pfCandComposites)
 

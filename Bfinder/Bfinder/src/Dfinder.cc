@@ -509,29 +509,9 @@ void Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         InVec.push_back(tk2);
                         PermuVec = GetPermu(InVec);
                         PermuVec = DelDuplicate(PermuVec);
-			auto initSize = DInfo.size;
                         for(unsigned int i = 0; i < PermuVec.size(); i++){
                             Dfinder::BranchOutNTk( DInfo, input_tracks, thePrimaryV, isNeededTrackIdx, D_counter, d0_mass_window, PermuVec[i], -1, -1, false, false, 1, 0);
                         }
-			auto postSize = DInfo.size;
-
-			for(auto i = 0; i < postSize - initSize; i++){
-
-			  pat::CompositeCandidate myCand;
-			  int dIndex = initSize +i;
-			  PolarLorentzVector myD0(DInfo.pt[dIndex],DInfo.eta[dIndex],DInfo.phi[dIndex],DInfo.mass[dIndex]);			  
-			  myCand.setP4(myD0);
-			  myCand.setCharge(0);
-
-			  pat::GenericParticle track1 = input_tracks[ DInfo.rftk1_index[dIndex] ];
-			  pat::GenericParticle track2 = input_tracks[ DInfo.rftk2_index[dIndex] ];
-			  myCand.addDaughter(track1, "track1");
-			  myCand.addDaughter(track2, "track2");
-
-			  d0Candidates->push_back(myCand);
-			}
-
-
                         //Dfinder::BranchOutNTk( DInfo, input_tracks, thePrimaryV, isNeededTrackIdx, D_counter, d0_mass_window, InVec, -1, -1, false, false, 1, 1);
                     }
                     //////////////////////////////////////////////////////////////////////////
@@ -546,29 +526,11 @@ void Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         InVec.push_back(tk2);
                         PermuVec = GetPermu(InVec);
                         PermuVec = DelDuplicate(PermuVec);
-			auto initSize = DInfo.size;
                         for(unsigned int i = 0; i < PermuVec.size(); i++){
                             Dfinder::BranchOutNTk( DInfo, input_tracks, thePrimaryV, isNeededTrackIdx, D_counter, d0_mass_window, PermuVec[i], -1, -1, false, false, 2, 0);
                         }
                         //Dfinder::BranchOutNTk( DInfo, input_tracks, thePrimaryV, isNeededTrackIdx, D_counter, d0_mass_window, InVec, -1, -1, false, false, 2, 1);
-			auto postSize = DInfo.size;
-			
-			for(auto i = 0; i < postSize - initSize; i++){			  
-
-			  pat::CompositeCandidate myCand;
-			  int dIndex = initSize +i;
-			  PolarLorentzVector myD0(DInfo.pt[dIndex],DInfo.eta[dIndex],DInfo.phi[dIndex],DInfo.mass[dIndex]);			  
-			  myCand.setP4(myD0);
-			  myCand.setCharge(0);
-
-			  pat::GenericParticle track1 = input_tracks[ DInfo.rftk1_index[dIndex] ];
-			  pat::GenericParticle track2 = input_tracks[ DInfo.rftk2_index[dIndex] ];
-			  myCand.addDaughter(track1, "track1");
-			  myCand.addDaughter(track2, "track2");
-
-			  d0Candidates->push_back(myCand);
-			}
-                    }
+		    }
                     //////////////////////////////////////////////////////////////////////////
                     // RECONSTRUCTION: K-pi+pi+
                     //////////////////////////////////////////////////////////////////////////
@@ -810,6 +772,29 @@ void Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         PermuVec = DelDuplicate(PermuVec);
                         Dfinder::BranchOutNTk( DInfo, input_tracks, thePrimaryV, isNeededTrackIdx, D_counter, bplus_mass_window, InVec, D0_MASS, 0.1, false, true, 14, 1);
                     }
+		    
+
+		    // write d0's in edm format.   Currently assumes that only d0 is being run
+		    auto outSize = DInfo.size;
+
+		    d0Candidates->reserve(outSize);
+
+		    for(auto i = 0; i < outSize; i++){
+		      
+		      pat::CompositeCandidate myCand;
+		      
+		      PolarLorentzVector myD0(DInfo.pt[i],DInfo.eta[i],DInfo.phi[i],DInfo.mass[i]);			  
+		      myCand.setP4(myD0);
+		      myCand.setCharge(0);
+		      
+		      pat::GenericParticle track1 = input_tracks[ DInfo.rftk1_index[i] ];
+		      pat::GenericParticle track2 = input_tracks[ DInfo.rftk2_index[i] ];
+		      myCand.addDaughter(track1, "track1");
+		      myCand.addDaughter(track2, "track2");
+		      
+		      d0Candidates->push_back(myCand);
+		    }
+
 
                     if(printInfo_){
                         printf("D_counter: ");

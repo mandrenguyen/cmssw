@@ -259,7 +259,7 @@ process.hionia.sglTriggerFilterNames = cms.vstring("hltHIL2Mu3N10HitQForPPRefL2F
                                                    "hltHIL2Mu20L2Filtered",
                                                    "hltHIL3SingleMu20L3Filtered")
 
-process.hionia.isPromptMC = False
+process.hionia.isPromptMC = True
 
 process.genParticlesForJets.storeJMM = cms.untracked.bool(True)
 process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")

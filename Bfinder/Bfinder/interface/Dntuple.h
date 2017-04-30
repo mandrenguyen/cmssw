@@ -197,7 +197,7 @@ class DntupleBranches
   float   DgenBAncestorpt[MAX_XB];
   int     DgenBAncestorpdgId[MAX_XB];
   
-  void buildDBranch(TTree* dnt, bool D0kpimode=false, bool detailMode=true)
+  void buildDBranch(TTree* dnt, bool D0kpimode=true, bool detailMode=false)
   {
     //EvtInfo
     dnt->Branch("RunNo",&RunNo);

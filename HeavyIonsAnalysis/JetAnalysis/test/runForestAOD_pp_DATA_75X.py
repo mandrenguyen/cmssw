@@ -192,14 +192,12 @@ oniaTreeAnalyzer(process, isPbPb=False, isMC=False, applyEventSel=False, muonSel
 # Main analysis list
 #########################
 
-process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
-process.ak4PFJets.src = 'pfCandComposites'
 
 process.ana_step = cms.Path(process.hltanalysis *
 			    process.hltobject *
                             process.hiEvtAnalyzer *
                             process.oniaTreeAna *
-                            process.pfCandComposites *
+                            #process.pfCandComposites *
                             process.jetSequences +
                             #process.egmGsfElectronIDSequence + #Should be added in the path for VID module
                             #process.ggHiNtuplizer +
@@ -270,3 +268,9 @@ process.hltobject.triggerNames = cms.vstring(
     'HLT_HIL3Mu3_NHitQ15_v', 
     'HLT_HIL3Mu5_NHitQ15_v', 
     'HLT_HIL3Mu7_NHitQ15_v', )
+
+
+process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
+process.pfCandComposites.removeJMM = True
+process.ak4PFJets.src = 'pfCandComposites'
+process.jetSequences.insert(0,process.pfCandComposites)

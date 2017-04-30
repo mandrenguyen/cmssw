@@ -103,7 +103,7 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
     # output
     process.load('Configuration.EventContent.EventContent_cff')
     process.load("Configuration.EventContent.EventContentHeavyIons_cff")
-
+'''
     process.outOnia2MuMu = cms.OutputModule("PoolOutputModule",
         fileName = cms.untracked.string('onia2MuMuPAT.root'),
         outputCommands =  cms.untracked.vstring(
@@ -130,3 +130,4 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
     )
 
     process.e = cms.EndPath(process.outOnia2MuMu)
+'''

@@ -123,7 +123,7 @@ void HLTInfo::setup(const edm::ParameterSet& pSet, TTree* HltTree) {
 
   algoBitToName = new TString[128];
   techBitToName = new TString[128];
-
+  /*
   HltTree->Branch("NL1IsolEm",&nl1extiem,"NL1IsolEm/I");
   HltTree->Branch("L1IsolEmEt",l1extiemet,"L1IsolEmEt[NL1IsolEm]/F");
   HltTree->Branch("L1IsolEmE",l1extieme,"L1IsolEmE[NL1IsolEm]/F");
@@ -155,6 +155,7 @@ void HLTInfo::setup(const edm::ParameterSet& pSet, TTree* HltTree) {
   HltTree->Branch("L1ForJetE",l1extjtfe,"L1ForJetE[NL1ForJet]/F");
   HltTree->Branch("L1ForJetEta",l1extjtfeta,"L1ForJetEta[NL1ForJet]/F");
   HltTree->Branch("L1ForJetPhi",l1extjtfphi,"L1ForJetPhi[NL1ForJet]/F");
+  */
   /*
   HltTree->Branch("NL1Jet",&nl1extjet,"NL1Jet/I");
   HltTree->Branch("L1JetEt",l1extjtet,"L1JetEt[NL1Jet]/F");
@@ -162,6 +163,7 @@ void HLTInfo::setup(const edm::ParameterSet& pSet, TTree* HltTree) {
   HltTree->Branch("L1JetEta",l1extjteta,"L1JetEta[NL1Jet]/F");
   HltTree->Branch("L1JetPhi",l1extjtphi,"L1JetPhi[NL1Jet]/F");
   */
+  /*
   HltTree->Branch("NL1Tau",&nl1exttau,"NL1Tau/I");
   HltTree->Branch("L1TauEt",l1exttauet,"L1TauEt[NL1Tau]/F");
   HltTree->Branch("L1TauE",l1exttaue,"L1TauE[NL1Tau]/F");
@@ -173,8 +175,9 @@ void HLTInfo::setup(const edm::ParameterSet& pSet, TTree* HltTree) {
   HltTree->Branch("L1Mht",&mht,"L1Mht/F");
   HltTree->Branch("L1MhtPhi",&mhtphi,"L1MhtPhi/F");
   HltTree->Branch("L1EtHad",&ethad,"L1EtHad/F");
-
+  */
   // L1GctJetCounts
+  /*
   HltTree->Branch("L1HfRing1EtSumPositiveEta",&l1hfRing1EtSumPositiveEta,"L1HfRing1EtSumPositiveEta/I");
   HltTree->Branch("L1HfRing2EtSumPositiveEta",&l1hfRing2EtSumPositiveEta,"L1HfRing2EtSumPositiveEta/I");
   HltTree->Branch("L1HfRing1EtSumNegativeEta",&l1hfRing1EtSumNegativeEta,"L1HfRing1EtSumNegativeEta/I");
@@ -183,6 +186,7 @@ void HLTInfo::setup(const edm::ParameterSet& pSet, TTree* HltTree) {
   HltTree->Branch("L1HfTowerCountNegativeEtaRing1",&l1hfTowerCountNegativeEtaRing1,"L1HfTowerCountNegativeEtaRing1/I");
   HltTree->Branch("L1HfTowerCountPositiveEtaRing2",&l1hfTowerCountPositiveEtaRing2,"L1HfTowerCountPositiveEtaRing2/I");
   HltTree->Branch("L1HfTowerCountNegativeEtaRing2",&l1hfTowerCountNegativeEtaRing2,"L1HfTowerCountNegativeEtaRing2/I");
+  */
 }
 
 /* **Analyze the event** */
@@ -217,6 +221,11 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
     if (HltEvtCnt==0){
       for (int itrig = 0; itrig != ntrigs; ++itrig) {
         TString trigName = triggerNames.triggerName(itrig);
+        if(!trigName.Contains("jet", TString::kIgnoreCase) &&
+           !trigName.Contains("minimum", TString::kIgnoreCase) &&
+           !trigName.Contains("mu", TString::kIgnoreCase) &&
+           !trigName.Contains("meson", TString::kIgnoreCase)
+           )continue;
         HltTree->Branch(trigName,trigflag+itrig,trigName+"/I");
         HltTree->Branch(trigName+"_Prescl",trigPrescl+itrig,trigName+"_Prescl/I");
       }
@@ -224,6 +233,11 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
       int itdum = ntrigs;
       for (unsigned int idum = 0; idum < dummyBranches_.size(); ++idum) {
 	TString trigName(dummyBranches_[idum].data());
+        if(!trigName.Contains("jet", TString::kIgnoreCase) &&
+           !trigName.Contains("minimum", TString::kIgnoreCase) &&
+           !trigName.Contains("mu", TString::kIgnoreCase) &&
+           !trigName.Contains("meson", TString::kIgnoreCase)
+           )continue;
 	bool addThisBranch = 1;
 	for (int itrig = 0; itrig != ntrigs; ++itrig) {
 	  TString realTrigName = triggerNames.triggerName(itrig);
@@ -531,7 +545,13 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
       // get L1 menu from event setup
       for (CItAlgo algo = menu->gtAlgorithmMap().begin(); algo!=menu->gtAlgorithmMap().end(); ++algo) {
 	if (_Debug) std::cout << "Name: " << (algo->second).algoName() << " Alias: " << (algo->second).algoAlias() << std::endl;
-        int itrig = (algo->second).algoBitNumber();
+        int itrig = (algo->second).algoBitNumber();	
+        if(!algoBitToName[itrig].Contains("jet", TString::kIgnoreCase) &&
+           !algoBitToName[itrig].Contains("minimum", TString::kIgnoreCase) &&
+           !algoBitToName[itrig].Contains("mu", TString::kIgnoreCase) &&
+           !algoBitToName[itrig].Contains("meson", TString::kIgnoreCase)
+           )continue;
+
 	//        algoBitToName[itrig] = TString( (algo->second).algoName() );
 	algoBitToName[itrig] = TString( (algo->second).algoAlias() );
         HltTree->Branch(algoBitToName[itrig],l1flag+itrig,algoBitToName[itrig]+"/I");
@@ -544,6 +564,12 @@ void HLTInfo::analyze(const edm::Handle<edm::TriggerResults>                 & h
       for (CItAlgo techTrig = menu->gtTechnicalTriggerMap().begin(); techTrig != menu->gtTechnicalTriggerMap().end(); ++techTrig) {
         int itrig = (techTrig->second).algoBitNumber();
 	techBitToName[itrig] = TString( (techTrig->second).algoName() );
+	continue;
+        if(!techBitToName[itrig].Contains("jet", TString::kIgnoreCase) &&
+           !techBitToName[itrig].Contains("minimum", TString::kIgnoreCase) &&
+           !techBitToName[itrig].Contains("mu", TString::kIgnoreCase) &&
+           !techBitToName[itrig].Contains("meson", TString::kIgnoreCase)
+           )continue;
 	if (_Debug) std::cout << "tech bit " << itrig << ": " << techBitToName[itrig] << " " << std::endl;
 	HltTree->Branch(techBitToName[itrig],l1techflag+itrig,techBitToName[itrig]+"/I");
         HltTree->Branch(techBitToName[itrig]+"_Prescl",l1techPrescl+itrig,techBitToName[itrig]+"_Prescl/I");

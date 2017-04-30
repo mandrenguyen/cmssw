@@ -117,7 +117,7 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
    // first pass over composite candidates, apply selections and check for presence in PF candidates 
    
-   if(composites->size()>0)std::cout<<" # of composites "<<composites->size()<<std::endl;
+   //if(composites->size()>0)std::cout<<" # of composites "<<composites->size()<<std::endl;
 
    for (std::vector<pat::CompositeCandidate>::const_iterator it=composites->begin();
 	it!=composites->end(); ++it) {
@@ -131,42 +131,46 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 	 for(unsigned i=0;i<selComposites.size();i++){
 	   if(checkDupTrack(cand,selComposites[i])) isDup = true;
 	 }
-	 if(!isDup) 
-	   selComposites.push_back(cand);
+
+	 if(isDup) continue;
+
+	 selComposites.push_back(cand);
+	 
+	 double candE = sqrt(cand.p()*cand.p() + 1.86484*1.86484);
+	 reco::Particle::LorentzVector p4(cand.px(),cand.py(),cand.pz(),candE);
+	 //charge, LorentzVector, type (reco::PFCandidate::ParticleType::X )
+	 //reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h0);
+	 reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h_HF);
+	 prod->push_back(newPFCand);     
        }
-
-       double candE = sqrt(cand.p()*cand.p() + 1.86484*1.86484);
-       reco::Particle::LorentzVector p4(cand.px(),cand.py(),cand.pz(),candE);
-       // charge, LorentzVector, type (reco::PFCandidate::ParticleType::X )
-       reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h0);
-       prod->push_back(newPFCand);     
-
      }
      else if(removeJMM_){
-
+       
        // apply some selections on the j/psi candidates here
        if( selJpsiCand(cand) && selMuonCand(cand,"muon1") && selMuonCand(cand,"muon2") ){
 	 bool isDup = false;
 	 for(unsigned i=0;i<selComposites.size();i++){
 	   if(checkDupMuon(cand,selComposites[i])) isDup = true;
 	 }
-	 if(!isDup) 
-	   selComposites.push_back(cand);
+	 if(isDup) continue;
+
+	 selComposites.push_back(cand);
+       
+	 double candE = sqrt(cand.p()*cand.p() + 3.096916*3.096916);
+	 reco::Particle::LorentzVector p4(cand.px(),cand.py(),cand.pz(),candE);
+	 // charge, LorentzVector, type (reco::PFCandidate::ParticleType::X )
+	 //reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h0);
+	 reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h_HF);
+	 prod->push_back(newPFCand);     
        }
-       
-       double candE = sqrt(cand.p()*cand.p() + 3.096916*3.096916);
-       reco::Particle::LorentzVector p4(cand.px(),cand.py(),cand.pz(),candE);
-       // charge, LorentzVector, type (reco::PFCandidate::ParticleType::X )
-       reco::PFCandidate newPFCand(0,p4,reco::PFCandidate::ParticleType::h0);
-       prod->push_back(newPFCand);     
-       
      }
                
    }
-   
+   /*
    for(unsigned i=0;i<selComposites.size();i++){
      std::cout<<" pt "<<selComposites[i].pt()<<" mass "<<selComposites[i].mass()<<std::endl;
    }
+   */
    int replacedCands = 0;
 
    // now loop over PF candidates and remove ones that are part of composites
@@ -251,7 +255,7 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
    }
    
    
-   if(selComposites.size()>0) std::cout<<" # of selected composites "<<selComposites.size()<<" replaced candidates "<<replacedCands<<std::endl;
+   //if(selComposites.size()>0) std::cout<<" # of selected composites "<<selComposites.size()<<" replaced candidates "<<replacedCands<<std::endl;
 
    //std::sort(prod->begin(),prod->end(),vPComparator_);
    iEvent.put(prod);

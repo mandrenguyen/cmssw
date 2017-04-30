@@ -1148,7 +1148,7 @@ void Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             std::cout  << "Exception during event number: " << iEvent.id()
                 << "\n" << err.what() << "\n";
     }//catch 
-    root->Fill();
+    //root->Fill();
     //std::cout<<"filled!\n";
  
     //Made a Dntuple on the fly   

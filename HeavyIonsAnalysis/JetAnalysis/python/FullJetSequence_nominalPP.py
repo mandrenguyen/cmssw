@@ -51,18 +51,39 @@ akFilter5PFJets = akFilter4PFJets.clone(rParam = cms.double(0.5))
 from RecoJets.Configuration.GenJetParticles_cff import *
 from RecoHI.HiJetAlgos.HiGenJets_cff import *
 from HeavyIonsAnalysis.JetAnalysis.makePartons_cff import myPartons
-
+'''
 from HeavyIonsAnalysis.JetAnalysis.jets.ak3PFJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.ak4PFJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.ak5PFJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.ak4CaloJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.akSoftDrop4PFJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.akSoftDrop5PFJetSequence_pp_mc_cff import *
+'''
+from HeavyIonsAnalysis.JetAnalysis.jets.ak4PFJetSequence_pp_mc_cff import *
 
 highPurityTracks = cms.EDFilter("TrackSelector",
                                 src = cms.InputTag("generalTracks"),
                                 cut = cms.string('quality("highPurity")')
 )
+
+#ak4PFXJets = cms.EDFilter("PFJetXSelector",
+#                                    src = cms.InputTag("ak4PFJets"),
+#                                    cut = cms.string("pt > 10.0 && abs(rapidity()) < 2.4")
+#                                    )
+
+ak4PFXpatJets = cms.EDFilter("PatJetXSelector",
+                                    src = cms.InputTag("ak4PFpatJetsWithBtagging"),
+                                    cut = cms.string("pt > 10.0 && abs(rapidity()) < 2.4")
+                                    )
+
+
+
+ak4PFJetSequence.remove(ak4PFJetAnalyzer)
+ak4PFJetSequence*=ak4PFXpatJets
+ak4PFJetSequence*=ak4PFJetAnalyzer
+ak4PFJetAnalyzer.jetTag = "ak4PFXpatJets"
+
+
 
 # Other radii jets and calo jets need to be reconstructed
 jetSequences = cms.Sequence(
@@ -73,6 +94,7 @@ jetSequences = cms.Sequence(
     #ak5GenJets +
     #ak3PFJets +
     ak4PFJets +
+    #ak4PFXJets +
     #ak5PFJets +
     #akSoftDrop4PFJets +
     #akSoftDrop5PFJets +
@@ -82,7 +104,9 @@ jetSequences = cms.Sequence(
     #akSoftDrop5GenJets +
     highPurityTracks +
     #ak3PFJetSequence +
+    #ak4PFJetSequence #+
     ak4PFJetSequence #+
+    #ak4PFXpatJets 
     #ak5PFJetSequence +
     #ak4CaloJetSequence +
     #akSoftDrop4PFJetSequence +

@@ -54,6 +54,7 @@ hiTracking = cms.Sequence(
     *hiRegitMuTrackingAndSta
     *hiGeneralTracks
     *trackExtrapolator
+    *bestFinalHiVertex
     )
 
 hiTracking_wSplitting = cms.Sequence(
@@ -62,6 +63,7 @@ hiTracking_wSplitting = cms.Sequence(
     *hiRegitMuTrackingAndSta
     *hiGeneralTracks
     *trackExtrapolator
+    *bestFinalHiVertex
     )
 
 hiTracking_wSplitting_Phase1 = cms.Sequence(
@@ -70,6 +72,7 @@ hiTracking_wSplitting_Phase1 = cms.Sequence(
     *hiRegitMuTrackingAndSta
     *hiGeneralTracks
     *trackExtrapolator
+    *bestFinalHiVertex
     )
 
 hiTracking_wConformalPixel = cms.Sequence(

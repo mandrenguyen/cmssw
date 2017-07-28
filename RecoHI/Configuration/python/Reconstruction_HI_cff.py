@@ -33,6 +33,11 @@ from RecoHI.HiEvtPlaneAlgos.HiEvtPlane_cfi import *
 from RecoMET.METProducers.hcalnoiseinfoproducer_cfi import *
 hcalnoise.trackCollName = 'hiGeneralTracks'
 
+from RecoHI.Configuration.HiEgammaPostPF_cff import *
+
+from RecoHI.HiJetAlgos.HiRecoPFJets_cff import *
+PFTowers.src = "particleFlow"
+
 # Global + High-Level Reco Sequence
 globalRecoPbPb = cms.Sequence(hiTracking_wSplitting
                               * hiParticleFlowLocalReco
@@ -42,12 +47,15 @@ globalRecoPbPb = cms.Sequence(hiTracking_wSplitting
                               * hiElectronSequence 
                               * hiEgammaSequence
                               * hiParticleFlowReco
+                              * egammaHighLevelRecoPostPF
                               * hiCentrality
                               * centralityBin
                               * hiClusterCompatibility
                               * hiEvtPlane
                               * hcalnoise
                               * muonRecoHighLevelPbPb
+                              * particleFlowLinks
+                              * hiRecoPFJets
                               )
 
 globalRecoPbPb_wConformalPixel = cms.Sequence(hiTracking_wConformalPixel
@@ -58,12 +66,15 @@ globalRecoPbPb_wConformalPixel = cms.Sequence(hiTracking_wConformalPixel
                                               * hiElectronSequence
                                               * hiEgammaSequence
                                               * hiParticleFlowReco
+                                              * egammaHighLevelRecoPostPF
                                               * hiCentrality
                                               * centralityBin
                                               * hiClusterCompatibility
                                               * hiEvtPlane
                                               * hcalnoise
                                               * muonRecoHighLevelPbPb
+                                              * particleFlowLinks
+                                              * hiRecoPFJets
                                               )
 
 #--------------------------------------------------------------------------

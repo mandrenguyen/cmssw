@@ -2,12 +2,14 @@ import FWCore.ParameterSet.Config as cms
 
 ### PP RECO does not include R=3 or R=5 jets.
 ### re-RECO is only possible for PF, RECO is missing calotowers
-from RecoJets.JetProducers.ak5PFJets_cfi import ak5PFJets
-ak5PFJets.doAreaFastjet = True
-ak3PFJets = ak5PFJets.clone(rParam = 0.3)
-from RecoJets.JetProducers.ak5GenJets_cfi import ak5GenJets
-ak3GenJets = ak5GenJets.clone(rParam = 0.3)
-ak4GenJets = ak5GenJets.clone(rParam = 0.4)
+from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
+ak4PFJets.doAreaFastjet = True
+ak3PFJets = ak4PFJets.clone(rParam = 0.3)
+ak5PFJets = ak4PFJets.clone(rParam = 0.5)
+from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
+ak3GenJets = ak4GenJets.clone(rParam = 0.3)
+ak5GenJets = ak4GenJets.clone(rParam = 0.5)
+from RecoJets.JetProducers.fc4GenJets_cfi import fc4GenJets
 
 #SoftDrop PF jets
 from RecoJets.JetProducers.PFJetParameters_cfi import *
@@ -49,13 +51,13 @@ akFilter5PFJets = akFilter4PFJets.clone(rParam = cms.double(0.5))
 
 from RecoJets.Configuration.GenJetParticles_cff import *
 from RecoHI.HiJetAlgos.HiGenJets_cff import *
-from HeavyIonsAnalysis.JetAnalysis.makePartons_cff import myPartons
+from HeavyIonsAnalysis.JetAnalysis.makePartons_cff import patJetPartonsLegacy, patJetPartons
 
-from HeavyIonsAnalysis.JetAnalysis.jets.ak3PFJetSequence_pp_mc_cff import *
+#from HeavyIonsAnalysis.JetAnalysis.jets.ak3PFJetSequence_pp_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.ak4PFJetSequence_pp_mc_cff import *
-from HeavyIonsAnalysis.JetAnalysis.jets.ak5PFJetSequence_pp_mc_cff import *
+#from HeavyIonsAnalysis.JetAnalysis.jets.ak5PFJetSequence_pp_mc_cff import *
 #from HeavyIonsAnalysis.JetAnalysis.jets.ak4CaloJetSequence_pp_mc_cff import *
-#from HeavyIonsAnalysis.JetAnalysis.jets.akSoftDrop4PFJetSequence_pp_mc_cff import *
+from HeavyIonsAnalysis.JetAnalysis.jets.akSoftDrop4PFJetSequence_pp_mc_cff import *
 #from HeavyIonsAnalysis.JetAnalysis.jets.akSoftDrop5PFJetSequence_pp_mc_cff import *
 
 highPurityTracks = cms.EDFilter("TrackSelector",
@@ -63,26 +65,33 @@ highPurityTracks = cms.EDFilter("TrackSelector",
                                 cut = cms.string('quality("highPurity")')
 )
 
+
+
+
+
+
 # Other radii jets and calo jets need to be reconstructed
 jetSequences = cms.Sequence(
-    myPartons +
+    patJetPartonsLegacy +
+    patJetPartons +
     genParticlesForJets +
-    ak3GenJets +
+    #ak3GenJets +
     ak4GenJets +
-    ak5GenJets +
-    ak3PFJets +
-    ak5PFJets +
-    #akSoftDrop4PFJets +
+    #ak5GenJets +
+    fc4GenJets +
+    #ak3PFJets +
+    #ak5PFJets +
+    akSoftDrop4PFJets +
     #akSoftDrop5PFJets +
     #akFilter4PFJets +
     #akFilter5PFJets +
-    #akSoftDrop4GenJets +
+    akSoftDrop4GenJets +
     #akSoftDrop5GenJets +
     highPurityTracks +
     #ak3PFJetSequence +
-    ak4PFJetSequence 
+    ak4PFJetSequence +
     #ak5PFJetSequence +
     #ak4CaloJetSequence +
-    #akSoftDrop4PFJetSequence +
+    akSoftDrop4PFJetSequence 
     #akSoftDrop5PFJetSequence
 )

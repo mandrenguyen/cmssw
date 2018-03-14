@@ -184,7 +184,7 @@ class bTaggers:
 
         self.PatJetPartonAssociationLegacy       = patJetPartonAssociationLegacy.clone(
             jets = cms.InputTag(jetname+"Jets"),
-            partons = cms.InputTag("myPartons")
+            partons = cms.InputTag("patJetPartonsLegacy")
             )
 
         self.PatJetFlavourAssociationLegacy      = patJetFlavourAssociationLegacy.clone(
@@ -193,14 +193,13 @@ class bTaggers:
 
         self.patJetFlavourIdLegacy = cms.Sequence( self.PatJetPartonAssociationLegacy * self.PatJetFlavourAssociationLegacy)
 
-        self.PatJetPartons = patJetPartons.clone()
         self.PatJetFlavourAssociation = patJetFlavourAssociation.clone(
             jets = cms.InputTag(jetname+"Jets"),
             rParam = rParam,
-            bHadrons = cms.InputTag(jetname+"PatJetPartons","bHadrons"),
-            cHadrons = cms.InputTag(jetname+"PatJetPartons","cHadrons"),
-            partons = cms.InputTag(jetname+"PatJetPartons","algorithmicPartons"),
-            leptons = cms.InputTag(jetname+"PatJetPartons","leptons"),
+            bHadrons = cms.InputTag("patJetPartons","bHadrons"),
+            cHadrons = cms.InputTag("patJetPartons","cHadrons"),
+            partons = cms.InputTag("patJetPartons","algorithmicPartons"),
+            leptons = cms.InputTag("patJetPartons","leptons"),
             )
 
 	if doSubjets:
@@ -208,7 +207,8 @@ class bTaggers:
 		self.PatJetFlavourAssociation.groomedJets = cms.InputTag(jetname+'Jets')
 		self.PatJetFlavourAssociation.subjets = cms.InputTag(jetname+'Jets', 'SubJets')
 
-        self.PatJetFlavourId               = cms.Sequence(self.PatJetPartons*self.PatJetFlavourAssociation)
+                #self.PatJetFlavourId               = cms.Sequence(self.PatJetPartons*self.PatJetFlavourAssociation)
+                self.PatJetFlavourId               = cms.Sequence(self.PatJetFlavourAssociation)
         #self.match   = patJetGenJetMatch.clone(
         #    src      = cms.InputTag(jetname+"Jets"),
         #    matched  = cms.InputTag(jetname+"clean"),

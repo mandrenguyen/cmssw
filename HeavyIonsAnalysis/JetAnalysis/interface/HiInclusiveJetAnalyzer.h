@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <iostream>
+#include <vector>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -45,6 +46,8 @@
 
 #include "fastjet/contrib/Njettiness.hh"
 #include "TMVA/Reader.h"
+
+
 //
 
 /**\class HiInclusiveJetAnalyzer
@@ -92,6 +95,7 @@ private:
   int TaggedJet(reco::Jet calojet, edm::Handle<reco::JetTagCollection > jetTags );
   float getTau(unsigned num, const reco::GenJet object) const;
   void analyzeSubjets(const reco::Jet jet, int idx, edm::Handle<reco::JetFlavourInfoMatchingCollection>, edm::Handle<edm::View<reco::Jet> >, edm::Handle<reco::JetTagCollection> jetTags_CombinedSvtxV2, edm::Handle<reco::JetTagCollection> jetTags_negCombinedSvtxV2, edm::Handle<reco::JetTagCollection> jetTags_JP, edm::Handle<std::vector<reco::TrackIPTagInfo> > subjetTagInfo, edm::Handle<std::vector<reco::SecondaryVertexTagInfo> > subjetSV, edm::Handle<std::vector<reco::SecondaryVertexTagInfo> > subjetTagInfoNegSVx);
+  void analyzeSubjets( const pat::JetPtrCollection & subjets);
   void fillNewJetVarsRecoJet(const reco::Jet jet);
   void fillNewJetVarsRefJet(const reco::GenJet jet);
   void fillNewJetVarsGenJet(const reco::GenJet jet);
@@ -234,7 +238,6 @@ private:
   edm::EDGetTokenT<reco::JetTagCollection> CombinedSubjetNegativeSecondaryVertexBJetTags_;
 
   bool doExtendedFlavorTagging_;
-  edm::EDGetTokenT<reco::JetFlavourInfoMatchingCollection> jetFlavourInfosToken_;
   edm::EDGetTokenT<reco::JetFlavourInfoMatchingCollection> subjetFlavourInfosToken_;
   edm::EDGetTokenT<edm::View<reco::Jet> >                  groomedJetsToken_;
   bool                                                     useSubjets_;
@@ -353,19 +356,20 @@ private:
     float jttau2[MAXJETS];
     float jttau3[MAXJETS];
 
-    float jtHadronFlavor[MAXJETS];
-    float jtPartonFlavor[MAXJETS];
+    int jtHadronFlavor[MAXJETS];
+    int jtPartonFlavor[MAXJETS];
 
     std::vector<std::vector<float>> jtSubJetPt;
     std::vector<std::vector<float>> jtSubJetEta;
     std::vector<std::vector<float>> jtSubJetPhi;
     std::vector<std::vector<float>> jtSubJetM;
-    std::vector<std::vector<float>> jtSubJetHadronFlavor;
-    std::vector<std::vector<float>> jtSubJetPartonFlavor; 
+    std::vector<std::vector<int>> jtSubJetHadronFlavor;
+    std::vector<std::vector<int>> jtSubJetPartonFlavor; 
     std::vector<std::vector<float>> jtSubJetcsvV2;
     std::vector<std::vector<float>> jtSubJetNegCsvV2;
     std::vector<std::vector<float>> jtSubJetJP;
     std::vector<std::vector<int>> jtSubJetVtxType;
+    /*
     std::vector<std::vector<std::vector<float>>> jtSubJetSvtxm;
     std::vector<std::vector<std::vector<float>>> jtSubJetSvtxpt;
     std::vector<std::vector<std::vector<float>>> jtSubJetSvtxeta;    
@@ -384,7 +388,7 @@ private:
     std::vector<std::vector<std::vector<float>>> jtSubJetPartonEta;
     std::vector<std::vector<std::vector<float>>> jtSubJetPartonPhi;
     std::vector<std::vector<std::vector<float>>> jtSubJetPartonPdg;
-
+    */
 
     std::vector<std::vector<int>> jtConstituentsId;
     std::vector<std::vector<float>> jtConstituentsE;
@@ -591,7 +595,6 @@ private:
     float refdrjt[MAXJETS];
     float refparton_pt[MAXJETS];
     int refparton_flavor[MAXJETS];
-    int refparton_flavorForB[MAXJETS];
     int refnCands[MAXJETS];
     int refnChCands[MAXJETS];
     int refnNeCands[MAXJETS];

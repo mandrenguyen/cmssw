@@ -42,7 +42,8 @@ class bTaggers:
         self.JetBProbabilityBJetTags.tagInfos      = cms.VInputTag(cms.InputTag(jetname+"ImpactParameterTagInfos"))
 
         # secondary vertex b-tag
-        self.SecondaryVertexTagInfos                     = secondaryVertexTagInfos.clone()
+        #self.SecondaryVertexTagInfos                     = secondaryVertexTagInfos.clone()
+        self.SecondaryVertexTagInfos                     = inclusiveSecondaryVertexFinderTagInfos.clone()
         self.SecondaryVertexTagInfos.trackIPTagInfos     = cms.InputTag(jetname+"ImpactParameterTagInfos")
         self.SimpleSecondaryVertexHighEffBJetTags               = simpleSecondaryVertexHighEffBJetTags.clone()
         self.SimpleSecondaryVertexHighEffBJetTags.tagInfos      = cms.VInputTag(cms.InputTag(jetname+"SecondaryVertexTagInfos"))

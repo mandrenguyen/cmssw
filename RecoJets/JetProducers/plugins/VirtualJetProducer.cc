@@ -15,6 +15,7 @@
 #include "DataFormats/Common/interface/RefProd.h"
 #include "DataFormats/Common/interface/Ref.h"
 #include "DataFormats/Common/interface/RefVector.h"
+#include "DataFormats/Common/interface/RefToPtr.h"
 
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
@@ -44,6 +45,7 @@
 #include "fastjet/CMSIterativeConePlugin.hh"
 #include "fastjet/ATLASConePlugin.hh"
 #include "fastjet/CDFMidPointPlugin.hh"
+
 
 #include <iostream>
 #include <memory>
@@ -97,7 +99,7 @@ void VirtualJetProducer::makeProduces( std::string alias, std::string tag )
   if ( writeJetsWithConst_ ) {
     produces<reco::PFCandidateCollection>(tag).setBranchAlias(alias);
     produces<reco::PFJetCollection>();
-  }else{
+  } else {
     if (makeCaloJet(jetTypeE)) {
       produces<reco::CaloJetCollection>(tag).setBranchAlias(alias);
     }
@@ -151,7 +153,7 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 	restrictInputs_ 	= iConfig.getParameter<bool>	("restrictInputs"); 	// restrict inputs to first "maxInputs" towers?
 	maxInputs_      	= iConfig.getParameter<unsigned int>("maxInputs");
 	writeCompound_ 		= iConfig.getParameter<bool>	("writeCompound"); 	// Check to see if we are writing compound jets for substructure and jet grooming
-	writeJetsWithConst_     = iConfig.getParameter<bool>("writeJetsWithConst"); //write subtracted jet constituents
+        writeJetsWithConst_     = iConfig.getParameter<bool>("writeJetsWithConst"); //write subtracted jet constituents
 	doFastJetNonUniform_ 	= iConfig.getParameter<bool>   	("doFastJetNonUniform");
 	puCenters_ 		= iConfig.getParameter<vector<double> >("puCenters");
 	puWidth_ 		= iConfig.getParameter<double>	("puWidth");
@@ -159,6 +161,7 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 	useDeterministicSeed_ 	= iConfig.getParameter<bool>	("useDeterministicSeed");
 	minSeed_ 		= iConfig.getParameter<unsigned int>("minSeed");
 	verbosity_ 		= iConfig.getParameter<int>	("verbosity");
+	useFlavorCone_		= iConfig.getParameter<bool>    ("useFlavorCone");
 
 	anomalousTowerDef_ = auto_ptr<AnomalousTower>(new AnomalousTower(iConfig));
 
@@ -166,6 +169,17 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 	input_candidateview_token_ = consumes<reco::CandidateView>(src_);
 	input_candidatefwdptr_token_ = consumes<vector<edm::FwdPtr<reco::PFCandidate> > >(iConfig.getParameter<edm::InputTag>("src"));
 	input_packedcandidatefwdptr_token_ = consumes<vector<edm::FwdPtr<pat::PackedCandidate> > >(iConfig.getParameter<edm::InputTag>("src"));
+	input_gencandidatefwdptr_token_ = consumes<vector<edm::FwdPtr<reco::GenParticle> > >(iConfig.getParameter<edm::InputTag>("src"));
+	input_packedgencandidatefwdptr_token_ = consumes<vector<edm::FwdPtr<pat::PackedGenParticle> > >(iConfig.getParameter<edm::InputTag>("src"));
+
+	if(useFlavorCone_){
+	  input_fcSeedsGenParticleRefVector_token_ = consumes<reco::GenParticleRefVector >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
+	  //input_fcSeedsVtx_token_ = consumes<vector<reco::Vertex> >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
+	  //input_fcSeedsVtx_token_ = consumes<vector<edm::FwdPtr<reco::Vertex> > >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
+	  //input_fcSeedsVtx_token_ = consumes<vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
+	  input_fcSeedsVtx_token_ = consumes<vector<reco::VertexCompositePtrCandidate> >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
+	}
+	
 	//
 	// additional parameters to think about:
 	// - overlap threshold (set to 0.75 for the time being)
@@ -181,6 +195,16 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 	else if (jetAlgorithm_=="AntiKt")
 		fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(fastjet::antikt_algorithm,rParam_) );
 
+
+
+	//std::vector<fastjet::PseudoJet> fjexcluded_jets;
+	else if (jetAlgorithm_=="FlavorCone"){
+	  // do nothing.  This needs to be done below
+
+	  // use constituents as seeds for the moment
+	  //fjFlavorCone_ = FlavorConePtr( new fastjet::contrib::FlavorConePlugin(fjInputs_, rParam_) );
+	  //fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(&*fjPlugin_) );
+	}
 	else if (jetAlgorithm_=="GeneralizedKt") 
 		fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(fastjet::genkt_algorithm,rParam_,-2) );
 
@@ -226,7 +250,7 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 
 		if (voronoiRfact_ <= 0) {
 			fjActiveArea_     = ActiveAreaSpecPtr(new fastjet::GhostedAreaSpec(ghostEtaMax_,activeAreaRepeats_,ghostArea_));
-			fjActiveArea_->set_fj2_placement(true);
+			
 
 			if ( !useExplicitGhosts_ ) {
 				fjAreaDefinition_ = AreaDefinitionPtr( new fastjet::AreaDefinition(fastjet::active_area, *fjActiveArea_ ) );
@@ -234,20 +258,19 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 				fjAreaDefinition_ = AreaDefinitionPtr( new fastjet::AreaDefinition(fastjet::active_area_explicit_ghosts, *fjActiveArea_ ) );
 			}
 		}
-		fjRangeDef_ = RangeDefPtr( new fastjet::RangeDefinition(rhoEtaMax_) );
+		fjSelector_ =  SelectorPtr( new fastjet::Selector( fastjet::SelectorAbsRapMax(rhoEtaMax_) ) );
 	} 
 
-	if( ( doFastJetNonUniform_ ) && ( puCenters_.size() == 0 ) ) 
+	if( ( doFastJetNonUniform_ ) && ( puCenters_.empty() ) ) 
 		throw cms::Exception("doFastJetNonUniform") << "Parameter puCenters for doFastJetNonUniform is not defined." << std::endl;
-
-	// make the "produces" statements
-	makeProduces( moduleLabel_, jetCollInstanceName_ );
+  
+        // make the "produces" statements
+        makeProduces( moduleLabel_, jetCollInstanceName_ );
 	produces<vector<double> >("rhos");
 	produces<vector<double> >("sigmas");
 	produces<double>("rho");
 	produces<double>("sigma");
 
-  
 }
 
 //______________________________________________________________________________
@@ -286,30 +309,39 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
     LogDebug("VirtualJetProducer") << "Adding PV info\n";
     edm::Handle<reco::VertexCollection> pvCollection;
     iEvent.getByToken(input_vertex_token_ , pvCollection);
-    if (pvCollection->size()>0) vertex_=pvCollection->begin()->position();
+    if (!pvCollection->empty()) vertex_=pvCollection->begin()->position();
   }
-
   // For Pileup subtraction using offset correction:
   // set up geometry map
   if ( doPUOffsetCorr_ ) {
      subtractor_->setupGeometryMap(iEvent, iSetup);
   }
-
   // clear data
   LogDebug("VirtualJetProducer") << "Clear data\n";
   fjInputs_.clear();
   fjJets_.clear();
   inputs_.clear();  
-  
+  if(useFlavorCone_){
+    seeds_.clear();
+    fcSeeds_.clear();
+  }
   // get inputs and convert them to the fastjet format (fastjet::PeudoJet)
   edm::Handle<reco::CandidateView> inputsHandle;
   
   edm::Handle< std::vector<edm::FwdPtr<reco::PFCandidate> > > pfinputsHandleAsFwdPtr; 
   edm::Handle< std::vector<edm::FwdPtr<pat::PackedCandidate> > > packedinputsHandleAsFwdPtr; 
-  
+  edm::Handle< std::vector<edm::FwdPtr<reco::GenParticle> > > geninputsHandleAsFwdPtr; 
+  edm::Handle< std::vector<edm::FwdPtr<pat::PackedGenParticle> > > packedgeninputsHandleAsFwdPtr; 
+
+  edm::Handle<reco::GenParticleRefVector> fcSeedsGenParticleRefVector;
+  //edm::Handle< std::vector<reco::Vertex> > fcSeedsVtx;
+  //edm::Handle< std::vector<edm::FwdPtr<reco::Vertex> > >fcSeedsVtx;
+  //edm::Handle< std::vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > >fcSeedsVtx;
+  edm::Handle< std::vector<reco::VertexCompositePtrCandidate> >fcSeedsVtx;
+
   bool isView = iEvent.getByToken(input_candidateview_token_, inputsHandle);
   if ( isView ) {
-    if ( inputsHandle->size() == 0) {
+    if ( inputsHandle->empty()) {
       output( iEvent, iSetup );
       return;
     }
@@ -318,8 +350,12 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
     }
   } else {
     bool isPF = iEvent.getByToken(input_candidatefwdptr_token_, pfinputsHandleAsFwdPtr);
+    bool isPFFwdPtr = iEvent.getByToken(input_packedcandidatefwdptr_token_, packedinputsHandleAsFwdPtr);
+    bool isGen = iEvent.getByToken(input_gencandidatefwdptr_token_, geninputsHandleAsFwdPtr);
+    bool isGenFwdPtr = iEvent.getByToken(input_packedgencandidatefwdptr_token_, packedgeninputsHandleAsFwdPtr);
+    
     if ( isPF ) {
-      if ( pfinputsHandleAsFwdPtr->size() == 0) {
+      if ( pfinputsHandleAsFwdPtr->empty()) {
 	output( iEvent, iSetup );
 	return;
       }
@@ -331,9 +367,8 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
 	  inputs_.push_back( (*pfinputsHandleAsFwdPtr)[i].backPtr() );
 	}
       }
-    } else {
-      iEvent.getByToken(input_packedcandidatefwdptr_token_, packedinputsHandleAsFwdPtr);
-      if ( packedinputsHandleAsFwdPtr->size() == 0) {
+    } else if ( isPFFwdPtr ) {
+      if ( packedinputsHandleAsFwdPtr->empty()) {
 	output( iEvent, iSetup );
 	return;
       }
@@ -345,10 +380,39 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
 	  inputs_.push_back( (*packedinputsHandleAsFwdPtr)[i].backPtr() );
 	}
       }
+    } else if ( isGen ) {
+      if ( geninputsHandleAsFwdPtr->empty()) {
+	output( iEvent, iSetup );
+	return;
+      }
+      for (size_t i = 0; i < geninputsHandleAsFwdPtr->size(); ++i) {
+	if ( (*geninputsHandleAsFwdPtr)[i].ptr().isAvailable() ) {
+	  inputs_.push_back( (*geninputsHandleAsFwdPtr)[i].ptr() );
+	}
+	else if ( (*geninputsHandleAsFwdPtr)[i].backPtr().isAvailable() ) {
+	  inputs_.push_back( (*geninputsHandleAsFwdPtr)[i].backPtr() );
+	}
+      }
+    } else if ( isGenFwdPtr ) {
+      if ( geninputsHandleAsFwdPtr->empty()) {
+	output( iEvent, iSetup );
+	return;
+      }
+      for (size_t i = 0; i < packedgeninputsHandleAsFwdPtr->size(); ++i) {
+	if ( (*packedgeninputsHandleAsFwdPtr)[i].ptr().isAvailable() ) {
+	  inputs_.push_back( (*packedgeninputsHandleAsFwdPtr)[i].ptr() );
+	}
+	else if ( (*packedgeninputsHandleAsFwdPtr)[i].backPtr().isAvailable() ) {
+	  inputs_.push_back( (*packedgeninputsHandleAsFwdPtr)[i].backPtr() );
+	}
+      }
+    }
+    else {
+	throw cms::Exception("Invalid Jet Inputs") <<"Did not specify appropriate inputs for VirtualJetProducer, Abort!\n";    
     }
   }
   LogDebug("VirtualJetProducer") << "Got inputs\n";
-  
+
   // Convert candidates to fastjet::PseudoJets.
   // Also correct to Primary Vertex. Will modify fjInputs_
   // and use inputs_
@@ -356,6 +420,53 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
   inputTowers();
   LogDebug("VirtualJetProducer") << "Inputted towers\n";
 
+  if(useFlavorCone_){
+    bool isGenSeeds = iEvent.getByToken(input_fcSeedsGenParticleRefVector_token_, fcSeedsGenParticleRefVector);
+    bool isVtxSeeds = iEvent.getByToken(input_fcSeedsVtx_token_, fcSeedsVtx);
+
+    if(isGenSeeds){
+      if ( fcSeedsGenParticleRefVector->empty()) {
+	output( iEvent, iSetup );
+	return;
+      }
+      else{	
+	for(reco::GenParticleRefVector::const_iterator it = fcSeedsGenParticleRefVector->begin(); it != fcSeedsGenParticleRefVector->end(); ++it){
+	  // refs not polymorphic, need ptr
+	  reco::GenParticleRef ref = *it;
+	  seeds_.push_back(edm::refToPtr(ref));
+	}
+      }      
+    }
+    else if(isVtxSeeds){
+      //std::cout<<"has vtx seeds "<<std::endl;
+      if ( fcSeedsVtx->empty()) {
+	//cout<<" fc seed empty "<<endl;
+	output( iEvent, iSetup );
+	return;
+      }
+      else{	
+	//std::cout<<" fcSeedsVtx->size() "<<fcSeedsVtx->size()<<std::endl;
+	for (size_t i = 0; i < fcSeedsVtx->size(); ++i) {	  	 
+	  //cout<<" vertex seed i "<<i<<" pt "<<(*fcSeedsVtx)[i].pt()<<" eta "<<(*fcSeedsVtx)[i].eta()<<" phi "<<(*fcSeedsVtx)[i].phi()<<std::endl;
+	  edm::Ptr<reco::Candidate> myPtr(fcSeedsVtx, i);  // only managed to do this by creating a transient Ptr
+	  seeds_.push_back(myPtr);
+	}
+      }      
+    }
+
+
+
+  }
+  
+  
+  if(useFlavorCone_){
+    fcSeeds_.reserve(seeds_.size());
+    //std::cout<<" inputting seeds "<<std::endl;
+    inputSeeds();
+    //if(fcSeeds_.size()>0) std::cout<<" fcSeeds_[0] "<<fcSeeds_[0].phi()<<std::endl;
+    fjFlavorCone_ = FlavorConePtr( new fastjet::contrib::FlavorConePlugin(fcSeeds_, rParam_) );
+    fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(&*fjFlavorCone_) );
+  }
   // For Pileup subtraction using offset correction:
   // Subtract pedestal. 
   if ( doPUOffsetCorr_ ) {
@@ -365,10 +476,16 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
      subtractor_->subtractPedestal(fjInputs_);    
      LogDebug("VirtualJetProducer") << "Subtracted pedestal\n";
   }
+
   // Run algorithm. Will modify fjJets_ and allocate fjClusterSeq_. 
   // This will use fjInputs_
   runAlgorithm( iEvent, iSetup );
 
+  //cout<<" fjJets_.size() "<<fjJets_.size()<<endl;
+  for (unsigned int ijet=0;ijet<fjJets_.size();++ijet) {
+    //std::cout<<fjJets_[ijet].px()<<" "<< fjJets_[ijet].py()<<" "<< fjJets_[ijet].pz()<<" "<< fjJets_[ijet].E()<<std::endl;
+    //std::cout<<" pt "<<fjJets_[ijet].pt()<<" eta "<<fjJets_[ijet].eta()<<" phi  "<< fjJets_[ijet].phi()<<std::endl;
+  }
   // if ( doPUOffsetCorr_ ) {
   //    subtractor_->setAlgorithm(fjClusterSeq_);
   // }
@@ -387,20 +504,24 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
     subtractor_->calculatePedestal(orphanInput);
     subtractor_->offsetCorrectJets();
   }
+
   // Write the output jets.
   // This will (by default) call the member function template
   // "writeJets", but can be overridden. 
   // this will use inputs_
   output( iEvent, iSetup );
   LogDebug("VirtualJetProducer") << "Wrote jets\n";
-  
+
   // Clear the work vectors so that memory is free for other modules.
   // Use the trick of swapping with an empty vector so that the memory
   // is actually given back rather than silently kept.
   decltype(fjInputs_)().swap(fjInputs_);
   decltype(fjJets_)().swap(fjJets_);
   decltype(inputs_)().swap(inputs_);  
-
+  if(useFlavorCone_){
+    decltype(fcSeeds_)().swap(fcSeeds_); 
+    decltype(seeds_)().swap(seeds_);  
+  }
   return;
 }
 
@@ -448,6 +569,35 @@ void VirtualJetProducer::inputTowers( )
     edm::LogWarning("JetRecoTooManyEntries") << "Too many inputs in the event, limiting to first " << maxInputs_ << ". Output is suspect.";
   }
 }
+
+
+void VirtualJetProducer::inputSeeds( )
+{
+
+  auto inBegin = seeds_.begin(), inEnd = seeds_.end(), i = inBegin;
+  for (; i != inEnd; ++i ) {
+    auto const & input = **i;
+    if (edm::isNotFinite(input.pt()))           continue;    
+    //std::cout<<" my Seed "<<"px "<< input.px() <<" py "<<input.py() <<" pz "<<input.pz() <<" energy "<<input.energy()<<endl;
+    //fcSeeds_.emplace_back(input.px(),input.py(),input.pz(),input.energy());    
+    float eta = input.eta();
+    float phi = input.phi();
+    float x = cos(phi);
+    float y = sin(phi);
+    float z = sinh(eta);
+    float r = sqrt(x*x+y*y+z*z);
+    fcSeeds_.emplace_back(x,y,z,r);    
+    
+    fcSeeds_.back().set_user_index(i - inBegin);
+  }
+  /*
+  for(unsigned i=0;i<fcSeeds_.size();i++){
+    std::cout<<" fcseeds i "<<i<<" eta "<<fcSeeds_[i].eta()<<" phi "<<fcSeeds_[i].phi()<<std::endl;
+  }
+  */
+
+}
+
 
 //______________________________________________________________________________
 bool VirtualJetProducer::isAnomalousTower(reco::CandidatePtr input)
@@ -497,6 +647,7 @@ void VirtualJetProducer::output(edm::Event & iEvent, edm::EventSetup const& iSet
 {
   // Write jets and constitutents. Will use fjJets_, inputs_
   // and fjClusterSeq_
+
   if ( writeCompound_ ) {
     // Write jets and subjets
     switch( jetTypeE ) {
@@ -540,7 +691,7 @@ void VirtualJetProducer::output(edm::Event & iEvent, edm::EventSetup const& iSet
       writeJets<reco::BasicJet>( iEvent, iSetup);
       break;
     default:
-      throw cms::Exception("InvalidInput") << "invalid jet type in VirtualJetProducer\n";
+           throw cms::Exception("InvalidInput") << "invalid jet type in VirtualJetProducer\n";
       break;
     };
   }
@@ -585,7 +736,7 @@ void VirtualJetProducer::writeJets( edm::Event & iEvent, edm::EventSetup const& 
         dynamic_cast<fastjet::ClusterSequenceAreaBase const *> ( &*fjClusterSeq_ );
 
       if (clusterSequenceWithArea ==nullptr ){
-	if (fjJets_.size() > 0) {
+	if (!fjJets_.empty()) {
 	  throw cms::Exception("LogicError")<<"fjClusterSeq is not initialized while inputs are present\n ";
 	}
       } else {
@@ -609,20 +760,14 @@ void VirtualJetProducer::writeJets( edm::Event & iEvent, edm::EventSetup const& 
       
       fastjet::ClusterSequenceAreaBase const* clusterSequenceWithArea =
         dynamic_cast<fastjet::ClusterSequenceAreaBase const *> ( &*fjClusterSeq_ );
-      /*
-	const double nemptyjets = clusterSequenceWithArea->n_empty_jets(*fjRangeDef_);
-	if(( nemptyjets  < -15 ) || ( nemptyjets > fjRangeDef_->area()+ 15)) {
-	edm::LogWarning("StrangeNEmtpyJets") << "n_empty_jets is : " << clusterSequenceWithArea->n_empty_jets(*fjRangeDef_) << " with range " << fjRangeDef_->description() << ".";
-	}
-      */
       if (clusterSequenceWithArea ==nullptr ){
-	if (fjJets_.size() > 0) {
+	if (!fjJets_.empty()) {
 	  throw cms::Exception("LogicError")<<"fjClusterSeq is not initialized while inputs are present\n ";
 	}
       } else {
-	clusterSequenceWithArea->get_median_rho_and_sigma(*fjRangeDef_,false,*rho,*sigma,mean_area);
+	clusterSequenceWithArea->get_median_rho_and_sigma(*fjSelector_,false,*rho,*sigma,mean_area);
 	if((*rho < 0)|| (edm::isNotFinite(*rho))) {
-	  edm::LogError("BadRho") << "rho value is " << *rho << " area:" << mean_area << " and n_empty_jets: " << clusterSequenceWithArea->n_empty_jets(*fjRangeDef_) << " with range " << fjRangeDef_->description()
+	  edm::LogError("BadRho") << "rho value is " << *rho << " area:" << mean_area << " and n_empty_jets: " << clusterSequenceWithArea->n_empty_jets(*fjSelector_) << " with range " << fjSelector_->description()
 				  <<". Setting rho to rezo.";
 	  *rho = 0;
 	}
@@ -855,7 +1000,6 @@ void VirtualJetProducer::writeCompoundJets(  edm::Event & iEvent, edm::EventSetu
 
 }
 
-
 /// function template to write out the outputs
 template< class T>
 void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::EventSetup const& iSetup)
@@ -943,7 +1087,7 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
       reco::CandidatePtr candPtr( constituentHandleAfterPut, *iconst, false );
       i_jetConstituents.push_back( candPtr );
     }
-    if(i_jetConstituents.size()>0) { //only keep jets which have constituents after subtraction
+    if(!i_jetConstituents.empty()) { //only keep jets which have constituents after subtraction
       reco::Particle::Point point(0,0,0);
       reco::PFJet jet;
       reco::writeSpecific(jet,*ip4,point,i_jetConstituents,iSetup);
@@ -956,60 +1100,62 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
   iEvent.put(std::move(jetCollection));
 }
 
-
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void VirtualJetProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
 
 	edm::ParameterSetDescription desc;
         fillDescriptionsFromVirtualJetProducer(desc);
 	desc.add<string>("jetCollInstanceName", ""	);
-	descriptions.add("VirtualJetProducer",desc);
+
+        // addDefault must be used here instead of add unless
+        // all the classes that inherit from this class redefine
+        // the fillDescriptions function. Otherwise, the autogenerated
+        // cfi filenames are the same and conflict.
+	descriptions.addDefault(desc);
 }
 
 void VirtualJetProducer::fillDescriptionsFromVirtualJetProducer(edm::ParameterSetDescription& desc)
 {
-	desc.add<edm::InputTag>("src",		edm::InputTag("particleFlow") );
-	desc.add<edm::InputTag>("srcPVs",	edm::InputTag("") );
-	desc.add<string>("jetType",		"PFJet" );
-	desc.add<string>("jetAlgorithm",	"AntiKt" );
-	desc.add<double>("rParam",		0.4 );
-	desc.add<double>("inputEtMin",		0.0 );
-	desc.add<double>("inputEMin",		0.0 );
-	desc.add<double>("jetPtMin",		5. );
-	desc.add<bool> 	("doPVCorrection",	false );
-	desc.add<bool> 	("doAreaFastjet",	false );
-	desc.add<bool>  ("doRhoFastjet",	false );
-	desc.add<bool> 	("doPUOffsetCorr", 	false	);
-	desc.add<double>("puPtMin",             10.);
-        desc.add<double>("nSigmaPU",            1.0 );
-        desc.add<double>("radiusPU",            0.5 );
-	desc.add<string>("subtractorName", 	""	);
-	desc.add<bool> 	("useExplicitGhosts", 	false	);
-	desc.add<bool> 	("doAreaDiskApprox", 	false 	);
-	desc.add<double>("voronoiRfact", 	-0.9 	);
-	desc.add<double>("Rho_EtaMax", 	 	4.4 	);
-	desc.add<double>("Ghost_EtaMax",	5. 	);
-	desc.add<int> 	("Active_Area_Repeats",	1 	);
-	desc.add<double>("GhostArea",	 	0.01 	);
-	desc.add<bool> 	("restrictInputs", 	false 	);
-	desc.add<unsigned int> 	("maxInputs", 	1 	);
-	desc.add<bool> 	("writeCompound", 	false 	);
-	desc.add<bool> ("writeJetsWithConst", false );
-	desc.add<bool> 	("doFastJetNonUniform", false 	);
-	desc.add<bool> 	("useDeterministicSeed",false 	);
-	desc.add<unsigned int> 	("minSeed", 	14327 	);
-	desc.add<int> 	("verbosity", 		0 	);
-	desc.add<double>("puWidth",	 	0. 	);
-	desc.add<unsigned int>("nExclude", 	0 	);
-	desc.add<unsigned int>("maxBadEcalCells", 	9999999	);
-	desc.add<unsigned int>("maxBadHcalCells",	9999999 );
-	desc.add<unsigned int>("maxProblematicEcalCells",	9999999 );
-	desc.add<unsigned int>("maxProblematicHcalCells",	9999999 );
-	desc.add<unsigned int>("maxRecoveredEcalCells",	9999999 );
-	desc.add<unsigned int>("maxRecoveredHcalCells",	9999999 );
-	vector<double>  puCentersDefault;
-	desc.add<vector<double>>("puCenters", 	puCentersDefault);
-	desc.add<double>("minimumTowersFraction", 0.0);
-
+  desc.add<edm::InputTag>("flavorConeSeeds",    edm::InputTag("partonsAndHadrons","bHadrons") );
+  desc.add<edm::InputTag>("src",		edm::InputTag("particleFlow") );
+  desc.add<edm::InputTag>("srcPVs",	edm::InputTag("") );
+  desc.add<string>("jetType",		"PFJet" );
+  desc.add<string>("jetAlgorithm",	"AntiKt" );
+  desc.add<double>("rParam",		0.4 );
+  desc.add<double>("inputEtMin",		0.0 );
+  desc.add<double>("inputEMin",		0.0 );
+  desc.add<double>("jetPtMin",		5. );
+  desc.add<bool> 	("doPVCorrection",	false );
+  desc.add<bool> 	("doAreaFastjet",	false );
+  desc.add<bool>  ("doRhoFastjet",	false );
+  desc.add<bool> 	("doPUOffsetCorr", 	false	);
+  desc.add<double>("puPtMin",             10.);
+  desc.add<double>("nSigmaPU",            1.0 );
+  desc.add<double>("radiusPU",            0.5 );
+  desc.add<string>("subtractorName", 	""	);
+  desc.add<bool> 	("useExplicitGhosts", 	false	);
+  desc.add<bool> 	("doAreaDiskApprox", 	false 	);
+  desc.add<double>("voronoiRfact", 	-0.9 	);
+  desc.add<double>("Rho_EtaMax", 	 	4.4 	);
+  desc.add<double>("Ghost_EtaMax",	5. 	);
+  desc.add<int> 	("Active_Area_Repeats",	1 	);
+  desc.add<double>("GhostArea",	 	0.01 	);
+  desc.add<bool> 	("restrictInputs", 	false 	);
+  desc.add<unsigned int> 	("maxInputs", 	1 	);
+  desc.add<bool> 	("writeCompound", 	false 	);
+  desc.add<bool> 	("writeJetsWithConst", 	false 	);
+  desc.add<bool> 	("doFastJetNonUniform", false 	);
+  desc.add<bool> 	("useDeterministicSeed",false 	);
+  desc.add<unsigned int> 	("minSeed", 	14327 	);
+  desc.add<int> 	("verbosity", 		0 	);
+  desc.add<double>("puWidth",	 	0. 	);
+  desc.add<unsigned int>("nExclude", 	0 	);
+  desc.add<unsigned int>("maxBadEcalCells", 	9999999	);
+  desc.add<unsigned int>("maxBadHcalCells",	9999999 );
+  desc.add<unsigned int>("maxProblematicEcalCells",	9999999 );
+  desc.add<unsigned int>("maxProblematicHcalCells",	9999999 );
+  desc.add<unsigned int>("maxRecoveredEcalCells",	9999999 );
+  desc.add<unsigned int>("maxRecoveredHcalCells",	9999999 );
+  vector<double>  puCentersDefault;
+  desc.add<vector<double>>("puCenters", 	puCentersDefault);
 }
-

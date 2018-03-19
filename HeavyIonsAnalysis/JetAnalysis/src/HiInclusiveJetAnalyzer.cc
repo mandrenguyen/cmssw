@@ -1136,28 +1136,6 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 
 
 
-  // test loop for pat only
-  for(unsigned int j = 0; j < patjets->size(); ++j){
-    const pat::Jet& jet = (*patjets)[j];
-
-    cout<<" jet pt "<<jet.pt()<<" eta "<<jet.eta() <<" phi "<<jet.phi()<<endl;
-    if(jet.hasSubjets("SoftDrop")){  // if your subjets aren't called like that it's your problem
-       const pat::JetPtrCollection & subjets = jet.subjets("SoftDrop");       
-       for(size_t isub=0; isub<subjets.size(); ++isub){	 
-	 const pat::Jet & subjet = subjets[isub]; 	 
-	 cout<<" subjet pt "<<subjet.pt()<<" eta "<<subjet.eta() <<" phi "<<subjet.phi()<<endl;
-
-	 const reco::GenJet * genjet = subjet.genJet();
-	 
-	 if(genjet){
-	   
-	   
-	   cout<<" subjet gen pt "<<subjet.genJet()->pt()<<" eta "<<subjet.genJet()->eta() <<" phi "<<subjet.genJet()->phi()<<endl;
-	 }
-       }
-    }
-  }
-
 
   for(unsigned int j = 0; j < jets->size(); ++j){
     const reco::Jet& jet = (*jets)[j];

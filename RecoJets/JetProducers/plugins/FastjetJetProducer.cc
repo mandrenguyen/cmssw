@@ -69,6 +69,7 @@ FastjetJetProducer::FastjetJetProducer(const edm::ParameterSet& iConfig):
 	minVtxNdof_ = iConfig.getParameter<int>("MinVtxNdof");
 	maxVtxZ_ = iConfig.getParameter<double>("MaxVtxZ");
 
+	useFlavorCone_ = iConfig.getParameter<bool>("useFlavorCone");
 	useMassDropTagger_ = iConfig.getParameter<bool>("useMassDropTagger");
 	muCut_ = iConfig.getParameter<double>("muCut");
 	yCut_ = iConfig.getParameter<double>("yCut");
@@ -148,7 +149,7 @@ FastjetJetProducer::FastjetJetProducer(const edm::ParameterSet& iConfig):
 				( dRMin_ == -1 )  || ( dRMax_ == -1 ) ) )
 		throw cms::Exception("useCMSBoostedTauSeedingAlgorithm") << "Parameters subjetPtMin, muMin, muMax, yMin, yMax, dRmin, dRmax, maxDepth for CMSBoostedTauSeedingAlgorithm are not defined." << std::endl;
 
-	if ( useConstituentSubtraction_ && ( fjAreaDefinition_.get() == 0 ) ) 
+	if ( useConstituentSubtraction_ && ( fjAreaDefinition_.get() == nullptr ) ) 
 		throw cms::Exception("AreaMustBeSet") << "Logic error. The area definition must be set if you use constituent subtraction." << std::endl;
 
 	if ( ( useConstituentSubtraction_ ) && ( ( csRho_EtaMax_ == -1 ) || ( csRParam_ == -1 ) ) ) 
@@ -227,6 +228,10 @@ void FastjetJetProducer::produceTrackJets( edm::Event & iEvent, const edm::Event
       // clear the intermediate containers
       inputs_.clear();
       fjInputs_.clear();
+      if(useFlavorCone_){
+	seeds_.clear();
+	fcSeeds_.clear();
+      }
       fjJets_.clear();
 
       // if only vertex-associated tracks should be used
@@ -289,13 +294,13 @@ void FastjetJetProducer::produceTrackJets( edm::Event & iEvent, const edm::Event
       fjInputs_.reserve(inputs_.size());
       inputTowers();
       LogDebug("FastjetTrackJetProducer") << "Inputted towers\n";
-
       // run algorithm, using fjInputs_, modifying fjJets_ and allocating fjClusterSeq_
       runAlgorithm(iEvent, iSetup);
       LogDebug("FastjetTrackJetProducer") << "Ran algorithm\n";
 
       // convert our jets and add to the overall jet vector
       for (unsigned int ijet=0;ijet<fjJets_.size();++ijet) {
+
         // get the constituents from fastjet
         std::vector<fastjet::PseudoJet> fjConstituents = sorted_by_pt(fjClusterSeq_->constituents(fjJets_[ijet]));
         // convert them to CandidatePtr vector
@@ -474,6 +479,7 @@ void FastjetJetProducer::fillDescriptions(edm::ConfigurationDescriptions& descri
 
 void FastjetJetProducer::fillDescriptionsFromFastJetProducer(edm::ParameterSetDescription& desc)
 {
+	desc.add<bool>("useFlavorCone",     false);
 	desc.add<bool>("useMassDropTagger",     false);
 	desc.add<bool>("useFiltering",	        false);
 	desc.add<bool>("useDynamicFiltering",	false);

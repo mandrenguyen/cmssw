@@ -9,12 +9,16 @@
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/Candidate/interface/CandidateFwd.h"
+#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
+#include "DataFormats/Candidate/interface/VertexCompositePtrCandidateFwd.h"
+
 #include "DataFormats/JetReco/interface/Jet.h"
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/JetReco/interface/PFJet.h"
 #include "DataFormats/JetReco/interface/BasicJet.h"
 #include "DataFormats/JetReco/interface/GenJet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 
 #include "DataFormats/JetReco/interface/BasicJetCollection.h"
 
@@ -26,6 +30,9 @@
 #include "fastjet/ClusterSequenceArea.hh"
 #include "fastjet/PseudoJet.hh"
 #include "fastjet/GhostedAreaSpec.hh"
+#include "fastjet/Selector.hh"
+
+#include "fastjet/contrib/FlavorCone.hh"
 
 #include <memory>
 #include <vector>
@@ -79,7 +86,7 @@ protected:
   //
 public:
   explicit VirtualJetProducer(const edm::ParameterSet& iConfig);
-  virtual ~VirtualJetProducer();
+  ~VirtualJetProducer() override;
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
   static void fillDescriptionsFromVirtualJetProducer(edm::ParameterSetDescription& desc);
   
@@ -89,13 +96,14 @@ public:
   typedef boost::shared_ptr<fastjet::JetDefinition>          JetDefPtr;
   typedef boost::shared_ptr<fastjet::GhostedAreaSpec>        ActiveAreaSpecPtr;
   typedef boost::shared_ptr<fastjet::AreaDefinition>         AreaDefinitionPtr;
-  typedef boost::shared_ptr<fastjet::RangeDefinition>        RangeDefPtr;
-  
+  typedef boost::shared_ptr<fastjet::Selector>               SelectorPtr;
+  typedef boost::shared_ptr<fastjet::contrib::FlavorConePlugin>  FlavorConePtr;
+
   //
   // member functions
   //
 public:
-  virtual void  produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override;
+  void  produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override;
   std::string   jetType() const { return jetType_; }
   
 protected:
@@ -113,6 +121,8 @@ protected:
   // This method inputs the constituents from "inputs" and modifies
   // fjInputs. 
   virtual void inputTowers();
+
+  virtual void inputSeeds();
 
   // This checks if the tower is anomalous (if a calo tower).
   virtual bool isAnomalousTower(reco::CandidatePtr input);
@@ -150,7 +160,7 @@ protected:
   void writeCompoundJets(  edm::Event & iEvent, edm::EventSetup const& iSetup);
 
   template< typename T>
-  void writeJetsWithConstituents(  edm::Event & iEvent, edm::EventSetup const& iSetup);
+    void writeJetsWithConstituents(  edm::Event & iEvent, edm::EventSetup const& iSetup);
 
   // This method copies the constituents from the fjConstituents method
   // to an output of CandidatePtr's. 
@@ -190,20 +200,25 @@ protected:
   int                   activeAreaRepeats_;         // default Active_Area_Repeats 1
   double                ghostArea_;                 // default GhostArea 0.01
 
+  bool                  useFlavorCone_;
+
   // for pileup offset correction
   bool                  doPUOffsetCorr_;            // add the pileup calculation from offset correction? 
   std::string           puSubtractorName_;
 
   std::vector<edm::Ptr<reco::Candidate> > inputs_;  // input candidates [View, PtrVector and CandCollection have limitations]
+  std::vector<edm::Ptr<reco::Candidate> > seeds_;  // input seeds for FlavorCone [View, PtrVector and CandCollection have limitations]
   reco::Particle::Point           vertex_;          // Primary vertex 
   ClusterSequencePtr              fjClusterSeq_;    // fastjet cluster sequence
   JetDefPtr                       fjJetDefinition_; // fastjet jet definition
   PluginPtr                       fjPlugin_;        // fastjet plugin
   ActiveAreaSpecPtr               fjActiveArea_;    // fastjet active area definition
   AreaDefinitionPtr               fjAreaDefinition_;// fastjet area definition
-  RangeDefPtr                     fjRangeDef_;      // range definition
+  SelectorPtr                     fjSelector_;      // selector for range definition
   std::vector<fastjet::PseudoJet> fjInputs_;        // fastjet inputs
   std::vector<fastjet::PseudoJet> fjJets_;          // fastjet jets
+  FlavorConePtr                   fjFlavorCone_;
+  std::vector<fastjet::PseudoJet> fcSeeds_;        // fastjet seeds for FlavorCone Algo
 
   // Parameters of the eta-dependent rho calculation
   std::vector<double>             puCenters_;
@@ -219,7 +234,7 @@ protected:
   unsigned int                    minSeed_;              // minimum seed to use, useful for MC generation
 
   int                   verbosity_;                 // flag to enable/disable debug output
-  bool                  fromHTTTopJetProducer_;   // for running the v2.0 HEPTopTagger
+  bool                  fromHTTTopJetProducer_ = false;   // for running the v2.0 HEPTopTagger
 
 private:
   std::auto_ptr<AnomalousTower>   anomalousTowerDef_;  // anomalous tower definition
@@ -228,6 +243,13 @@ private:
   edm::EDGetTokenT<reco::CandidateView> input_candidateview_token_;
   edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > input_candidatefwdptr_token_;
   edm::EDGetTokenT<std::vector<edm::FwdPtr<pat::PackedCandidate> > > input_packedcandidatefwdptr_token_;
+  edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::GenParticle> > > input_gencandidatefwdptr_token_;
+  edm::EDGetTokenT<std::vector<edm::FwdPtr<pat::PackedGenParticle> > > input_packedgencandidatefwdptr_token_;
+
+  edm::EDGetTokenT<reco::GenParticleRefVector > input_fcSeedsGenParticleRefVector_token_;
+  //edm::EDGetTokenT<std::vector<reco::Vertex> > input_fcSeedsVtx_token_;
+  //edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > > input_fcSeedsVtx_token_;
+  edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > input_fcSeedsVtx_token_;
 
  protected:
   edm::EDGetTokenT<reco::VertexCollection> input_vertex_token_;

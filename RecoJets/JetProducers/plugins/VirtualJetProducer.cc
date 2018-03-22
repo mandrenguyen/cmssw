@@ -41,6 +41,9 @@
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 
+#include "DataFormats/GeometryVector/interface/GlobalPoint.h"
+#include "DataFormats/GeometryVector/interface/GlobalVector.h"
+
 #include "fastjet/SISConePlugin.hh"
 #include "fastjet/CMSIterativeConePlugin.hh"
 #include "fastjet/ATLASConePlugin.hh"
@@ -174,9 +177,6 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 
 	if(useFlavorCone_){
 	  input_fcSeedsGenParticleRefVector_token_ = consumes<reco::GenParticleRefVector >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
-	  //input_fcSeedsVtx_token_ = consumes<vector<reco::Vertex> >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
-	  //input_fcSeedsVtx_token_ = consumes<vector<edm::FwdPtr<reco::Vertex> > >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
-	  //input_fcSeedsVtx_token_ = consumes<vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
 	  input_fcSeedsVtx_token_ = consumes<vector<reco::VertexCompositePtrCandidate> >(iConfig.getParameter<edm::InputTag>("flavorConeSeeds"));
 	}
 	
@@ -200,10 +200,6 @@ VirtualJetProducer::VirtualJetProducer(const edm::ParameterSet& iConfig) {
 	//std::vector<fastjet::PseudoJet> fjexcluded_jets;
 	else if (jetAlgorithm_=="FlavorCone"){
 	  // do nothing.  This needs to be done below
-
-	  // use constituents as seeds for the moment
-	  //fjFlavorCone_ = FlavorConePtr( new fastjet::contrib::FlavorConePlugin(fjInputs_, rParam_) );
-	  //fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(&*fjPlugin_) );
 	}
 	else if (jetAlgorithm_=="GeneralizedKt") 
 		fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(fastjet::genkt_algorithm,rParam_,-2) );
@@ -305,12 +301,22 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
   LogDebug("VirtualJetProducer") << "Entered produce\n";
   //determine signal vertex2
   vertex_=reco::Jet::Point(0,0,0);
-  if ( (makeCaloJet(jetTypeE) || makePFJet(jetTypeE)) &&doPVCorrection_) {
-    LogDebug("VirtualJetProducer") << "Adding PV info\n";
-    edm::Handle<reco::VertexCollection> pvCollection;
-    iEvent.getByToken(input_vertex_token_ , pvCollection);
-    if (!pvCollection->empty()) vertex_=pvCollection->begin()->position();
+  vertex2_=reco::Jet::Point(0,0,0);
+
+  edm::Handle<reco::VertexCollection> pvCollection;
+  
+  if(doPVCorrection_ || useFlavorCone_){
+    if ( (makeCaloJet(jetTypeE) || makePFJet(jetTypeE))) {
+      LogDebug("VirtualJetProducer") << "Adding PV info\n";
+      iEvent.getByToken(input_vertex_token_ , pvCollection);    
+      
+      if (!pvCollection->empty()){
+	if(doPVCorrection_) vertex_=pvCollection->begin()->position();
+	if(useFlavorCone_)vertex2_=pvCollection->begin()->position();
+      }
+    }
   }
+
   // For Pileup subtraction using offset correction:
   // set up geometry map
   if ( doPUOffsetCorr_ ) {
@@ -334,9 +340,6 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
   edm::Handle< std::vector<edm::FwdPtr<pat::PackedGenParticle> > > packedgeninputsHandleAsFwdPtr; 
 
   edm::Handle<reco::GenParticleRefVector> fcSeedsGenParticleRefVector;
-  //edm::Handle< std::vector<reco::Vertex> > fcSeedsVtx;
-  //edm::Handle< std::vector<edm::FwdPtr<reco::Vertex> > >fcSeedsVtx;
-  //edm::Handle< std::vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > >fcSeedsVtx;
   edm::Handle< std::vector<reco::VertexCompositePtrCandidate> >fcSeedsVtx;
 
   bool isView = iEvent.getByToken(input_candidateview_token_, inputsHandle);
@@ -448,11 +451,23 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
 	//std::cout<<" fcSeedsVtx->size() "<<fcSeedsVtx->size()<<std::endl;
 	for (size_t i = 0; i < fcSeedsVtx->size(); ++i) {	  	 
 	  //cout<<" vertex seed i "<<i<<" pt "<<(*fcSeedsVtx)[i].pt()<<" eta "<<(*fcSeedsVtx)[i].eta()<<" phi "<<(*fcSeedsVtx)[i].phi()<<std::endl;
+	  //cout<<" vertex flight direction "<<(*fcSeedsVtx)[i].direction()<<endl;
+	  /*
+	  double dirx = (*fcSeedsVtx)[i].vertex().x() - vertex_.x();
+	  double diry = (*fcSeedsVtx)[i].vertex().y() - vertex_.y();
+	  double dirz = (*fcSeedsVtx)[i].vertex().z() - vertex_.z();
+
+	  GlobalVector dir(dirx,diry,dirz);
+	  
+	  cout<<" dir "<<dir<<endl;
+	  */
 	  edm::Ptr<reco::Candidate> myPtr(fcSeedsVtx, i);  // only managed to do this by creating a transient Ptr
 	  seeds_.push_back(myPtr);
 	}
       }      
     }
+
+
 
 
 
@@ -463,7 +478,6 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
     fcSeeds_.reserve(seeds_.size());
     //std::cout<<" inputting seeds "<<std::endl;
     inputSeeds();
-    //if(fcSeeds_.size()>0) std::cout<<" fcSeeds_[0] "<<fcSeeds_[0].phi()<<std::endl;
     fjFlavorCone_ = FlavorConePtr( new fastjet::contrib::FlavorConePlugin(fcSeeds_, rParam_) );
     fjJetDefinition_= JetDefPtr( new fastjet::JetDefinition(&*fjFlavorCone_) );
   }
@@ -480,12 +494,13 @@ void VirtualJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
   // Run algorithm. Will modify fjJets_ and allocate fjClusterSeq_. 
   // This will use fjInputs_
   runAlgorithm( iEvent, iSetup );
-
-  //cout<<" fjJets_.size() "<<fjJets_.size()<<endl;
+  /*
+  cout<<" fjJets_.size() "<<fjJets_.size()<<endl;
   for (unsigned int ijet=0;ijet<fjJets_.size();++ijet) {
-    //std::cout<<fjJets_[ijet].px()<<" "<< fjJets_[ijet].py()<<" "<< fjJets_[ijet].pz()<<" "<< fjJets_[ijet].E()<<std::endl;
-    //std::cout<<" pt "<<fjJets_[ijet].pt()<<" eta "<<fjJets_[ijet].eta()<<" phi  "<< fjJets_[ijet].phi()<<std::endl;
+    std::cout<<fjJets_[ijet].px()<<" "<< fjJets_[ijet].py()<<" "<< fjJets_[ijet].pz()<<" "<< fjJets_[ijet].E()<<std::endl;
+    std::cout<<" pt "<<fjJets_[ijet].pt()<<" eta "<<fjJets_[ijet].eta()<<" phi  "<< fjJets_[ijet].phi_std()<<std::endl;
   }
+  */
   // if ( doPUOffsetCorr_ ) {
   //    subtractor_->setAlgorithm(fjClusterSeq_);
   // }
@@ -578,24 +593,54 @@ void VirtualJetProducer::inputSeeds( )
   for (; i != inEnd; ++i ) {
     auto const & input = **i;
     if (edm::isNotFinite(input.pt()))           continue;    
-    //std::cout<<" my Seed "<<"px "<< input.px() <<" py "<<input.py() <<" pz "<<input.pz() <<" energy "<<input.energy()<<endl;
-    //fcSeeds_.emplace_back(input.px(),input.py(),input.pz(),input.energy());    
-    float eta = input.eta();
-    float phi = input.phi();
-    float x = cos(phi);
-    float y = sin(phi);
-    float z = sinh(eta);
-    float r = sqrt(x*x+y*y+z*z);
-    fcSeeds_.emplace_back(x,y,z,r);    
+
+
+    if(jetTypeE == JetType::GenJet ) {
+      float eta = input.eta();
+      float phi = input.phi();
+      float x = cos(phi);
+      float y = sin(phi);
+      float z = sinh(eta);
+
+      /*
+      // should genJets be shifted by the pv as well?
+      double vx = input.vx();
+      double vy = input.vy();
+      double vz = input.vz();
+      x-=vx;
+      y-=vy;
+      z-=vz;
+      */
+      float r = sqrt(x*x+y*y+z*z);
+      //cout<<" x "<<x<<" y "<<y<<" z "<<z<<" r "<<r<<endl;
+      //cout<<" vx "<<vx<<" vy "<<vy<<" vz "<<vz<<endl;
+      fcSeeds_.emplace_back(x,y,z,r); 
+    }
+    else if(jetTypeE == JetType::PFJet) {
+      //cout<<" x "<<input.vertex().x()<<" y "<<input.vertex().y()<< " z "<<input.vertex().z()<<endl;
+      //cout<<" vtx x "<<vertex2_.x()<<" y "<<vertex2_.y()<<" z "<<vertex2_.z()<<endl;
+
+      double dirx = input.vertex().x() - vertex2_.x();
+      double diry = input.vertex().y() - vertex2_.y();
+      double dirz = input.vertex().z() - vertex2_.z();
+
+      /*
+      double dirx = input.vertex().x();
+      double diry = input.vertex().y();
+      double dirz = input.vertex().z();
+      */
+      GlobalVector dir(dirx,diry,dirz);
+      dir = dir.unit();
+      //cout<<" dir x "<<dir.x()<<" y "<<dir.y()<< " z "<<dir.z()<<endl;
+      fcSeeds_.emplace_back(dir.x(),dir.y(),dir.z(),dir.mag());    
+    }
     
     fcSeeds_.back().set_user_index(i - inBegin);
   }
   /*
-  for(unsigned i=0;i<fcSeeds_.size();i++){
-    std::cout<<" fcseeds i "<<i<<" eta "<<fcSeeds_[i].eta()<<" phi "<<fcSeeds_[i].phi()<<std::endl;
-  }
+  for(unsigned i =0;i<fcSeeds_.size();i++)
+    cout<<" fcSeeds phi "<<fcSeeds_[i].phi_std()<<" eta "<<fcSeeds_[i].eta()<<endl;
   */
-
 }
 
 

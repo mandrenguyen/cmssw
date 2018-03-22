@@ -1,4 +1,4 @@
-### hiforest Configuration
+### Hiforest Configuration
 # Collisions: pp
 # Type: MC
 # Input: AOD
@@ -24,15 +24,17 @@ process.HiForest.HiForestVersion = cms.string(version)
 #####################################################################################
 
 process.source = cms.Source("PoolSource",
+                            #skipEvents = cms.untracked.uint32(71),
                             duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
                             fileNames = cms.untracked.vstring(
         "file:/data_CMS/cms/mnguyen/ttbarRelVal/1848D55B-981E-E811-89E0-0025905A612A.root"
+        #'/store/user/mnguyen/Pythia8_bJetFiltered_5p02TeV/Pythia8_bJetFiltered_5TeV_pthat100_RECO/180319_172943/0000/step3_RAW2DIGI_L1Reco_RECO_RECOSIM_1.root'
+        )
                             )
-)
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100))
+    input = cms.untracked.int32(-1))
 
 
 #####################################################################################
@@ -229,14 +231,15 @@ process.akSoftDrop4PFJetAnalyzer.trackPairV0Filter = process.ak4PFSecondaryVerte
 
 process.akSoftDrop4PFPatJetFlavourAssociation.redoSubtraction = cms.bool(False)
 process.akSoftDrop4PFPatJetFlavourAssociation.jets = cms.InputTag("ak4PFJets")
-process.akSoftDrop4PFSubjetSecondaryVertexNegativeTagInfos.fatJets = cms.InputTag("ak4PFJets")
 process.akSoftDrop4PFSubjetSecondaryVertexTagInfos.fatJets = cms.InputTag("ak4PFJets")
 
-process.akSoftDrop4PFJetBtaggingSV *= process.akSoftDrop4PFSubjetJetTracksAssociatorAtVertex+process.akSoftDrop4PFSubjetImpactParameterTagInfos+process.akSoftDrop4PFSubjetJetProbabilityBJetTags+process.akSoftDrop4PFSubjetSecondaryVertexTagInfos+process.akSoftDrop4PFSubjetSecondaryVertexNegativeTagInfos+process.akSoftDrop4PFCombinedSubjetSecondaryVertexBJetTags+process.akSoftDrop4PFCombinedSubjetSecondaryVertexV2BJetTags+process.akSoftDrop4PFCombinedSubjetNegativeSecondaryVertexV2BJetTags
+process.akSoftDrop4PFJetBtaggingSV *= process.akSoftDrop4PFSubjetJetTracksAssociatorAtVertex+process.akSoftDrop4PFSubjetImpactParameterTagInfos+process.akSoftDrop4PFSubjetJetProbabilityBJetTags+process.akSoftDrop4PFSubjetSecondaryVertexTagInfos+process.akSoftDrop4PFCombinedSubjetSecondaryVertexBJetTags+process.akSoftDrop4PFCombinedSubjetSecondaryVertexV2BJetTags
 
 #play
 #process.ak4PFmatch.matched = cms.InputTag("fc4GenJets")
 #process.akSoftDrop4PFJetAnalyzer.jetTag = cms.InputTag("boostedJetMerger")
+
 process.fc4PFJetAnalyzer.jetPtMin = 0.
 process.fc4PFJetAnalyzer.genPtMin = 0.
 
+process.fc4PFPatJetFlavourAssociation.rParam = cms.double(0.3)

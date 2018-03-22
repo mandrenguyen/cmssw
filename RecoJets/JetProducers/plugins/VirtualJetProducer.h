@@ -209,6 +209,7 @@ protected:
   std::vector<edm::Ptr<reco::Candidate> > inputs_;  // input candidates [View, PtrVector and CandCollection have limitations]
   std::vector<edm::Ptr<reco::Candidate> > seeds_;  // input seeds for FlavorCone [View, PtrVector and CandCollection have limitations]
   reco::Particle::Point           vertex_;          // Primary vertex 
+  reco::Particle::Point           vertex2_;          // Primary vertex 
   ClusterSequencePtr              fjClusterSeq_;    // fastjet cluster sequence
   JetDefPtr                       fjJetDefinition_; // fastjet jet definition
   PluginPtr                       fjPlugin_;        // fastjet plugin
@@ -247,8 +248,6 @@ private:
   edm::EDGetTokenT<std::vector<edm::FwdPtr<pat::PackedGenParticle> > > input_packedgencandidatefwdptr_token_;
 
   edm::EDGetTokenT<reco::GenParticleRefVector > input_fcSeedsGenParticleRefVector_token_;
-  //edm::EDGetTokenT<std::vector<reco::Vertex> > input_fcSeedsVtx_token_;
-  //edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::VertexCompositePtrCandidate> > > input_fcSeedsVtx_token_;
   edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > input_fcSeedsVtx_token_;
 
  protected:

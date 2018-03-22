@@ -1361,11 +1361,9 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
        // new method using only pat
      if((*patjets)[j].hasSubjets("SoftDrop")){  // currently hard-coded, but could be setup to do multiple subjet collections
        const pat::JetPtrCollection & subjets = (*patjets)[j].subjets("SoftDrop");       
-       cout<<" new method "<<endl;
        analyzeSubjets(subjets);
      }
      else {
-       cout<<" old method "<<endl;
        // old method of grabbing subjets from reco::Jets, get rid of it eventually
        analyzeSubjets(jet, jets_.nref, theSubjetFlavourInfos, groomedJets, jetTags_subjet_combinedSvtx,  jetTags_subjet_JP, subjetTagInfo, subjetTagInfoSVx);
      }
@@ -2180,7 +2178,6 @@ void HiInclusiveJetAnalyzer::analyzeSubjets( const pat::JetPtrCollection & subje
   jets_.refSubJetM.push_back(sjrefm);
   
   
-  cout<<" returning "<<endl;
 }
 
 
@@ -4023,7 +4020,6 @@ void HiInclusiveJetAnalyzer::fillInfoSV(const reco::SecondaryVertexTagInfo * tag
   */
   for (int ivtx=0; ivtx<jets_.nsvtx[jets_.nref]; ivtx++) {
     svtxntrks.push_back(tagInfoSV->nVertexTracks(ivtx));
-    cout<<" nSV tracks "<<tagInfoSV->nVertexTracks(ivtx)<<endl;
     svjetDr.push_back(reco::deltaR(tagInfoSV->flightDirection(ivtx),jetDir));
     // this is the 3d flight distance, for 2-D use (0,true)
     Measurement1D m1D = tagInfoSV->flightDistance(ivtx);

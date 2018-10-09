@@ -1009,5 +1009,7 @@ void VirtualJetProducer::fillDescriptionsFromVirtualJetProducer(edm::ParameterSe
 	desc.add<unsigned int>("maxRecoveredHcalCells",	9999999 );
 	vector<double>  puCentersDefault;
 	desc.add<vector<double>>("puCenters", 	puCentersDefault);
+	desc.add<double>("minimumTowersFraction", 0.0);
+
 }
 

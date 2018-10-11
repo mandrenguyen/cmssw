@@ -15,7 +15,6 @@ RecoHiJetsRECO = cms.PSet(
                                             'keep *_*HiGenJets_*_*',
                                             'keep *_PFTowers_*_*',
                                             'keep *_hiFJRhoProducer_*_*'
-
                                            )
     )
 

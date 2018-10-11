@@ -63,8 +63,8 @@ class HLTGetDigi : public edm::EDAnalyzer {
 
  public:
   explicit HLTGetDigi(const edm::ParameterSet&);
-  ~HLTGetDigi() override;
-  void analyze(const edm::Event&, const edm::EventSetup&) override;
+  ~HLTGetDigi();
+  void analyze(const edm::Event&, const edm::EventSetup&);
   static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
   
  private:

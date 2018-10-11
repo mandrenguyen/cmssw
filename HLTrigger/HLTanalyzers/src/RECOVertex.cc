@@ -3,8 +3,8 @@
 #include <istream>
 #include <fstream>
 #include <iomanip>
-#include <cstdlib>
-#include <cstring>
+#include <stdlib.h>
+#include <string.h>
 
 #include "HLTrigger/HLTanalyzers/interface/RECOVertex.h"
 #include "HLTMessages.h"

@@ -48,7 +48,7 @@ kt4PFJetsForRho = cms.EDProducer(
     jetAlgorithm = cms.string("Kt"),
     rParam       = cms.double(0.4)
 )
-kt4PFJetsForRho.src = cms.InputTag('particleFlow')
+kt4PFJetsForRho.src = cms.InputTag('particleFlowTmp')
 kt4PFJetsForRho.doAreaFastjet = cms.bool(True)
 kt4PFJetsForRho.jetPtMin      = cms.double(0.0)
 kt4PFJetsForRho.GhostArea     = cms.double(0.005)
@@ -78,7 +78,7 @@ akCs4PFJets = cms.EDProducer(
     writeJetsWithConst = cms.bool(True),
     jetCollInstanceName = cms.string("pfParticlesCs")
 )
-akCs4PFJets.src           = cms.InputTag('particleFlow')
+akCs4PFJets.src           = cms.InputTag('particleFlowTmp')
 akCs4PFJets.doAreaFastjet = cms.bool(True)
 akCs4PFJets.jetPtMin      = cms.double(0.0)
 akCs4PFJets.useExplicitGhosts = cms.bool(True)

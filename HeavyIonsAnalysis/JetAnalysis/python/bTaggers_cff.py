@@ -26,6 +26,9 @@ class bTaggers:
         self.ImpactParameterTagInfos = impactParameterTagInfos.clone()
         self.ImpactParameterTagInfos.jetTracks = cms.InputTag(jetname+"JetTracksAssociatorAtVertex")
         self.ImpactParameterTagInfos.primaryVertex = cms.InputTag("offlinePrimaryVertices")
+        self.PfImpactParameterTagInfos = pfImpactParameterTagInfos.clone()
+        self.PfImpactParameterTagInfos.jets = cms.InputTag(jetname+"Jets")
+        self.PfImpactParameterTagInfos.maxDeltaR = cms.double(rParam)
         self.TrackCountingHighEffBJetTags          = trackCountingHighEffBJetTags.clone()
         self.TrackCountingHighEffBJetTags.tagInfos = cms.VInputTag(cms.InputTag(jetname+"ImpactParameterTagInfos"))
         self.TrackCountingHighPurBJetTags          = trackCountingHighPurBJetTags.clone()
@@ -160,7 +163,8 @@ class bTaggers:
             rParam = rParam,
             bHadrons = cms.InputTag(jetname+"PatJetPartons","bHadrons"),
             cHadrons = cms.InputTag(jetname+"PatJetPartons","cHadrons"),
-            partons = cms.InputTag(jetname+"PatJetPartons","partons")
+            leptons = cms.InputTag(jetname+"PatJetPartons","leptons"),
+            partons = cms.InputTag(jetname+"PatJetPartons","physicsPartons")
             )
 
         self.PatJetFlavourId               = cms.Sequence(self.PatJetPartons*self.PatJetFlavourAssociation)

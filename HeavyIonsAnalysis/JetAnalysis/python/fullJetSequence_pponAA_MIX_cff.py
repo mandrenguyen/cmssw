@@ -5,6 +5,9 @@ from HeavyIonsAnalysis.JetAnalysis.rerecoRho_cff import *
 from HeavyIonsAnalysis.JetAnalysis.rerecoJets_cff import *
 from HeavyIonsAnalysis.JetAnalysis.rerecoTracks_cff import *
 
+from HeavyIonsAnalysis.JetAnalysis.jets.ak3PFJetSequence_pponPbPb_mc_cff import *
+from HeavyIonsAnalysis.JetAnalysis.jets.ak4PFJetSequence_pponPbPb_mc_cff import *
+
 from HeavyIonsAnalysis.JetAnalysis.jets.akPu3CaloJetSequence_pponPbPb_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.akPu3PFJetSequence_pponPbPb_mc_cff import *
 from HeavyIonsAnalysis.JetAnalysis.jets.akCs3PFJetSequence_pponPbPb_mc_cff import *
@@ -49,6 +52,9 @@ jetSequence = cms.Sequence(
 
     highPurityTracks +
 
+    ak3PFJets +
+    ak4PFJets +
+
     akPu3CaloJets +
     akPu3PFJets +
     akCs3PFJets +
@@ -56,6 +62,9 @@ jetSequence = cms.Sequence(
     akPu4CaloJets +
     akPu4PFJets +
     akCs4PFJets +
+
+    ak3PFJetSequence +
+    ak4PFJetSequence +
 
     akPu3CaloJetSequence +
     akPu3PFJetSequence +

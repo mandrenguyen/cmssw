@@ -26,13 +26,14 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        "file:/afs/cern.ch/work/r/rbi/public/forest/step2_RAW2DIGI_L1Reco_RECO_pp_on_AA.root"
+        #'/store/relval/CMSSW_10_3_2/RelValPyquen_DiJet_pt80to120_2760GeV/GEN-SIM-RECO/PU_103X_upgrade2018_realistic_HI_v11_rsb2-v1/20000/EB278C48-CB65-BA49-B2B1-3C3F2E2436DD.root'
+        '/store/user/ikucher/FCR80_TuneZ2_5020GeV_L1Reco_RECO_200k_1030pre5_DIGIpre5/FCR80_5020GeV_TuneCUETP8M1_GEN_SIM_PU_200k_103X/crab_FCR80_TuneZ2_5020GeV_L1Reco_RECO_200k_1030pre5_DIGIpre5/181021_081325/0000/step3_pre5DIGI_RAW2DIGI_L1Reco_RECO_99.root'
         ),
     )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1)
+    input = cms.untracked.int32(-1)
     )
 
 ###############################################################################
@@ -89,6 +90,7 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_cff')
 process.akPu4Calocorr.payload = "AK4Calo"
 process.akPu4PFcorr.payload = "AK4PF"
 process.akCs4PFcorr.payload = "AK4PF"
+process.ak4PFcorr.payload = "AK4PF"
 process.akPu4PFJets.jetPtMin = 1
 
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
@@ -183,16 +185,16 @@ process.ana_step = cms.Path(
     process.hltanalysis +
     process.centralityBin +
     process.hiEvtAnalyzer +
-    process.HiGenParticleAna +
+    #process.HiGenParticleAna +
     process.genSignalSequence +
     process.jetSequence +
-    process.ggHiNtuplizer +
-    process.ggHiNtuplizerGED +
-    process.hiFJRhoAnalyzer +
-    process.pfcandAnalyzer +
-    process.pfcandAnalyzerCS +
-    process.trackSequencesPP +
-    process.rechitanalyzerpp
+    #process.ggHiNtuplizer +
+    #process.ggHiNtuplizerGED +
+    process.hiFJRhoAnalyzer #+
+    #process.pfcandAnalyzer +
+    #process.pfcandAnalyzerCS +
+    #process.trackSequencesPP +
+    #process.rechitanalyzerpp
     )
 
 # # edm output for debugging purposes
@@ -259,3 +261,4 @@ process = MassReplaceInputTag(process,"offlinePrimaryVertices","offlinePrimaryVe
 process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
 # Customization
 ###############################################################################
+process.ak4PFJets.doAreaFastjet = False

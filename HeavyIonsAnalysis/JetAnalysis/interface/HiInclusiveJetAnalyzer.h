@@ -415,6 +415,8 @@ private:
     float matchedRawPt[MAXJETS];
     float matchedR[MAXJETS];
     float matchedPu[MAXJETS];
+    int matchedHadronFlavor[MAXJETS];
+    int matchedPartonFlavor[MAXJETS];
 
     float discr_csvV1[MAXJETS];
     float discr_csvV2[MAXJETS];

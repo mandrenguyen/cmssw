@@ -708,8 +708,8 @@ TrackAnalyzer::fillTracks(const edm::Event& iEvent, const edm::EventSetup& iSetu
     //pev_.trkNhit[pev_.nTrk] = tr.numberOfValidHits();
 
     if (doPFMatching_) {
-      pev_.pfType[pev_.nParticle] = -1;
-      pev_.pfCandPt[pev_.nParticle] = -999;
+      pev_.pfType[pev_.nTrk] = -1;
+      pev_.pfCandPt[pev_.nTrk] = -999;
 
       for (unsigned ic=0; ic<pfCandidates->size(); ic++) {
         const reco::PFCandidate& cand = (*pfCandidates)[ic];
@@ -724,10 +724,10 @@ TrackAnalyzer::fillTracks(const edm::Event& iEvent, const edm::EventSetup& iSetu
         reco::TrackRef trackRef = cand.trackRef();
 
         if (it == trackRef.key()) {
-          pev_.pfType[pev_.nParticle] = type;
-          pev_.pfCandPt[pev_.nParticle] = cand.pt();
-          pev_.pfEcal[pev_.nParticle] = cand.ecalEnergy();
-          pev_.pfHcal[pev_.nParticle] = cand.hcalEnergy();
+          pev_.pfType[pev_.nTrk] = type;
+          pev_.pfCandPt[pev_.nTrk] = cand.pt();
+          pev_.pfEcal[pev_.nTrk] = cand.ecalEnergy();
+          pev_.pfHcal[pev_.nTrk] = cand.hcalEnergy();
           break;
         }
       }
@@ -743,7 +743,7 @@ TrackAnalyzer::fillTracks(const edm::Event& iEvent, const edm::EventSetup& iSetu
    bool etaLT1 = fabs(etrk.eta())<1;
    bool nHitsGT12 = pev_.trkNHit[pev_.nTrk] > 12;
    bool chi2PndofPnLayers = etrk.chi2()/etrk.ndof()/pev_.trkNlayer[pev_.nTrk] < 0.15; 
-   bool caloMatching  = (pev_.pfEcal[pev_.nParticle] + pev_.pfHcal[pev_.nParticle]) / (etrk.pt() * TMath::CosH(etrk.eta())) > 0.5  ||  etrk.pt()<20;
+   bool caloMatching  = (pev_.pfEcal[pev_.nTrk] + pev_.pfHcal[pev_.nTrk]) / (etrk.pt() * TMath::CosH(etrk.eta())) > 0.5  ||  etrk.pt()<20;
 
    if(isHigherPt[0]) pev_.leadingTrackPt[0] = etrk.pt();//no cut
    if(isHigherPt[1] && hp) pev_.leadingTrackPt[1] = etrk.pt();//highPurity

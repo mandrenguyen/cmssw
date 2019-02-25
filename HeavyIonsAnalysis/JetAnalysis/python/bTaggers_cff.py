@@ -40,6 +40,8 @@ class bTaggers:
 
         self.SecondaryVertexTagInfos                     = secondaryVertexTagInfos.clone()
         self.SecondaryVertexTagInfos.trackIPTagInfos     = cms.InputTag(jetname+"ImpactParameterTagInfos")
+        self.PfSecondaryVertexTagInfos                     = pfSecondaryVertexTagInfos.clone()
+        self.PfSecondaryVertexTagInfos.trackIPTagInfos     = cms.InputTag(jetname+"PfImpactParameterTagInfos")
         #self.SimpleSecondaryVertexBJetTags               = simpleSecondaryVertexBJetTags.clone()
         #self.SimpleSecondaryVertexBJetTags.tagInfos      = cms.VInputTag(cms.InputTag(jetname+"SecondaryVertexTagInfos"))
         self.CombinedSecondaryVertexBJetTags             = combinedSecondaryVertexV2BJetTags.clone()
@@ -47,7 +49,15 @@ class bTaggers:
                 cms.InputTag(jetname+"SecondaryVertexTagInfos"))
         self.CombinedSecondaryVertexV2BJetTags          = combinedSecondaryVertexV2BJetTags.clone()
         self.CombinedSecondaryVertexV2BJetTags.tagInfos = cms.VInputTag(cms.InputTag(jetname+"ImpactParameterTagInfos"),
-                cms.InputTag(jetname+"SecondaryVertexTagInfos"))
+                                                                        cms.InputTag(jetname+"PfSecondaryVertexTagInfos"))
+        self.PfCombinedSecondaryVertexV2BJetTags          = pfCombinedSecondaryVertexV2BJetTags.clone()
+        self.PfCombinedSecondaryVertexV2BJetTags.tagInfos = cms.VInputTag(cms.InputTag(jetname+"PfImpactParameterTagInfos"),
+                                                                          cms.InputTag(jetname+"PfSecondaryVertexTagInfos"))
+        self.InclusiveSecondaryVertexFinderTagInfos = inclusiveSecondaryVertexFinderTagInfos.clone()
+        self.InclusiveSecondaryVertexFinderTagInfos.trackIPTagInfos = cms.InputTag(jetname+"ImpactParameterTagInfos")
+        self.CombinedInclusiveSecondaryVertexV2BJetTags          = combinedInclusiveSecondaryVertexV2BJetTags.clone()
+        self.CombinedInclusiveSecondaryVertexV2BJetTags.tagInfos = cms.VInputTag(cms.InputTag(jetname+"ImpactParameterTagInfos"),
+                                                                          cms.InputTag(jetname+"InclusiveSecondaryVertexFinderTagInfos"))
 
 
         # secondary vertex b-tag

@@ -142,6 +142,7 @@ process.load('HeavyIonsAnalysis.PhotonAnalysis.ggHiNtuplizer_cfi')
 #######################
 # B-tagging
 ######################
+'''
 # replace pp CSVv2 with PbPb CSVv2 (positive and negative taggers unchanged!)
 process.load('RecoBTag.CSVscikit.csvscikitTagJetTags_cfi')
 process.load('RecoBTag.CSVscikit.csvscikitTaggerProducer_cfi')
@@ -157,11 +158,16 @@ process.akPu4CaloCombinedSecondaryVertexV2BJetTags = process.pfCSVscikitJetTags.
 process.akPu4CaloCombinedSecondaryVertexV2BJetTags.tagInfos = cms.VInputTag(
     cms.InputTag("akPu4CaloImpactParameterTagInfos"),
     cms.InputTag("akPu4CaloSecondaryVertexTagInfos"))
+process.akCs4PFCombinedInclusiveSecondaryVertexV2BJetTags = process.pfCSVscikitJetTags.clone()
+process.akCs4PFCombinedInclusiveSecondaryVertexV2BJetTags.tagInfos = cms.VInputTag(
+    cms.InputTag("akCs4PFImpactParameterTagInfos"),
+    cms.InputTag("akCs4PFInclusiveSecondaryVertexFinderTagInfos"))
+
 
 # trained on CS jets
 process.CSVscikitTags.weightFile = cms.FileInPath(
     'HeavyIonsAnalysis/JetAnalysis/data/TMVA_Btag_CsJets_PbPb_BDTG.weights.xml')
-
+'''
 ###############################################################################
 
 #########################
@@ -262,3 +268,5 @@ process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
 # Customization
 ###############################################################################
 process.ak4PFJets.doAreaFastjet = False
+process.akCs4PFPfImpactParameterTagInfos.explicitJTA = cms.bool(False)
+process.akCs4PFJets.writeJetsWithConst = False

@@ -7,3 +7,7 @@ highPurityTracks = cms.EDFilter(
 
 from RecoVertex.PrimaryVertexProducer.OfflinePrimaryVertices_cfi import *
 offlinePrimaryVertices.TrackLabel = 'highPurityTracks'
+
+
+from RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff import *
+inclusiveVertexFinder.tracks = 'highPurityTracks'

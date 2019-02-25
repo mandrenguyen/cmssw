@@ -175,6 +175,8 @@ HiInclusiveJetAnalyzer::HiInclusiveJetAnalyzer(const edm::ParameterSet& iConfig)
     SimpleSecondaryVertexHighPurBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("SimpleSecondaryVertexHighPurBJetTags",(bTagJetName_+"SimpleSecondaryVertexHighPurBJetTags")));
     CombinedSecondaryVertexBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSecondaryVertexBJetTags",(bTagJetName_+"CombinedSecondaryVertexBJetTags")));
     CombinedSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSecondaryVertexV2BJetTags",(bTagJetName_+"CombinedSecondaryVertexV2BJetTags")));
+    pfCombinedSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("pfCombinedSecondaryVertexV2BJetTags",(bTagJetName_+"PfCombinedSecondaryVertexV2BJetTags")));
+    CombinedInclusiveSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedInclusiveSecondaryVertexV2BJetTags",(bTagJetName_+"CombinedInclusiveSecondaryVertexV2BJetTags")));
   }
 
   doSubEvent_ = 0;
@@ -448,6 +450,8 @@ HiInclusiveJetAnalyzer::beginJob() {
 
     t->Branch("discr_csvV1",jets_.discr_csvV1,"discr_csvV1[nref]/F");
     t->Branch("discr_csvV2",jets_.discr_csvV2,"discr_csvV2[nref]/F");
+    t->Branch("discr_pfcsvV2",jets_.discr_pfcsvV2,"discr_pfcsvV2[nref]/F");
+    t->Branch("discr_inccsvV2",jets_.discr_inccsvV2,"discr_inccsvV2[nref]/F");
     t->Branch("discr_muByIp3",jets_.discr_muByIp3,"discr_muByIp3[nref]/F");
     t->Branch("discr_muByPt",jets_.discr_muByPt,"discr_muByPt[nref]/F");
     t->Branch("discr_prob",jets_.discr_prob,"discr_prob[nref]/F");
@@ -837,6 +841,8 @@ HiInclusiveJetAnalyzer::beginJob() {
     /* clear arrays */
     memset(jets_.discr_csvV1, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_csvV2, 0, MAXJETS * sizeof(float));
+    memset(jets_.discr_pfcsvV2, 0, MAXJETS * sizeof(float));
+    memset(jets_.discr_inccsvV2, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_muByIp3, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_muByPt, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_prob, 0, MAXJETS * sizeof(float));
@@ -970,6 +976,8 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
   Handle<JetTagCollection> jetTags_SvtxHighPur;
   Handle<JetTagCollection> jetTags_CombinedSvtx;
   Handle<JetTagCollection> jetTags_CombinedSvtxV2;
+  Handle<JetTagCollection> jetTags_pfCombinedSvtxV2;
+  Handle<JetTagCollection> jetTags_CombinedIncSvtxV2;
 
   //------------------------------------------------------
   // Soft muon tagger
@@ -989,6 +997,8 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
     iEvent.getByToken(SimpleSecondaryVertexHighPurBJetTags_, jetTags_SvtxHighPur);
     iEvent.getByToken(CombinedSecondaryVertexBJetTags_, jetTags_CombinedSvtx);
     iEvent.getByToken(CombinedSecondaryVertexV2BJetTags_, jetTags_CombinedSvtxV2);
+    iEvent.getByToken(pfCombinedSecondaryVertexV2BJetTags_, jetTags_pfCombinedSvtxV2);
+    iEvent.getByToken(CombinedInclusiveSecondaryVertexV2BJetTags_, jetTags_CombinedIncSvtxV2);
   }
 
 
@@ -1119,6 +1129,12 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 
       ith_tagged          = this->TaggedJet(jet,jetTags_CombinedSvtxV2);
       if(ith_tagged >= 0) jets_.discr_csvV2[jets_.nref]  = (*jetTags_CombinedSvtxV2)[ith_tagged].second;
+
+      ith_tagged          = this->TaggedJet(jet,jetTags_pfCombinedSvtxV2);
+      if(ith_tagged >= 0) jets_.discr_pfcsvV2[jets_.nref]  = (*jetTags_pfCombinedSvtxV2)[ith_tagged].second;
+
+      ith_tagged          = this->TaggedJet(jet,jetTags_CombinedIncSvtxV2);
+      if(ith_tagged >= 0) jets_.discr_inccsvV2[jets_.nref]  = (*jetTags_CombinedIncSvtxV2)[ith_tagged].second;
 
       if(ith_tagged >= 0){
 	ith_tagged = this->TaggedJet(jet,jetTags_JP);

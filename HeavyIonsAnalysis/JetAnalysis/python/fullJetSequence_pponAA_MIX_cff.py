@@ -51,6 +51,7 @@ jetSequence = cms.Sequence(
     rhoSequence +
 
     highPurityTracks +
+    inclusiveVertexing +
 
     ak3PFJets +
     ak4PFJets +

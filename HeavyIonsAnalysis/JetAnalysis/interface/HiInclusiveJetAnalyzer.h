@@ -202,6 +202,8 @@ private:
   edm::EDGetTokenT<reco::JetTagCollection> SimpleSecondaryVertexHighPurBJetTags_;
   edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexBJetTags_;
   edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexV2BJetTags_;
+  edm::EDGetTokenT<reco::JetTagCollection> pfCombinedSecondaryVertexV2BJetTags_;
+  edm::EDGetTokenT<reco::JetTagCollection> CombinedInclusiveSecondaryVertexV2BJetTags_;
 
   static const int MAXJETS = 1000;
   static const int MAXTRACKS = 5000;
@@ -420,6 +422,8 @@ private:
 
     float discr_csvV1[MAXJETS];
     float discr_csvV2[MAXJETS];
+    float discr_pfcsvV2[MAXJETS];
+    float discr_inccsvV2[MAXJETS];
     float discr_muByIp3[MAXJETS];
     float discr_muByPt[MAXJETS];
     float discr_prob[MAXJETS];

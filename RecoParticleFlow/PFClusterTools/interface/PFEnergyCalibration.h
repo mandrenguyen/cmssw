@@ -64,6 +64,10 @@ class PFEnergyCalibration
 		  double &ps1,double&ps2,
 		  bool crackCorrection=true) const;
 
+  double Ecorr(double eEcal,double ePS1,double ePS2,double eta,double phi,bool crackCorrection=true) const;
+  double Ecorr(double eEcal,double ePS1,double ePS2,double eta,double phi,double&,double&,bool crackCorrection=true) const;
+
+
   // ECAL+HCAL (abc) calibration, with E and eta dependent coefficients, for hadrons
   void energyEmHad(double t, double& e, double&h, double eta, double phi) const;
   
@@ -123,8 +127,6 @@ class PFEnergyCalibration
   double EcorrPS(double eEcal,double ePS1,double ePS2,double etaEcal,double&, double&) const;
   double EcorrPS_ePSNil(double eEcal,double eta) const;
   double EcorrZoneAfterPS(double E, double eta) const;
-  double Ecorr(double eEcal,double ePS1,double ePS2,double eta,double phi,bool crackCorrection=true) const;
-  double Ecorr(double eEcal,double ePS1,double ePS2,double eta,double phi,double&,double&,bool crackCorrection=true) const;
 
   // The calibration functions
   double aBarrel(double x) const;

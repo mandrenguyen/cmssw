@@ -12,7 +12,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
-#include "RecoParticleFlow/PFClusterTools/interface/PFEnergyCalibration.h"
 
 
 class EcalEscaleShiftPFProducer : public edm::EDProducer {
@@ -29,8 +28,6 @@ class EcalEscaleShiftPFProducer : public edm::EDProducer {
 
   edm::EDGetTokenT<reco::PFCandidateCollection> src_;  
   edm::EDGetTokenT<reco::PFCandidateCollection> pfCands_;  
-
-  std::shared_ptr<PFEnergyCalibration> calibrator_;
 
   bool removePreshower_;
   double scaleEE_, scaleEB_;

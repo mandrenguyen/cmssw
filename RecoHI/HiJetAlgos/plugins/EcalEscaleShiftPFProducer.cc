@@ -16,10 +16,6 @@
 
 // user include files
 #include "RecoHI/HiJetAlgos/plugins/EcalEscaleShiftPFProducer.h"
-#include "DataFormats/EgammaCandidates/interface/PhotonFwd.h"
-#include "DataFormats/EgammaCandidates/interface/Photon.h"
-#include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
-#include "DataFormats/ParticleFlowReco/interface/PFClusterFwd.h"
 
 //
 // constants, enums and typedefs
@@ -33,8 +29,7 @@
 //
 // constructors and destructor
 //
-EcalEscaleShiftPFProducer::EcalEscaleShiftPFProducer(const edm::ParameterSet& iConfig) :
-  calibrator_(new PFEnergyCalibration)
+EcalEscaleShiftPFProducer::EcalEscaleShiftPFProducer(const edm::ParameterSet& iConfig)
 {
    //register your products  
   src_ = consumes<reco::PFCandidateCollection>(iConfig.getParameter<edm::InputTag>("src"));
@@ -80,43 +75,18 @@ EcalEscaleShiftPFProducer::produce(edm::Event& iEvent, const edm::EventSetup& iS
    for(reco::PFCandidateCollection::const_iterator pfcItr=pfcand.begin();
        pfcItr!=pfcand.end(); pfcItr++) {
      
-     reco::PFCandidate *scaledPFCand  = pfcItr->clone();
+     reco::PFCandidate scaledPFCand  = *pfcItr;
      
        
-     if(pfcItr->particleId()==4){
-     
-     /*
-       std::cout<<" photon px "<<pfcItr->px()<<std::endl;
-       std::cout<<" photon py "<<pfcItr->py()<<std::endl;
-       std::cout<<" photon pz "<<pfcItr->pz()<<std::endl;
-     */
-       
-
-       if(fabs(pfcItr->eta())< 1.44) scaledPFCand->rescaleMomentum(scaleEB_);
-       else if(!removePreshower_ || (pfcItr->pS1Energy()==0 && pfcItr->pS2Energy()==0) ) scaledPFCand->rescaleMomentum(scaleEE_); 
+     if(pfcItr->particleId()==4){     
+       if(fabs(pfcItr->eta())< 1.48) scaledPFCand.rescaleMomentum(scaleEB_);
        else{
-	 /*
-	 std::cout<<" photon ps1 E "<<pfcItr->pS1Energy()<<std::endl;
-	 std::cout<<" photon ps2 E "<<pfcItr->pS2Energy()<<std::endl;
-	 std::cout<<" photon E "<<pfcItr->energy()<<std::endl;
-	 std::cout<<" photon ecal E "<<pfcItr->ecalEnergy()<<std::endl;
-	 std::cout<<" photon raw ecal E "<<pfcItr->rawEcalEnergy()<<std::endl;	       
-	 std::cout<<" position at ECAL entrance "<<pfcItr->positionAtECALEntrance()<<std::endl;
-	 double correctedEnergy = calibrator_->Ecorr(pfcItr->rawEcalEnergy(),pfcItr->pS1Energy(),pfcItr->pS2Energy(),pfcItr->eta(),pfcItr->phi(), false);
-	 std::cout<<" correctedEnergy "<<correctedEnergy<<std::endl;
-	 */
-
-	 //  FIXME:  This ain't really working right yet, use removePreshower = False
-	 double correctedEnergy = calibrator_->Ecorr(pfcItr->rawEcalEnergy()*scaleEE_,pfcItr->pS1Energy(),pfcItr->pS2Energy(),pfcItr->eta(),pfcItr->phi(), false); 
-	 if(pfcItr->energy()>0)scaledPFCand->rescaleMomentum(correctedEnergy/pfcItr->energy());
-
-
-       }
-       
-
+	 if(!removePreshower_ || !(pfcItr->pS1Energy() + pfcItr->pS2Energy() >0 ) ) scaledPFCand.rescaleMomentum(scaleEE_);
+	 else scaledPFCand.rescaleMomentum(scaleEE_*(1. - (pfcItr->pS1Energy() + pfcItr->pS2Energy())/pfcItr->energy()));
+       }       
      }
      
-     prod->push_back(*scaledPFCand);
+     prod->push_back(scaledPFCand);
      
    }
    

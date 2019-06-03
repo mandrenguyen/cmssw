@@ -192,16 +192,16 @@ private:
   std::string			jetIDweightFile_;
 
   std::string bTagJetName_;
-  edm::EDGetTokenT<std::vector<reco::TrackIPTagInfo> > ImpactParameterTagInfos_;
-  edm::EDGetTokenT<reco::JetTagCollection> TrackCountingHighEffBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> TrackCountingHighPurBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> JetProbabilityBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> JetBProbabilityBJetTags_;
-  edm::EDGetTokenT<std::vector<reco::SecondaryVertexTagInfo> > SecondaryVertexTagInfos_;
-  edm::EDGetTokenT<reco::JetTagCollection> SimpleSecondaryVertexHighEffBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> SimpleSecondaryVertexHighPurBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexV2BJetTags_;
+  std::string ipTagInfos_;
+  std::string svTagInfos_;
+  std::string trackCHEBJetTags_;
+  std::string trackCHPBJetTags_;
+  std::string jetPBJetTags_;
+  std::string jetBPBJetTags_;
+  std::string simpleSVHighEffBJetTags_;
+  std::string simpleSVHighPurBJetTags_;
+  std::string combinedSVV1BJetTags_;
+  std::string combinedSVV2BJetTags_;
 
   static const int MAXJETS = 1000;
   static const int MAXTRACKS = 5000;

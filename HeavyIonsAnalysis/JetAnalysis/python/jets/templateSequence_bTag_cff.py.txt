@@ -160,6 +160,7 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_patJetsWithBtagging = patJets.clone(
         cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighEffBJetTags"),
         cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighPurBJetTags"),
         ),
+    tagInfoSources = cms.VInputTag(cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos"),cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SecondaryVertexTagInfos")),
     jetIDMap = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_JetID"),
     addBTagInfo = True,
     addTagInfos = True,

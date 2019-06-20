@@ -90,6 +90,7 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_cff')
 process.akPu4Calocorr.payload = "AK4Calo"
 process.akPu4PFcorr.payload = "AK4PF"
 process.akCs4PFcorr.payload = "AK4PF"
+process.ak4PFcorr.payload = "AK4PF"
 process.akPu4PFJets.jetPtMin = 1
 
 

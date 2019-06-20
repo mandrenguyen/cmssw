@@ -436,6 +436,10 @@ HiInclusiveJetAnalyzer::beginJob() {
     t->Branch("matchedRawPt", jets_.matchedRawPt,"matchedRawPt[nref]/F");
     t->Branch("matchedPu", jets_.matchedPu,"matchedPu[nref]/F");
     t->Branch("matchedR", jets_.matchedR,"matchedR[nref]/F");
+    if(isMC_){
+      t->Branch("matchedHadronFlavor", jets_.matchedHadronFlavor,"matchedHadronFlavor[nref]/I");
+      t->Branch("matchedPartonFlavor", jets_.matchedPartonFlavor,"matchedPartonFlavor[nref]/I");
+    }
   }
 
   // b-jet discriminators
@@ -1316,6 +1320,10 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 	    const pat::Jet& mpatjet = (*patmatchedjets)[imatch];
 	    jets_.matchedRawPt[jets_.nref] = mpatjet.correctedJet("Uncorrected").pt();
 	    jets_.matchedPu[jets_.nref] = mpatjet.pileup();
+	    if(isMC_){
+	      jets_.matchedHadronFlavor[jets_.nref] = mpatjet.hadronFlavour();
+	      jets_.matchedPartonFlavor[jets_.nref] = mpatjet.partonFlavour();
+	    }
 	  }
 	  jets_.matchedR[jets_.nref] = dr;
 	  drMin = dr;

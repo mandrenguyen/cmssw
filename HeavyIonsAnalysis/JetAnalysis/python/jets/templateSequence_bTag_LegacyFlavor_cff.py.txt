@@ -49,6 +49,7 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger = bTaggers(
     0.RADIUS_)
 
 # create objects locally since they dont load properly otherwise
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociationLegacy
 ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartons = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetPartons
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.JetTracksAssociatorAtVertex
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex.tracks = cms.InputTag("highPurityTracks")
@@ -61,6 +62,8 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJE
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByIP3dBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonByIP3dBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighEffBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.TrackCountingHighEffBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighPurBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.TrackCountingHighPurBJetTags
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetPartonAssociationLegacy
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy.partons = "MATCHPS"
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.ImpactParameterTagInfos
 ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos.primaryVertex = cms.InputTag("VERTEX")
@@ -87,8 +90,10 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByIP3dBJetTags = ALGO_SUB_GROOM_RADIUS_OB
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonByPtBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeSoftPFMuonByPtBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PositiveSoftPFMuonByPtBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociation
-ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartons*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation)
+ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy)
+# Not working with our PU sub, but keep it here for reference
+# ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociation
+# ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartons*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation)
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingIP = cms.Sequence(
     ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos *
@@ -139,10 +144,10 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_patJetsWithBtagging = patJets.clone(
     genJetMatch            = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_match"),
     genPartonMatch         = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_parton"),
     jetCorrFactorsSource   = cms.VInputTag(cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_corr")),
-    JetPartonMapSource     = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation"),
+    JetPartonMapSource     = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy"),
     JetFlavourInfoSource   = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation"),
     trackAssociationSource = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex"),
-    useLegacyJetMCFlavour  = False,
+    useLegacyJetMCFlavour  = True,
     discriminatorSources   = cms.VInputTag(
         cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighEffBJetTags"),
         cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighPurBJetTags"),
@@ -228,7 +233,9 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_JetSequence_mc = cms.Sequence(
     # *
     # ALGO_SUB_GROOM_RADIUS_OBJECT_JetID
     *
-     ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId 
+    ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy
+    # *
+    # ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId # Use legacy algo till PU implemented
     *
     ALGO_SUB_GROOM_RADIUS_OBJECT_JetTracksAssociatorAtVertex
     *

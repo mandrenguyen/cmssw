@@ -180,33 +180,17 @@ HiInclusiveJetAnalyzer::HiInclusiveJetAnalyzer(const edm::ParameterSet& iConfig)
   }
   if(doLifeTimeTagging_){
     bTagJetName_ = iConfig.getUntrackedParameter<string>("bTagJetName");
-    ImpactParameterTagInfos_ = consumes<vector<TrackIPTagInfo> > (iConfig.getUntrackedParameter<string>("ImpactParameterTagInfos",(bTagJetName_+"ImpactParameterTagInfos")));
-    TrackCountingHighEffBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("TrackCountingHighEffBJetTags",(bTagJetName_+"TrackCountingHighEffBJetTags")));
-    TrackCountingHighPurBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("TrackCountingHighPurBJetTags",(bTagJetName_+"TrackCountingHighPurBJetTags")));
-    JetProbabilityBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("JetProbabilityBJetTags",(bTagJetName_+"JetProbabilityBJetTags")));
-    JetBProbabilityBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("JetBProbabilityBJetTags",(bTagJetName_+"JetBProbabilityBJetTags")));
-    SecondaryVertexTagInfos_ = consumes<vector<SecondaryVertexTagInfo> > (iConfig.getUntrackedParameter<string>("SecondaryVertexTagInfos",(bTagJetName_+"SecondaryVertexTagInfos")));
-    SecondaryVertexNegativeTagInfos_ = consumes<vector<SecondaryVertexTagInfo> > (iConfig.getUntrackedParameter<string>("SecondaryVertexNegativeTagInfos",(bTagJetName_+"SecondaryVertexNegativeTagInfos")));
-    SimpleSecondaryVertexHighEffBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("SimpleSecondaryVertexHighEffBJetTags",(bTagJetName_+"SimpleSecondaryVertexHighEffBJetTags")));
-    NegativeSimpleSecondaryVertexHighEffBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("NegativeSimpleSecondaryVertexHighEffBJetTags",(bTagJetName_+"NegativeSimpleSecondaryVertexHighEffBJetTags")));
-    SimpleSecondaryVertexHighPurBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("SimpleSecondaryVertexHighPurBJetTags",(bTagJetName_+"SimpleSecondaryVertexHighPurBJetTags")));
-    NegativeSimpleSecondaryVertexHighPurBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("NegativeSimpleSecondaryVertexHighPurBJetTags",(bTagJetName_+"NegativeSimpleSecondaryVertexHighPurBJetTags")));
-    CombinedSecondaryVertexBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSecondaryVertexBJetTags",(bTagJetName_+"CombinedSecondaryVertexBJetTags")));
-    NegativeCombinedSecondaryVertexBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("NegativeCombinedSecondaryVertexBJetTags",(bTagJetName_+"NegativeCombinedSecondaryVertexBJetTags")));
-    PositiveCombinedSecondaryVertexBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("PositiveCombinedSecondaryVertexBJetTags",(bTagJetName_+"PositiveCombinedSecondaryVertexBJetTags")));
-    CombinedSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSecondaryVertexV2BJetTags",(bTagJetName_+"CombinedSecondaryVertexV2BJetTags")));
-    NegativeCombinedSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("NegativeCombinedSecondaryVertexV2BJetTags",(bTagJetName_+"NegativeCombinedSecondaryVertexV2BJetTags")));
-    PositiveCombinedSecondaryVertexV2BJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("PositiveCombinedSecondaryVertexV2BJetTags",(bTagJetName_+"PositiveCombinedSecondaryVertexV2BJetTags")));
-    NegativeSoftPFMuonByPtBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("NegativeSoftPFMuonByPtBJetTags",(bTagJetName_+"NegativeSoftPFMuonByPtBJetTags")));
-    PositiveSoftPFMuonByPtBJetTags_ = consumes<JetTagCollection> (iConfig.getUntrackedParameter<string>("PositiveSoftPFMuonByPtBJetTags",(bTagJetName_+"PositiveSoftPFMuonByPtBJetTags")));
-    if(doSubJets_){
-	    CombinedSubjetSecondaryVertexBJetTags_ = mayConsume<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSubjetSecondaryVertexV2BJetTags",(bTagJetName_+"CombinedSubjetSecondaryVertexV2BJetTags")));
-	    SubjetJetProbabilityBJetTags_ = mayConsume<JetTagCollection> (iConfig.getUntrackedParameter<string>("SubjetJetProbabilityBJetTags",(bTagJetName_+"SubjetJetProbabilityBJetTags")));
-	    svSubjetTagInfos_ = mayConsume<vector<SecondaryVertexTagInfo> >(iConfig.getUntrackedParameter<string>("SecondaryVertexTagInfos",(bTagJetName_+"SubjetSecondaryVertexTagInfos")));
-            svSubjetNegTagInfos_ = mayConsume<vector<SecondaryVertexTagInfo> >(iConfig.getUntrackedParameter<string>("NegativeSecondaryVertexTagInfos",(bTagJetName_+"SubjetNegativeSecondaryVertexTagInfos")));
-	    svImpactParameterTagInfos_ = mayConsume<vector<TrackIPTagInfo> >(iConfig.getUntrackedParameter<string>("ImpactParameterTagInfos",(bTagJetName_+"SubjetImpactParameterTagInfos")));
-	    CombinedSubjetNegativeSecondaryVertexBJetTags_ = mayConsume<JetTagCollection> (iConfig.getUntrackedParameter<string>("CombinedSubjetNegativeSecondaryVertexV2BJetTags",(bTagJetName_+"CombinedSubjetNegativeSecondaryVertexV2BJetTags")));
-    } 
+    ipTagInfos_ = bTagJetName_+"ImpactParameter";
+    svTagInfos_ = bTagJetName_+"SecondaryVertex";
+    trackCHEBJetTags_ = bTagJetName_+"TrackCountingHighEffBJetTags";
+    trackCHPBJetTags_ = bTagJetName_+"TrackCountingHighPurBJetTags";
+    jetPBJetTags_ = bTagJetName_+"JetProbabilityBJetTags";
+    jetBPBJetTags_ = bTagJetName_+"JetBProbabilityBJetTags";
+    simpleSVHighEffBJetTags_ = bTagJetName_+"SimpleSecondaryVertexHighEffBJetTags";
+    simpleSVHighPurBJetTags_ = bTagJetName_+"SimpleSecondaryVertexHighPurBJetTags";
+    combinedSVV1BJetTags_ = bTagJetName_+"CombinedSecondaryVertexBJetTags";
+    combinedSVV2BJetTags_ = bTagJetName_+"CombinedSecondaryVertexV2BJetTags";
+    deepCSVJetTags_ = bTagJetName_+"PfDeepCSVJetTags:probb";
   }
 
   //  cout<<" jet collection : "<<jetTag_<<endl;
@@ -380,31 +364,18 @@ HiInclusiveJetAnalyzer::beginJob() {
     t->Branch("jtSubJetEta",&jets_.jtSubJetEta);
     t->Branch("jtSubJetPhi",&jets_.jtSubJetPhi);
     t->Branch("jtSubJetM",&jets_.jtSubJetM);
-    t->Branch("jtSubJetcsvV2",&jets_.jtSubJetcsvV2);
-    t->Branch("jtSubJetNegCsvV2",&jets_.jtSubJetNegCsvV2);
-    t->Branch("jtSubJetJP",&jets_.jtSubJetJP);
-    t->Branch("jtSubJetVtxType", &jets_.jtSubJetVtxType);
-    t->Branch("jtSubJetSvtxm",&jets_.jtSubJetSvtxm);
-    t->Branch("jtSubJetSvtxpt",&jets_.jtSubJetSvtxpt);
-    t->Branch("jtSubJetSvtxeta",&jets_.jtSubJetSvtxeta);
-    t->Branch("jtSubJetSvtxphi",&jets_.jtSubJetSvtxphi);
-    t->Branch("jtSubJetSvtxNtrk",&jets_.jtSubJetSvtxNtrk);
-    t->Branch("jtSubJetSvtxdl",&jets_.jtSubJetSvtxdl);
-    t->Branch("jtSubJetSvtxdls",&jets_.jtSubJetSvtxdls);
-    if(doExtendedFlavorTagging_){
-	t->Branch("jtSubJetHadronFlavor",&jets_.jtSubJetHadronFlavor);
-	t->Branch("jtSubJetPartonFlavor",&jets_.jtSubJetPartonFlavor);
-	t->Branch("jtSubJetHadronDR",&jets_.jtSubJetHadronDR);
-	t->Branch("jtSubJetHadronPt",&jets_.jtSubJetHadronPt);
-	t->Branch("jtSubJetHadronEta",&jets_.jtSubJetHadronEta);
-	t->Branch("jtSubJetHadronPhi",&jets_.jtSubJetHadronPhi);
-	t->Branch("jtSubJetHadronPdg",&jets_.jtSubJetHadronPdg);
-	t->Branch("jtSubJetPartonDR",&jets_.jtSubJetPartonDR);
-	t->Branch("jtSubJetPartonPt",&jets_.jtSubJetPartonPt);
-	t->Branch("jtSubJetPartonEta",&jets_.jtSubJetPartonEta);
-	t->Branch("jtSubJetPartonPhi",&jets_.jtSubJetPartonPhi);
-	t->Branch("jtSubJetPartonPdg",&jets_.jtSubJetPartonPdg);
-    }
+    t->Branch("jtSubJetHadronFlavor",&jets_.jtSubJetHadronFlavor);
+    t->Branch("jtSubJetPartonFlavor",&jets_.jtSubJetPartonFlavor);
+    t->Branch("jtSubJetHadronDR",&jets_.jtSubJetHadronDR);
+    t->Branch("jtSubJetHadronPt",&jets_.jtSubJetHadronPt);
+    t->Branch("jtSubJetHadronEta",&jets_.jtSubJetHadronEta);
+    t->Branch("jtSubJetHadronPhi",&jets_.jtSubJetHadronPhi);
+    t->Branch("jtSubJetHadronPdg",&jets_.jtSubJetHadronPdg);
+    t->Branch("jtSubJetPartonDR",&jets_.jtSubJetPartonDR);
+    t->Branch("jtSubJetPartonPt",&jets_.jtSubJetPartonPt);
+    t->Branch("jtSubJetPartonEta",&jets_.jtSubJetPartonEta);
+    t->Branch("jtSubJetPartonPhi",&jets_.jtSubJetPartonPhi);
+    t->Branch("jtSubJetPartonPdg",&jets_.jtSubJetPartonPdg);
   }
 
   if(doJetConstituents_){
@@ -508,21 +479,13 @@ HiInclusiveJetAnalyzer::beginJob() {
 
     t->Branch("discr_csvV1",jets_.discr_csvV1,"discr_csvV1[nref]/F");
     t->Branch("discr_csvV2",jets_.discr_csvV2,"discr_csvV2[nref]/F");
+    t->Branch("discr_deepCSV",jets_.discr_deepCSV,"discr_deepCSV[nref]/F");
     t->Branch("discr_muByIp3",jets_.discr_muByIp3,"discr_muByIp3[nref]/F");
     t->Branch("discr_muByPt",jets_.discr_muByPt,"discr_muByPt[nref]/F");
     t->Branch("discr_prob",jets_.discr_prob,"discr_prob[nref]/F");
     t->Branch("discr_probb",jets_.discr_probb,"discr_probb[nref]/F");
     t->Branch("discr_tcHighEff",jets_.discr_tcHighEff,"discr_tcHighEff[nref]/F");
     t->Branch("discr_tcHighPur",jets_.discr_tcHighPur,"discr_tcHighPur[nref]/F");
-
-    t->Branch("ndiscr_ssvHighEff",jets_.ndiscr_ssvHighEff,"ndiscr_ssvHighEff[nref]/F");
-    t->Branch("ndiscr_ssvHighPur",jets_.ndiscr_ssvHighPur,"ndiscr_ssvHighPur[nref]/F");
-    t->Branch("ndiscr_csvV1",jets_.ndiscr_csvV1,"ndiscr_csvV1[nref]/F");
-    t->Branch("ndiscr_csvV2",jets_.ndiscr_csvV2,"ndiscr_csvV2[nref]/F");
-    t->Branch("ndiscr_muByPt",jets_.ndiscr_muByPt,"ndiscr_muByPt[nref]/F");
-
-    t->Branch("pdiscr_csvV1",jets_.pdiscr_csvV1,"pdiscr_csvV1[nref]/F");
-    t->Branch("pdiscr_csvV2",jets_.pdiscr_csvV2,"pdiscr_csvV2[nref]/F");
 
     t->Branch("nsvtx",    jets_.nsvtx,    "nsvtx[nref]/I");
     t->Branch("svType", &jets_.svType);
@@ -1002,79 +965,6 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
   edm::Handle<reco::GenParticleCollection> genparts;
   iEvent.getByToken(genParticleSrc_,genparts);
 
-  //Get all the b-tagging handles
-  // Track Counting Taggers
-  //------------------------------------------------------
-  Handle<JetTagCollection> jetTags_TCHighEff;
-  Handle<JetTagCollection> jetTags_TCHighPur;
-
-  //------------------------------------------------------
-  // Jet Probability tagger
-  //------------------------------------------------------
-  Handle<vector<TrackIPTagInfo> > tagInfo;
-  Handle<JetTagCollection> jetTags_JP;
-  Handle<JetTagCollection> jetTags_JB;
-  Handle<JetTagCollection> jetTags_subjet_JP;
-
-  //------------------------------------------------------
-  // Secondary vertex taggers
-  //------------------------------------------------------
-  Handle<vector<SecondaryVertexTagInfo> > tagInfoSVx;
-  Handle<vector<SecondaryVertexTagInfo> > tagInfoNegSVx;
-  Handle<JetTagCollection> jetTags_SvtxHighEff;
-  Handle<JetTagCollection> jetTags_negSvtxHighEff;
-  Handle<JetTagCollection> jetTags_SvtxHighPur;
-  Handle<JetTagCollection> jetTags_negSvtxHighPur;
-  Handle<JetTagCollection> jetTags_CombinedSvtx;
-  Handle<JetTagCollection> jetTags_negCombinedSvtx;
-  Handle<JetTagCollection> jetTags_posCombinedSvtx;
-  Handle<JetTagCollection> jetTags_CombinedSvtxV2;
-  Handle<JetTagCollection> jetTags_negCombinedSvtxV2;
-  Handle<JetTagCollection> jetTags_posCombinedSvtxV2;
-  
-  Handle<JetTagCollection> jetTags_subjet_combinedSvtx;
-  Handle<vector<TrackIPTagInfo> > subjetTagInfo;
-  Handle<vector<SecondaryVertexTagInfo> > subjetTagInfoSVx;
-  Handle<vector<SecondaryVertexTagInfo> > subjetTagInfoNegSVx;
-  Handle<JetTagCollection> jetTags_subjet_negCombinedSvtx;
-
-  //------------------------------------------------------
-  // Soft muon tagger
-  //------------------------------------------------------
-
-  //Handle<SoftLeptonTagInfoCollection> tagInos_softmuon;
-  //Handle<JetTagCollection> jetTags_softMu;
-  //Handle<JetTagCollection> jetTags_softMuneg;
-
-  if(doLifeTimeTagging_){
-    iEvent.getByToken(ImpactParameterTagInfos_, tagInfo);
-    iEvent.getByToken(TrackCountingHighEffBJetTags_, jetTags_TCHighEff);
-    iEvent.getByToken(TrackCountingHighPurBJetTags_, jetTags_TCHighPur);
-    iEvent.getByToken(JetProbabilityBJetTags_, jetTags_JP);
-    iEvent.getByToken(JetBProbabilityBJetTags_, jetTags_JB);
-    iEvent.getByToken(SecondaryVertexTagInfos_, tagInfoSVx);
-    iEvent.getByToken(SecondaryVertexNegativeTagInfos_, tagInfoNegSVx);
-    iEvent.getByToken(SimpleSecondaryVertexHighEffBJetTags_, jetTags_SvtxHighEff);
-    iEvent.getByToken(NegativeSimpleSecondaryVertexHighEffBJetTags_, jetTags_negSvtxHighEff);
-    iEvent.getByToken(SimpleSecondaryVertexHighPurBJetTags_, jetTags_SvtxHighPur);
-    iEvent.getByToken(NegativeSimpleSecondaryVertexHighEffBJetTags_, jetTags_negSvtxHighPur);
-    iEvent.getByToken(CombinedSecondaryVertexBJetTags_, jetTags_CombinedSvtx);
-    iEvent.getByToken(NegativeCombinedSecondaryVertexBJetTags_, jetTags_negCombinedSvtx);
-    iEvent.getByToken(PositiveCombinedSecondaryVertexBJetTags_, jetTags_posCombinedSvtx);
-    iEvent.getByToken(CombinedSecondaryVertexV2BJetTags_, jetTags_CombinedSvtxV2);
-    iEvent.getByToken(NegativeCombinedSecondaryVertexV2BJetTags_, jetTags_negCombinedSvtxV2);
-    iEvent.getByToken(PositiveCombinedSecondaryVertexV2BJetTags_, jetTags_posCombinedSvtxV2);
-    if(doSubJets_){   
-	    iEvent.getByToken(CombinedSubjetSecondaryVertexBJetTags_, jetTags_subjet_combinedSvtx);
-	    iEvent.getByToken(CombinedSubjetNegativeSecondaryVertexBJetTags_, jetTags_subjet_negCombinedSvtx);
-	    iEvent.getByToken(SubjetJetProbabilityBJetTags_, jetTags_subjet_JP);
-	    iEvent.getByToken(svImpactParameterTagInfos_,subjetTagInfo);
-	    iEvent.getByToken(svSubjetTagInfos_,subjetTagInfoSVx);
-	    iEvent.getByToken(svSubjetNegTagInfos_, subjetTagInfoNegSVx);
-    }
-    //iEvent.getByToken(NegativeSoftPFMuonByPtBJetTags_, jetTags_softMuneg);
-    //iEvent.getByToken(PositiveSoftPFMuonByPtBJetTags_, jetTags_softMu);
-  }
 
   // get tower information
   edm::Handle<CaloTowerCollection> towers;
@@ -1142,12 +1032,24 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
     math::XYZVector jetDir = jet.momentum().Unit();
 
     if(doLifeTimeTagging_){
-      int ith_tagged =    this->TaggedJet(jet,jetTags_SvtxHighEff);
-      if(ith_tagged >= 0){
-	jets_.discr_ssvHighEff[jets_.nref] = (*jetTags_SvtxHighEff)[ith_tagged].second;
-	const SecondaryVertexTagInfo &tagInfoSV = (*tagInfoSVx)[ith_tagged];
-	jets_.nsvtx[jets_.nref]     = tagInfoSV.nVertices();
+      jets_.discr_ssvHighEff[jets_.nref]=(*patjets)[j].bDiscriminator(simpleSVHighEffBJetTags_);
+      jets_.discr_ssvHighPur[jets_.nref]=(*patjets)[j].bDiscriminator(simpleSVHighPurBJetTags_);
+      jets_.discr_csvV1[jets_.nref]=(*patjets)[j].bDiscriminator(combinedSVV1BJetTags_);
+      jets_.discr_csvV2[jets_.nref]=(*patjets)[j].bDiscriminator(combinedSVV2BJetTags_);
+      jets_.discr_deepCSV[jets_.nref]=(*patjets)[j].bDiscriminator(deepCSVJetTags_);
+      jets_.discr_prob[jets_.nref]=(*patjets)[j].bDiscriminator(jetPBJetTags_);
+      jets_.discr_probb[jets_.nref]=(*patjets)[j].bDiscriminator(jetBPBJetTags_);
+      jets_.discr_tcHighEff[jets_.nref]=(*patjets)[j].bDiscriminator(trackCHEBJetTags_);
+      jets_.discr_tcHighPur[jets_.nref]=(*patjets)[j].bDiscriminator(trackCHPBJetTags_);
 
+
+      if((*patjets)[j].hasTagInfo(svTagInfos_.c_str()) ){
+	
+	const reco::SecondaryVertexTagInfo *svTagInfo = (*patjets)[j].tagInfoSecondaryVertex(svTagInfos_.c_str());
+
+	jets_.nsvtx[jets_.nref]     = svTagInfo->nVertices();
+	
+	
 	std::vector<int> svtxntrks;
 	std::vector<float> svjetDr, svtxdl, svtxdls, svtxdl2d, svtxdls2d, svtxm, svtxpt;
 	std::vector<int> svType;
@@ -1162,18 +1064,18 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 		svType.push_back(-999);
 	}
 	for (int ivtx=0; ivtx<jets_.nsvtx[jets_.nref]; ivtx++) {
-	//  if(jets_.nsvtx[jets_.nref]>1) cout << "ntrks: " << tagInfoSV.nVertexTracks(ivtx) << endl;
-	  svtxntrks.push_back(tagInfoSV.nVertexTracks(ivtx));
-	  if(doExtraCTagging_) svjetDr.push_back(reco::deltaR(tagInfoSV.flightDirection(ivtx),jetDir));
+	//  if(jets_.nsvtx[jets_.nref]>1) cout << "ntrks: " << svTagInfo->nVertexTracks(ivtx) << endl;
+	  svtxntrks.push_back(svTagInfo->nVertexTracks(ivtx));
+	  if(doExtraCTagging_) svjetDr.push_back(reco::deltaR(svTagInfo->flightDirection(ivtx),jetDir));
 
 	  // this is the 3d flight distance, for 2-D use (0,true)
-	  Measurement1D m1D = tagInfoSV.flightDistance(ivtx);
+	  Measurement1D m1D = svTagInfo->flightDistance(ivtx);
 	  svtxdl.push_back(m1D.value());
 	  svtxdls.push_back(m1D.significance());
-	  Measurement1D m2D = tagInfoSV.flightDistance(ivtx,true);
+	  Measurement1D m2D = svTagInfo->flightDistance(ivtx,true);
           svtxdl2d.push_back(m2D.value());
           svtxdls2d.push_back(m2D.significance());
-          const Vertex& svtx = tagInfoSV.secondaryVertex(ivtx);
+          const Vertex& svtx = svTagInfo->secondaryVertex(ivtx);
 	  
 	  double svtxM = svtx.p4().mass();
           double svtxPt = svtx.p4().pt();
@@ -1186,7 +1088,7 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 	    int trkNetCharge=0;
 	    int nTrkInCone=0;
 	    int nsvtxtrks=0;
-	    TrackRefVector svtxTracks = tagInfoSV.vertexTracks(ivtx);
+	    TrackRefVector svtxTracks = svTagInfo->vertexTracks(ivtx);
 	    for(unsigned int itrk=0; itrk<svtxTracks.size(); itrk++){
 	      nsvtxtrks++;
 	      trkSumChi2 += svtxTracks.at(itrk)->chi2();
@@ -1199,15 +1101,15 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 	    
 	    //try out the corrected mass (http://arxiv.org/pdf/1504.07670v1.pdf)
 	    //mCorr=srqt(m^2+p^2sin^2(th)) + p*sin(th)
-	    double sinth = svtx.p4().Vect().Unit().Cross(tagInfoSV.flightDirection(0).unit()).Mag2();
+	    double sinth = svtx.p4().Vect().Unit().Cross(svTagInfo->flightDirection(0).unit()).Mag2();
 	    sinth = sqrt(sinth);
 	    jets_.svtxmcorr[jets_.nref] = sqrt(pow(svtxM,2)+(pow(svtxPt,2)*pow(sinth,2)))+svtxPt*sinth;
 	  }
 	  
-	  TrackRefVector svtxTracks = tagInfoSV.vertexTracks(ivtx);
+	  TrackRefVector svtxTracks = svTagInfo->vertexTracks(ivtx);
 	  unsigned nVtxTypeTrks=0, nVtxTypeVertices=0, nAssocTrks=0;
 	  for(unsigned int itrk=0; itrk<svtxTracks.size(); itrk++){
-		  if(tagInfoSV.trackWeight(ivtx, svtxTracks.at(itrk)) >= 0.5) nAssocTrks++; //0.5 is default value
+		  if(svTagInfo->trackWeight(ivtx, svtxTracks.at(itrk)) >= 0.5) nAssocTrks++; //0.5 is default value
 	  }
 	  if(nAssocTrks>0){
 		  bool isTrackVertex = (nAssocTrks==1);
@@ -1230,56 +1132,35 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
         jets_.svtxpt.push_back(svtxpt);
 
       }
-      ith_tagged    = this->TaggedJet(jet,jetTags_negSvtxHighEff);
-      if(ith_tagged >= 0) jets_.ndiscr_ssvHighEff[jets_.nref]   = (*jetTags_negSvtxHighEff)[ith_tagged].second;
-      ith_tagged    = this->TaggedJet(jet,jetTags_SvtxHighPur);
-      if(ith_tagged >= 0) jets_.discr_ssvHighPur[jets_.nref]  = (*jetTags_SvtxHighPur)[ith_tagged].second;
-      ith_tagged    = this->TaggedJet(jet,jetTags_negSvtxHighPur);
-      if(ith_tagged >= 0) jets_.ndiscr_ssvHighPur[jets_.nref] = (*jetTags_negSvtxHighPur)[ith_tagged].second;
 
-      ith_tagged          = this->TaggedJet(jet,jetTags_CombinedSvtx);
-      if(ith_tagged >= 0) jets_.discr_csvV1[jets_.nref]  = (*jetTags_CombinedSvtx)[ith_tagged].second;
-      ith_tagged          = this->TaggedJet(jet,jetTags_negCombinedSvtx);
-      if(ith_tagged >= 0) jets_.ndiscr_csvV1[jets_.nref] = (*jetTags_negCombinedSvtx)[ith_tagged].second;
-      ith_tagged  = this->TaggedJet(jet,jetTags_posCombinedSvtx);
-      if(ith_tagged >= 0) jets_.pdiscr_csvV1[jets_.nref] = (*jetTags_posCombinedSvtx)[ith_tagged].second;
+      if((*patjets)[j].hasTagInfo(ipTagInfos_.c_str()) ){
+	const reco::TrackIPTagInfo *ipTagInfo = (*patjets)[j].tagInfoTrackIP(ipTagInfos_.c_str());
+	
+	jets_.nIPtrk[jets_.nref] = ipTagInfo->tracks().size();
+	jets_.nselIPtrk[jets_.nref] = ipTagInfo->selectedTracks().size();
 
-      ith_tagged          = this->TaggedJet(jet,jetTags_CombinedSvtxV2);
-      if(ith_tagged >= 0) jets_.discr_csvV2[jets_.nref]  = (*jetTags_CombinedSvtxV2)[ith_tagged].second;
-      ith_tagged          = this->TaggedJet(jet,jetTags_negCombinedSvtxV2);
-      if(ith_tagged >= 0) jets_.ndiscr_csvV2[jets_.nref] = (*jetTags_negCombinedSvtxV2)[ith_tagged].second;
-      ith_tagged  = this->TaggedJet(jet,jetTags_posCombinedSvtxV2);
-      if(ith_tagged >= 0) jets_.pdiscr_csvV2[jets_.nref] = (*jetTags_posCombinedSvtxV2)[ith_tagged].second;
-
-      if(ith_tagged >= 0){
-	ith_tagged = this->TaggedJet(jet,jetTags_JP);
-	jets_.discr_prob[jets_.nref]  = (*jetTags_JP)[ith_tagged].second;
-
-	const TrackIPTagInfo& tagInfoIP= (*tagInfo)[ith_tagged];
-
-	jets_.nIPtrk[jets_.nref] = tagInfoIP.tracks().size();
-	jets_.nselIPtrk[jets_.nref] = tagInfoIP.selectedTracks().size();
 	if (doLifeTimeTaggingExtras_) {
 
-	  TrackRefVector selTracks=tagInfoIP.selectedTracks();
+	  TrackRefVector selTracks=ipTagInfo->selectedTracks();
 
-	  GlobalPoint pv(tagInfoIP.primaryVertex()->position().x(),tagInfoIP.primaryVertex()->position().y(),tagInfoIP.primaryVertex()->position().z());
+
+	  GlobalPoint pv(ipTagInfo->primaryVertex()->position().x(),ipTagInfo->primaryVertex()->position().y(),ipTagInfo->primaryVertex()->position().z());
 
   	  reco::TrackKinematics allKinematics;	 
  
 	  for(int it=0;it<jets_.nselIPtrk[jets_.nref] ;it++){
 	    jets_.ipJetIndex[jets_.nIP + it]= jets_.nref;
-	    reco::btag::TrackIPData data = tagInfoIP.impactParameterData()[it];
+	    reco::btag::TrackIPData data = ipTagInfo->impactParameterData()[it];
 	    jets_.ipPt[jets_.nIP + it] = selTracks[it]->pt();
 	    jets_.ipEta[jets_.nIP + it] = selTracks[it]->eta();
-	    jets_.ipDxy[jets_.nIP + it] = selTracks[it]->dxy(tagInfoIP.primaryVertex()->position());
-	    jets_.ipDz[jets_.nIP + it] = selTracks[it]->dz(tagInfoIP.primaryVertex()->position());
+	    jets_.ipDxy[jets_.nIP + it] = selTracks[it]->dxy(ipTagInfo->primaryVertex()->position());
+	    jets_.ipDz[jets_.nIP + it] = selTracks[it]->dz(ipTagInfo->primaryVertex()->position());
 	    jets_.ipChi2[jets_.nIP + it] = selTracks[it]->normalizedChi2();
 	    jets_.ipNHit[jets_.nIP + it] = selTracks[it]->numberOfValidHits();
 	    jets_.ipNHitPixel[jets_.nIP + it] = selTracks[it]->hitPattern().numberOfValidPixelHits();
 	    jets_.ipNHitStrip[jets_.nIP + it] = selTracks[it]->hitPattern().numberOfValidStripHits();
 	    jets_.ipIsHitL1[jets_.nIP + it]  = selTracks[it]->hitPattern().hasValidHitInPixelLayer(PixelSubdetector::SubDetector(1),1); //(inBarrel, layer)
-	    jets_.ipProb0[jets_.nIP + it] = tagInfoIP.probabilities(0)[it];
+	    jets_.ipProb0[jets_.nIP + it] = ipTagInfo->probabilities(0)[it];
 	    jets_.ip2d[jets_.nIP + it] = data.ip2d.value();
 	    jets_.ip2dSig[jets_.nIP + it] = data.ip2d.significance();
 	    jets_.ip3d[jets_.nIP + it] = data.ip3d.value();
@@ -1304,22 +1185,15 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 	    jets_.trackSumJetDeltaR[jets_.nref] = ROOT::Math::VectorUtil::DeltaR(allKinematics.vectorSum(),jetDir);
 	    
 	    //do some sorting to get the impact parameter of all tracks in descending order
-	    jets_.trackSip2dSigAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, tagInfoIP, 1);
-	    jets_.trackSip3dSigAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, tagInfoIP, 2);
-	    jets_.trackSip2dValAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, tagInfoIP, 3);
-	    jets_.trackSip3dValAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, tagInfoIP, 4);
+	    jets_.trackSip2dSigAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, *ipTagInfo, 1);
+	    jets_.trackSip3dSigAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, *ipTagInfo, 2);
+	    jets_.trackSip2dValAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, *ipTagInfo, 3);
+	    jets_.trackSip3dValAboveCharm[jets_.nref] = getAboveCharmThresh(selTracks, *ipTagInfo, 4);
 	  }
 	  jets_.nIP += jets_.nselIPtrk[jets_.nref];
 	}
       }
 
-      ith_tagged = this->TaggedJet(jet,jetTags_JB);
-      if(ith_tagged >= 0) jets_.discr_probb[jets_.nref]  = (*jetTags_JB)[ith_tagged].second;
-
-      ith_tagged    = this->TaggedJet(jet,jetTags_TCHighEff);
-      if(ith_tagged >= 0) jets_.discr_tcHighEff[jets_.nref]   = (*jetTags_TCHighEff)[ith_tagged].second;
-      ith_tagged    = this->TaggedJet(jet,jetTags_TCHighPur);
-      if(ith_tagged >= 0) jets_.discr_tcHighPur[jets_.nref]   = (*jetTags_TCHighPur)[ith_tagged].second;
 
       //ith_tagged = this->TaggedJet(jet,jetTags_softMu);
       //if(ith_tagged >= 0){
@@ -1639,7 +1513,7 @@ HiInclusiveJetAnalyzer::analyze(const Event& iEvent,
 	}
    }
 
-    if(doSubJets_) analyzeSubjets(jet, jets_.nref, theSubjetFlavourInfos, groomedJets, jetTags_subjet_combinedSvtx, jetTags_subjet_negCombinedSvtx, jetTags_subjet_JP, subjetTagInfo, subjetTagInfoSVx, subjetTagInfoNegSVx);
+    if(doSubJets_) analyzeSubjets(jet, jets_.nref, theSubjetFlavourInfos, groomedJets);
 
     if(usePat_){
       if( (*patjets)[j].hasUserFloat(jetName_+"Njettiness:tau1") )
@@ -2433,7 +2307,7 @@ float HiInclusiveJetAnalyzer::getTau(unsigned num, const reco::GenJet object) co
 
 
 //--------------------------------------------------------------------------------------------------
-void HiInclusiveJetAnalyzer::analyzeSubjets(const reco::Jet jet, int idx, edm::Handle<reco::JetFlavourInfoMatchingCollection> theSubjetFlavourInfos, edm::Handle<edm::View<reco::Jet> > groomedJets, Handle<JetTagCollection> jetTags_CombinedSvtx, Handle<JetTagCollection> jetTags_negCombinedSvtx, Handle<JetTagCollection> jetTags_JP, Handle<vector<TrackIPTagInfo> > subjetIP, Handle<vector<SecondaryVertexTagInfo> > subjetSV, Handle<vector<SecondaryVertexTagInfo> > subjetNegSV) {
+void HiInclusiveJetAnalyzer::analyzeSubjets(const reco::Jet jet, int idx, edm::Handle<reco::JetFlavourInfoMatchingCollection> theSubjetFlavourInfos, edm::Handle<edm::View<reco::Jet> > groomedJets) {
 
   std::vector<float> sjpt;
   std::vector<float> sjeta;
@@ -2441,17 +2315,6 @@ void HiInclusiveJetAnalyzer::analyzeSubjets(const reco::Jet jet, int idx, edm::H
   std::vector<float> sjm;
   std::vector<float> hadronFlavor;
   std::vector<float> partonFlavor;
-  std::vector<float> csvV2;
-  std::vector<float> negCsvV2;
-  std::vector<float> jptag;
-  std::vector<int> sjVtxType;
-  std::vector<std::vector<float>> subjetVtxMass;
-  std::vector<std::vector<float>> subjetVtxPt;
-  std::vector<std::vector<float>> subjetVtxEta;
-  std::vector<std::vector<float>> subjetVtxPhi;
-  std::vector<std::vector<float>> subjetVtxNtrk;
-  std::vector<std::vector<float>> subjetVtxdl;
-  std::vector<std::vector<float>> subjetVtxdls;
   std::vector<std::vector<float>> hadronDR;
   std::vector<std::vector<float>> hadronPt;
   std::vector<std::vector<float>> hadronEta;
@@ -2472,163 +2335,66 @@ void HiInclusiveJetAnalyzer::analyzeSubjets(const reco::Jet jet, int idx, edm::H
 		  sjphi.push_back(dp.phi());
 		  sjm.push_back(dp.mass());
 
-		  vector<float> svm, svpt, sveta, svphi, svntrk, svdl, svdls; 
 		  const reco::Jet *subjd = dynamic_cast<const reco::Jet*>(jet.daughter(k));
-		  int ith_tagged = TaggedJet(*subjd,jetTags_CombinedSvtx);
-		  if(ith_tagged >= 0) csvV2.push_back((*jetTags_CombinedSvtx)[ith_tagged].second);
-		  else csvV2.push_back(-1.);
-		  ith_tagged = TaggedJet(*subjd,jetTags_JP);
-		  if(ith_tagged >= 0) jptag.push_back((*jetTags_JP)[ith_tagged].second);
-		  else jptag.push_back(-1.);
-		  ith_tagged = TaggedJet(*subjd,jetTags_negCombinedSvtx);
-		  if(ith_tagged >= 0) negCsvV2.push_back((*jetTags_negCombinedSvtx)[ith_tagged].second);
-		  else negCsvV2.push_back(-1.);		  
 
-		  ith_tagged = TaggedJet(*subjd,jetTags_CombinedSvtx);
-		  if(ith_tagged>=0){
-			  const SecondaryVertexTagInfo &subjetInfo = (*subjetSV)[ith_tagged];
-			  for(unsigned isv=0; isv<subjetInfo.nVertices(); isv++){
-				  //cout << "subjet " << ith_tagged << " x,y,z: " << subjetInfo.secondaryVertex(isv).x() << " " << subjetInfo.secondaryVertex(isv).y() << " " << subjetInfo.secondaryVertex(isv).z() << endl;
-				  svm.push_back(subjetInfo.secondaryVertex(isv).p4().mass());
-				  svpt.push_back(subjetInfo.secondaryVertex(isv).p4().pt());
-				  sveta.push_back(subjetInfo.secondaryVertex(isv).p4().eta());
-				  svphi.push_back(subjetInfo.secondaryVertex(isv).p4().phi());
-				  svntrk.push_back(subjetInfo.nVertexTracks(isv));
-				  svdl.push_back(subjetInfo.flightDistance(isv).value());
-				  svdls.push_back(subjetInfo.flightDistance(isv).significance());
-			  }
-			  if((*jetTags_CombinedSvtx)[ith_tagged].second > 0.9 && subjetInfo.nVertices()>0){
-//				cout << "full vtx criteria met for subjet " << k << " (pt=" << subjd->pt() << ", csv="<< (*jetTags_CombinedSvtx)[ith_tagged].second << ") " << endl;
-//				cout << "full vtx reco tracks: "<< endl;
-				int itrack=0;
-				for(reco::Vertex::trackRef_iterator it = subjetInfo.secondaryVertex(0).tracks_begin(); it != subjetInfo.secondaryVertex(0).tracks_end(); it++, itrack++){
-//					cout << "sv track " << itrack << " pt: "<< (*it)->pt() << " eta: " << (*it)->eta() << " phi: "<< (*it)->phi() << endl; 
-				}	  
-	
-			  }
-			  //if((*jetTags_CombinedSvtx)[ith_tagged].second > 0.9 && subjetInfo.nVertices()==0) cout << "WARNING! No vertex found in a large CSV subjet!!" << endl;
-			  if(subjetInfo.nVertices()>0) sjVtxType.push_back(0);
-			  else{
-				  const TrackIPTagInfo &ipInfo = (*subjetIP)[ith_tagged];		    	
-				  GlobalPoint pv(ipInfo.primaryVertex()->position().x(),ipInfo.primaryVertex()->position().y(),ipInfo.primaryVertex()->position().z());
-				  std::vector<std::size_t> indices = ipInfo.sortedIndexes(reco::btag::IP3DSig);
-				  const std::vector<reco::btag::TrackIPData> &ipData = ipInfo.impactParameterData();
-
-				  const TrackIPTagInfo::input_container &tracks = ipInfo.selectedTracks();
-				  std::vector<const Track *> pseudoVertexTracks;	
-				  int nVtxTrks=0;		
-
-				  const Track * trackPairV0Test[2];
-			//	  cout << "pseudoVtx criteria met for subjet " << k << " (pt=" << subjd->pt() << ", csv=" << (*jetTags_CombinedSvtx)[ith_tagged].second <<") " << endl;
-			//	  if((*jetTags_CombinedSvtx)[ith_tagged].second > 0.9) cout << " track debug info for PSVtx: " << endl;
-				  for(std::size_t i=0; i<indices.size(); i++) {
-					  std::size_t idx = indices[i];
-					  const reco::btag::TrackIPData &data = ipData[idx];
-					  const Track * trackPtr = reco::btag::toTrack(tracks[idx]);
-					  const Track &track = *trackPtr;		
-
-					  if (!trackSelector(track, data, *subjd, pv)) continue;
-					  if( trackPseudoSelector(track, data, *subjd, pv)) {
-						  pseudoVertexTracks.push_back(trackPtr);
-			//			  if((*jetTags_CombinedSvtx)[ith_tagged].second > 0.9) cout << " track " << i << " pt: "<< track.pt() << " eta: "<< track.eta() << " phi: " << track.phi() << " displacement: "<< data.ip3d.value() << " dist to jet axis: "<< data.distanceToJetAxis.value() << endl;
-						  nVtxTrks++;
-					  }
-					  // check against all other tracks for V0 track pairs
-					  trackPairV0Test[0] = reco::btag::toTrack(tracks[idx]);
-					  bool ok = true;
-					  for(std::size_t j=0; j<indices.size(); j++) {
-						  if (i == j) continue;
-
-						  std::size_t pairIdx = indices[j];
-						  const reco::btag::TrackIPData &pairTrackData = ipData[pairIdx];
-						  const Track * pairTrackPtr = reco::btag::toTrack(tracks[pairIdx]);
-						  const Track &pairTrack = *pairTrackPtr;
-
-						  if (!trackSelector(pairTrack, pairTrackData, *subjd, pv))
-							  continue;
-
-						  trackPairV0Test[1] = pairTrackPtr;
-						  if (!trackPairV0Filter(trackPairV0Test, 2)) {
-							  ok = false;
-							  break;
-						  }
-					  }
-					  if (!ok) continue;
-				  }
-				  if(nVtxTrks >= 2 && pseudoVertexV0Filter(pseudoVertexTracks)) sjVtxType.push_back(1);
-				  else sjVtxType.push_back(2); 
-			  }
-			  subjetVtxMass.push_back(svm);
-			  subjetVtxPt.push_back(svpt);
-			  subjetVtxEta.push_back(sveta);
-			  subjetVtxPhi.push_back(svphi);
-			  subjetVtxNtrk.push_back(svntrk);
-			  subjetVtxdl.push_back(svdl);
-			  subjetVtxdls.push_back(svdls);
-
-			  if(doExtendedFlavorTagging_){		
-				  vector<float> hdr, hpt, heta, hphi, hpdg, pdr, ppt, peta, pphi, ppdg;
-				  for ( reco::JetFlavourInfoMatchingCollection::const_iterator sj  = theSubjetFlavourInfos->begin(); sj != theSubjetFlavourInfos->end(); sj++ ) { 
-					  if( sqrt(reco::deltaR2(subjd->eta(), subjd->phi(), (*sj).first.get()->eta(), (*sj).first.get()->phi() )) <0.01  ){
-
-						  reco::Jet *aSubjet = const_cast<reco::Jet*>((*sj).first.get());
-
-						  reco::JetFlavourInfo aInfo = (*sj).second;	
-						  hadronFlavor.push_back(aInfo.getHadronFlavour());
-						  partonFlavor.push_back(aInfo.getPartonFlavour());
-						  const reco::GenParticleRefVector &bHadrons = aInfo.getbHadrons();
-						  for(reco::GenParticleRefVector::const_iterator it = bHadrons.begin(); it != bHadrons.end(); ++it){
-							  hdr.push_back(reco::deltaR(aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi()));
-							  hpt.push_back((*it)->pt());
-							  heta.push_back((*it)->eta());
-							  hphi.push_back((*it)->phi());
-							  hpdg.push_back((*it)->pdgId());
-						  }
-						  const reco::GenParticleRefVector &cHadrons = aInfo.getcHadrons();
-						  for(reco::GenParticleRefVector::const_iterator it = cHadrons.begin(); it != cHadrons.end(); ++it){
-							  hdr.push_back(reco::deltaR(aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi()));
-							  hpt.push_back((*it)->pt());
-							  heta.push_back((*it)->eta());
-							  hphi.push_back((*it)->phi());
-							  hpdg.push_back((*it)->pdgId());
-						  }
-						  const reco::GenParticleRefVector & partons = aInfo.getPartons();
-						  for(reco::GenParticleRefVector::const_iterator it = partons.begin(); it != partons.end(); ++it){
-							  pdr.push_back(reco::deltaR( aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi() ));
-							  ppt.push_back((*it)->pt());
-							  peta.push_back((*it)->eta());
-							  pphi.push_back((*it)->phi());
-							  ppdg.push_back((*it)->pdgId());
-						  }
-						  break;	
-					  } // end if reco::deltaR2 subjd (*sj).first.get()
-				  } // end for const_iterator sj  = theSubjetFlavourInfos->begin()
-				  hadronDR.push_back(hdr);
-				  hadronPt.push_back(hpt);
-				  hadronEta.push_back(heta);
-				  hadronPhi.push_back(hphi);
-				  hadronPdg.push_back(hpdg);
-				  partonDR.push_back(pdr);
-				  partonPt.push_back(ppt);
-				  partonEta.push_back(peta);
-				  partonPhi.push_back(pphi);
-				  partonPdg.push_back(ppdg);
-			  }	
-
-		  }
-	  }
+		  if(doExtendedFlavorTagging_){		
+		    vector<float> hdr, hpt, heta, hphi, hpdg, pdr, ppt, peta, pphi, ppdg;
+		    for ( reco::JetFlavourInfoMatchingCollection::const_iterator sj  = theSubjetFlavourInfos->begin(); sj != theSubjetFlavourInfos->end(); sj++ ) { 
+		      if( sqrt(reco::deltaR2(subjd->eta(), subjd->phi(), (*sj).first.get()->eta(), (*sj).first.get()->phi() )) <0.01  ){
+			
+			reco::Jet *aSubjet = const_cast<reco::Jet*>((*sj).first.get());
+			
+			reco::JetFlavourInfo aInfo = (*sj).second;	
+			hadronFlavor.push_back(aInfo.getHadronFlavour());
+			partonFlavor.push_back(aInfo.getPartonFlavour());
+			const reco::GenParticleRefVector &bHadrons = aInfo.getbHadrons();
+			for(reco::GenParticleRefVector::const_iterator it = bHadrons.begin(); it != bHadrons.end(); ++it){
+			  hdr.push_back(reco::deltaR(aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi()));
+			  hpt.push_back((*it)->pt());
+			  heta.push_back((*it)->eta());
+			  hphi.push_back((*it)->phi());
+			  hpdg.push_back((*it)->pdgId());
+			}
+			const reco::GenParticleRefVector &cHadrons = aInfo.getcHadrons();
+			for(reco::GenParticleRefVector::const_iterator it = cHadrons.begin(); it != cHadrons.end(); ++it){
+			  hdr.push_back(reco::deltaR(aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi()));
+			  hpt.push_back((*it)->pt());
+			  heta.push_back((*it)->eta());
+			  hphi.push_back((*it)->phi());
+			  hpdg.push_back((*it)->pdgId());
+			}
+			const reco::GenParticleRefVector & partons = aInfo.getPartons();
+			for(reco::GenParticleRefVector::const_iterator it = partons.begin(); it != partons.end(); ++it){
+			  pdr.push_back(reco::deltaR( aSubjet->eta(), aSubjet->phi(), (*it)->eta(), (*it)->phi() ));
+			  ppt.push_back((*it)->pt());
+			  peta.push_back((*it)->eta());
+			  pphi.push_back((*it)->phi());
+			  ppdg.push_back((*it)->pdgId());
+			}
+			break;	
+		      } // end if reco::deltaR2 subjd (*sj).first.get()
+		    } // end for const_iterator sj  = theSubjetFlavourInfos->begin()
+		    hadronDR.push_back(hdr);
+		    hadronPt.push_back(hpt);
+		    hadronEta.push_back(heta);
+		    hadronPhi.push_back(hphi);
+		    hadronPdg.push_back(hpdg);
+		    partonDR.push_back(pdr);
+		    partonPt.push_back(ppt);
+		    partonEta.push_back(peta);
+		    partonPhi.push_back(pphi);
+		    partonPdg.push_back(ppdg);
+		  }	
+	  }	  
+	  
   } else {
-	  sjpt.push_back(-999.);
-	  sjeta.push_back(-999.);
+    sjpt.push_back(-999.);
+    sjeta.push_back(-999.);
 	  sjphi.push_back(-999.);
 	  sjm.push_back(-999.);
-	  sjVtxType.push_back(-999.);
-	  csvV2.push_back(-999.);
-	  negCsvV2.push_back(-999);
-          jptag.push_back(-999.);
 	  if(doExtendedFlavorTagging_){
-		  hadronFlavor.push_back(-999.);
-		  partonFlavor.push_back(-999.);
+	    hadronFlavor.push_back(-999.);
+	    partonFlavor.push_back(-999.);
 	  }
   }
   //cout << "subjet pt size: "<< sjpt.size() << endl;
@@ -2639,17 +2405,6 @@ void HiInclusiveJetAnalyzer::analyzeSubjets(const reco::Jet jet, int idx, edm::H
   jets_.jtSubJetEta.push_back(sjeta);
   jets_.jtSubJetPhi.push_back(sjphi);
   jets_.jtSubJetM.push_back(sjm);
-  jets_.jtSubJetVtxType.push_back(sjVtxType);
-  jets_.jtSubJetcsvV2.push_back(csvV2);
-  jets_.jtSubJetNegCsvV2.push_back(negCsvV2);
-  jets_.jtSubJetJP.push_back(jptag);
-  jets_.jtSubJetSvtxm.push_back(subjetVtxMass);
-  jets_.jtSubJetSvtxpt.push_back(subjetVtxPt);
-  jets_.jtSubJetSvtxeta.push_back(subjetVtxEta);
-  jets_.jtSubJetSvtxphi.push_back(subjetVtxPhi);
-  jets_.jtSubJetSvtxNtrk.push_back(subjetVtxNtrk);
-  jets_.jtSubJetSvtxdl.push_back(subjetVtxdl);
-  jets_.jtSubJetSvtxdls.push_back(subjetVtxdls);
   if(doExtendedFlavorTagging_){
 	  jets_.jtSubJetHadronFlavor.push_back(hadronFlavor);
 	  jets_.jtSubJetPartonFlavor.push_back(partonFlavor); 

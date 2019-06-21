@@ -58,7 +58,7 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighPurBJetTags = ALGO_SUB_GROOM_RADIU
 ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetPartonAssociationLegacy
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.ImpactParameterTagInfos
-ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos.primaryVertex = cms.InputTag("VERTEX")
+ALGO_SUB_GROOM_RADIUS_OBJECT_PfImpactParameterTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PfImpactParameterTagInfos
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetProbabilityBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.JetProbabilityBJetTags
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_SecondaryVertexTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SecondaryVertexTagInfos
@@ -66,22 +66,15 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighEffBJetTags = ALGO_SUB_GRO
 ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighPurBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SimpleSecondaryVertexHighPurBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSecondaryVertexBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.CombinedSecondaryVertexBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSecondaryVertexV2BJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.CombinedSecondaryVertexV2BJetTags
+ALGO_SUB_GROOM_RADIUS_OBJECT_PfInclusiveSecondaryVertexFinderTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PfInclusiveSecondaryVertexFinderTagInfos
+ALGO_SUB_GROOM_RADIUS_OBJECT_PfDeepCSVTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PfDeepCSVTagInfos
+ALGO_SUB_GROOM_RADIUS_OBJECT_PfDeepCSVJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PfDeepCSVJetTags
 
-ALGO_SUB_GROOM_RADIUS_OBJECT_SecondaryVertexNegativeTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SecondaryVertexNegativeTagInfos
-ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSimpleSecondaryVertexHighEffBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeSimpleSecondaryVertexHighEffBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSimpleSecondaryVertexHighPurBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeSimpleSecondaryVertexHighPurBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeCombinedSecondaryVertexBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeCombinedSecondaryVertexBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveCombinedSecondaryVertexBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PositiveCombinedSecondaryVertexBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeCombinedSecondaryVertexV2BJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeCombinedSecondaryVertexV2BJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveCombinedSecondaryVertexV2BJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PositiveCombinedSecondaryVertexV2BJetTags
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonsTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonsTagInfos
-ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonsTagInfos.primaryVertex = cms.InputTag("VERTEX")
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByIP3dBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonByIP3dBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SoftPFMuonByPtBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.NegativeSoftPFMuonByPtBJetTags
-ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveSoftPFMuonByPtBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PositiveSoftPFMuonByPtBJetTags
 ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourIdLegacy = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetPartonAssociationLegacy*ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociationLegacy)
 #Not working with our PU sub
 ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourAssociation = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.PatJetFlavourAssociation
@@ -91,18 +84,17 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_PatJetFlavourId = cms.Sequence(ALGO_SUB_GROOM_RADIU
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_SubjetImpactParameterTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SubjetImpactParameterTagInfos
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_SubjetJetProbabilityBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SubjetJetProbabilityBJetTags
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_SubjetSecondaryVertexTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SubjetSecondaryVertexTagInfos
-#SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_SubjetSecondaryVertexNegativeTagInfos = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SubjetSecondaryVertexNegativeTagInfos
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_SubjetJetTracksAssociatorAtVertex = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.SubjetJetTracksAssociatorAtVertex
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSubjetSecondaryVertexBJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.CombinedSubjetSecondaryVertexBJetTags
 #SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSubjetSecondaryVertexV2BJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.CombinedSubjetSecondaryVertexV2BJetTags
-#SUBJETDUMMY_ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSubjetNegativeSecondaryVertexV2BJetTags = ALGO_SUB_GROOM_RADIUS_OBJECT_bTagger.CombinedSubjetNegativeSecondaryVertexV2BJetTags
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingIP       = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos *
             (ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighEffBJetTags +
              ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighPurBJetTags +
              ALGO_SUB_GROOM_RADIUS_OBJECT_JetProbabilityBJetTags +
              ALGO_SUB_GROOM_RADIUS_OBJECT_JetBProbabilityBJetTags 
-            )
+            ) *
+	     ALGO_SUB_GROOM_RADIUS_OBJECT_PfImpactParameterTagInfos 
             )
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingSV = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos
@@ -112,36 +104,25 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingSV = cms.Sequence(ALGO_SUB_GROOM_RADIUS_
                 ALGO_SUB_GROOM_RADIUS_OBJECT_SimpleSecondaryVertexHighPurBJetTags+
                 ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSecondaryVertexBJetTags+
                 ALGO_SUB_GROOM_RADIUS_OBJECT_CombinedSecondaryVertexV2BJetTags
-              )
+              ) *
+	    ALGO_SUB_GROOM_RADIUS_OBJECT_PfImpactParameterTagInfos *
+	    ALGO_SUB_GROOM_RADIUS_OBJECT_PfInclusiveSecondaryVertexFinderTagInfos *
+	    ALGO_SUB_GROOM_RADIUS_OBJECT_PfDeepCSVTagInfos *
+	    ALGO_SUB_GROOM_RADIUS_OBJECT_PfDeepCSVJetTags  
             )
 
-ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingNegSV = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_ImpactParameterTagInfos
-            *
-            ALGO_SUB_GROOM_RADIUS_OBJECT_SecondaryVertexNegativeTagInfos
-            * (ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSimpleSecondaryVertexHighEffBJetTags+
-                ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSimpleSecondaryVertexHighPurBJetTags+
-                ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeCombinedSecondaryVertexBJetTags+
-                ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveCombinedSecondaryVertexBJetTags+
-                ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeCombinedSecondaryVertexV2BJetTags+
-                ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveCombinedSecondaryVertexV2BJetTags
-              )
-            )
+
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingMu = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonsTagInfos * (ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonBJetTags
                 +
                 ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByIP3dBJetTags
                 +
-                ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags
-                +
-                ALGO_SUB_GROOM_RADIUS_OBJECT_NegativeSoftPFMuonByPtBJetTags
-                +
-                ALGO_SUB_GROOM_RADIUS_OBJECT_PositiveSoftPFMuonByPtBJetTags
+                ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByPtBJetTags               
               )
             )
 
 ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtagging = cms.Sequence(ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingIP
             *ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingSV
-            *ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingNegSV
 #            *ALGO_SUB_GROOM_RADIUS_OBJECT_JetBtaggingMu
             )
 
@@ -164,6 +145,8 @@ ALGO_SUB_GROOM_RADIUS_OBJECT_patJetsWithBtagging = patJets.clone(jetSource = cms
             #cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_SoftPFMuonByIP3dBJetTags"),
             cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighEffBJetTags"),
             cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_TrackCountingHighPurBJetTags"),
+            cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_PfDeepCSVJetTags:probb")
+
             ),
         jetIDMap = cms.InputTag("ALGO_SUB_GROOM_RADIUS_OBJECT_JetID"),
         addBTagInfo = True,

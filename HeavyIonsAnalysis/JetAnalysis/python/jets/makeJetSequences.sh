@@ -47,7 +47,6 @@ do
                             corrlabel="_offline"
                             domatch="True"
                             tracks="hiGeneralTracks"
-			    vertex="offlinePrimaryVertices"
                             pflow="particleFlowTmp"
                             domatch="False"
 			    doTower="True"
@@ -61,7 +60,6 @@ do
                             if [ $system == "pp" ]; then
                                 #corrlabel="_generalTracks"
                                 tracks="generalTracks"
-			        vertex="offlinePrimaryVertices"
                                 genparticles="genParticles"
                                 partons="genParticles"
                                 pflow="particleFlow"
@@ -110,7 +108,6 @@ do
                                       -e "s/GENPARTICLES/$genparticles/g" \
                                       -e "s/PARTONS/$partons/g" \
                                       -e "s/TRACKS/$tracks/g" \
-                                      -e "s/VERTEX/$vertex/g" \
                                       -e "s/PARTICLEFLOW/$pflow/g" \
                                       -e "s/DOMATCH/$domatch/g" \
                                       -e "s/EVENTINFOTAG/$eventinfotag/g" \

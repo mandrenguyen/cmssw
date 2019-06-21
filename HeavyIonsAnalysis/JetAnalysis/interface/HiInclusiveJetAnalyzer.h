@@ -91,7 +91,7 @@ private:
   math::XYZPoint getPosition(const DetId &id, reco::Vertex::Point vtx = reco::Vertex::Point(0,0,0));
   int TaggedJet(reco::Jet calojet, edm::Handle<reco::JetTagCollection > jetTags );
   float getTau(unsigned num, const reco::GenJet object) const;
-  void analyzeSubjets(const reco::Jet jet, int idx, edm::Handle<reco::JetFlavourInfoMatchingCollection>, edm::Handle<edm::View<reco::Jet> >, edm::Handle<reco::JetTagCollection> jetTags_CombinedSvtxV2, edm::Handle<reco::JetTagCollection> jetTags_negCombinedSvtxV2, edm::Handle<reco::JetTagCollection> jetTags_JP, edm::Handle<std::vector<reco::TrackIPTagInfo> > subjetTagInfo, edm::Handle<std::vector<reco::SecondaryVertexTagInfo> > subjetSV, edm::Handle<std::vector<reco::SecondaryVertexTagInfo> > subjetTagInfoNegSVx);
+  void analyzeSubjets(const reco::Jet jet, int idx, edm::Handle<reco::JetFlavourInfoMatchingCollection>, edm::Handle<edm::View<reco::Jet> > );
   void fillNewJetVarsRecoJet(const reco::Jet jet);
   void fillNewJetVarsRefJet(const reco::GenJet jet);
   void fillNewJetVarsGenJet(const reco::GenJet jet);
@@ -207,31 +207,18 @@ private:
   std::string			jetIDweightFile_;
 
   std::string bTagJetName_;
-  edm::EDGetTokenT<std::vector<reco::TrackIPTagInfo> > ImpactParameterTagInfos_;
-  edm::EDGetTokenT<reco::JetTagCollection> TrackCountingHighEffBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> TrackCountingHighPurBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> JetProbabilityBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> JetBProbabilityBJetTags_;
-  edm::EDGetTokenT<std::vector<reco::SecondaryVertexTagInfo> > SecondaryVertexTagInfos_;
-  edm::EDGetTokenT<std::vector<reco::SecondaryVertexTagInfo> > SecondaryVertexNegativeTagInfos_;
-  edm::EDGetTokenT<reco::JetTagCollection> SimpleSecondaryVertexHighEffBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> NegativeSimpleSecondaryVertexHighEffBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> SimpleSecondaryVertexHighPurBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> NegativeSimpleSecondaryVertexHighPurBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> NegativeCombinedSecondaryVertexBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> PositiveCombinedSecondaryVertexBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSecondaryVertexV2BJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> NegativeCombinedSecondaryVertexV2BJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> PositiveCombinedSecondaryVertexV2BJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> NegativeSoftPFMuonByPtBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> PositiveSoftPFMuonByPtBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> SubjetJetProbabilityBJetTags_;
-  edm::EDGetTokenT<std::vector<reco::TrackIPTagInfo> > svImpactParameterTagInfos_;
-  edm::EDGetTokenT<std::vector<reco::SecondaryVertexTagInfo> > svSubjetTagInfos_;
-  edm::EDGetTokenT<std::vector<reco::SecondaryVertexTagInfo> > svSubjetNegTagInfos_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSubjetSecondaryVertexBJetTags_;
-  edm::EDGetTokenT<reco::JetTagCollection> CombinedSubjetNegativeSecondaryVertexBJetTags_;
+  std::string ipTagInfos_;
+  std::string svTagInfos_;
+  std::string trackCHEBJetTags_;
+  std::string trackCHPBJetTags_;
+  std::string jetPBJetTags_;
+  std::string jetBPBJetTags_;
+  std::string simpleSVHighEffBJetTags_;
+  std::string simpleSVHighPurBJetTags_;
+  std::string combinedSVV1BJetTags_;
+  std::string combinedSVV2BJetTags_;
+  std::string deepCSVJetTags_;
+  std::string deepCSVDiscriminatorJetTags_;
 
   bool doExtendedFlavorTagging_;
   edm::EDGetTokenT<reco::JetFlavourInfoMatchingCollection> jetFlavourInfosToken_;
@@ -362,17 +349,6 @@ private:
     std::vector<std::vector<float>> jtSubJetM;
     std::vector<std::vector<float>> jtSubJetHadronFlavor;
     std::vector<std::vector<float>> jtSubJetPartonFlavor; 
-    std::vector<std::vector<float>> jtSubJetcsvV2;
-    std::vector<std::vector<float>> jtSubJetNegCsvV2;
-    std::vector<std::vector<float>> jtSubJetJP;
-    std::vector<std::vector<int>> jtSubJetVtxType;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxm;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxpt;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxeta;    
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxphi;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxNtrk;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxdl;
-    std::vector<std::vector<std::vector<float>>> jtSubJetSvtxdls;
 
     std::vector<std::vector<std::vector<float>>> jtSubJetHadronDR;
     std::vector<std::vector<std::vector<float>>> jtSubJetHadronPt;
@@ -479,6 +455,8 @@ private:
 
     float discr_csvV1[MAXJETS];
     float discr_csvV2[MAXJETS];
+    float discr_deepCSV[MAXJETS];
+    float discr_deepCSV_disc[MAXJETS];
     float discr_muByIp3[MAXJETS];
     float discr_muByPt[MAXJETS];
     float discr_prob[MAXJETS];
@@ -488,14 +466,6 @@ private:
     float discr_ssvHighEff[MAXJETS];
     float discr_ssvHighPur[MAXJETS];
 
-    float ndiscr_ssvHighEff[MAXJETS];
-    float ndiscr_ssvHighPur[MAXJETS];
-    float ndiscr_csvV1[MAXJETS];
-    float ndiscr_csvV2[MAXJETS];
-    float ndiscr_muByPt[MAXJETS];
-
-    float pdiscr_csvV1[MAXJETS];
-    float pdiscr_csvV2[MAXJETS];
 
     int nsvtx[MAXJETS];
     std::vector<std::vector<int> >svType;

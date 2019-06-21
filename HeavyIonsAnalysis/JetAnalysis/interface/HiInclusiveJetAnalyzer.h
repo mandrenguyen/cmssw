@@ -456,7 +456,6 @@ private:
     float discr_csvV1[MAXJETS];
     float discr_csvV2[MAXJETS];
     float discr_deepCSV[MAXJETS];
-    float discr_deepCSV_disc[MAXJETS];
     float discr_muByIp3[MAXJETS];
     float discr_muByPt[MAXJETS];
     float discr_prob[MAXJETS];

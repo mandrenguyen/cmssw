@@ -7,7 +7,7 @@ from RecoHI.HiJetAlgos.hiFJRhoProducer import hiFJRhoProducer, hiFJRhoProducerFi
 from RecoHI.HiJetAlgos.hiFJGridEmptyAreaCalculator_cff import hiFJGridEmptyAreaCalculator, hiFJGridEmptyAreaCalculatorFinerBins
 
 rhoSequence = cms.Sequence(
-    PFTowers +
+    #PFTowers +
     kt4PFJets +
     kt4PFJetsForRho +
     hiFJRhoProducer +

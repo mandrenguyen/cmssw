@@ -405,13 +405,13 @@ HiEvtAnalyzer::beginJob()
     thi_->Branch("Nhard",&fNhard,"Nhard/F");
     thi_->Branch("phi0",&fPhi0,"NPhi0/F");
     thi_->Branch("b",&fb,"b/F");
-    thi_->Branch("Ncharged",&fNcharged,"Ncharged/I");
-    thi_->Branch("NchargedMR",&fNchargedMR,"NchargedMR/I");
-    thi_->Branch("MeanPt",&fMeanPt,"MeanPt/F");
-    thi_->Branch("MeanPtMR",&fMeanPtMR,"MeanPtMR/F");
-    thi_->Branch("EtMR",&fEtMR,"EtMR/F");
-    thi_->Branch("NchargedPtCut",&fNchargedPtCut,"NchargedPtCut/I");
-    thi_->Branch("NchargedPtCutMR",&fNchargedPtCutMR,"NchargedPtCutMR/I");
+    //thi_->Branch("Ncharged",&fNcharged,"Ncharged/I");
+    //thi_->Branch("NchargedMR",&fNchargedMR,"NchargedMR/I");
+    //thi_->Branch("MeanPt",&fMeanPt,"MeanPt/F");
+    //thi_->Branch("MeanPtMR",&fMeanPtMR,"MeanPtMR/F");
+    //thi_->Branch("EtMR",&fEtMR,"EtMR/F");
+    //thi_->Branch("NchargedPtCut",&fNchargedPtCut,"NchargedPtCut/I");
+    //thi_->Branch("NchargedPtCutMR",&fNchargedPtCutMR,"NchargedPtCutMR/I");
   }
   if (doMC_) {
     thi_->Branch("ProcessID",&proc_id,"ProcessID/I");
@@ -433,37 +433,37 @@ HiEvtAnalyzer::beginJob()
   // Centrality
   thi_->Branch("hiBin",&hiBin,"hiBin/I");
   thi_->Branch("hiHF",&hiHF,"hiHF/F");
-  thi_->Branch("hiHFplus",&hiHFplus,"hiHFplus/F");
-  thi_->Branch("hiHFminus",&hiHFminus,"hiHFminus/F");
-  thi_->Branch("hiHFECut",&hiHFECut,"hiHFECut/F");
-  thi_->Branch("hiHFECutPlus",&hiHFECutPlus,"hiHFECutPlus/F");
-  thi_->Branch("hiHFECutMinus",&hiHFECutMinus,"hiHFECutMinus/F");
-  thi_->Branch("hiHFplusEta4",&hiHFplusEta4,"hiHFplusEta4/F");
-  thi_->Branch("hiHFminusEta4",&hiHFminusEta4,"hiHFminusEta4/F");
+  //thi_->Branch("hiHFplus",&hiHFplus,"hiHFplus/F");
+  //thi_->Branch("hiHFminus",&hiHFminus,"hiHFminus/F");
+  //thi_->Branch("hiHFECut",&hiHFECut,"hiHFECut/F");
+  //thi_->Branch("hiHFECutPlus",&hiHFECutPlus,"hiHFECutPlus/F");
+  //thi_->Branch("hiHFECutMinus",&hiHFECutMinus,"hiHFECutMinus/F");
+  //thi_->Branch("hiHFplusEta4",&hiHFplusEta4,"hiHFplusEta4/F");
+  //thi_->Branch("hiHFminusEta4",&hiHFminusEta4,"hiHFminusEta4/F");
 
-  thi_->Branch("hiZDC",&hiZDC,"hiZDC/F");
-  thi_->Branch("hiZDCplus",&hiZDCplus,"hiZDCplus/F");
-  thi_->Branch("hiZDCminus",&hiZDCminus,"hiZDCminus/F");
+  //thi_->Branch("hiZDC",&hiZDC,"hiZDC/F");
+  //thi_->Branch("hiZDCplus",&hiZDCplus,"hiZDCplus/F");
+  //thi_->Branch("hiZDCminus",&hiZDCminus,"hiZDCminus/F");
 
-  thi_->Branch("hiHFhit",&hiHFhit,"hiHFhit/F");
-  thi_->Branch("hiHFhitPlus",&hiHFhitPlus,"hiHFhitPlus/F");
-  thi_->Branch("hiHFhitMinus",&hiHFhitMinus,"hiHFhitMinus/F");
+  //thi_->Branch("hiHFhit",&hiHFhit,"hiHFhit/F");
+  //thi_->Branch("hiHFhitPlus",&hiHFhitPlus,"hiHFhitPlus/F");
+  //thi_->Branch("hiHFhitMinus",&hiHFhitMinus,"hiHFhitMinus/F");
 
-  thi_->Branch("hiET",&hiET,"hiET/F");
-  thi_->Branch("hiEE",&hiEE,"hiEE/F");
-  thi_->Branch("hiEB",&hiEB,"hiEB/F");
-  thi_->Branch("hiEEplus",&hiEEplus,"hiEEplus/F");
-  thi_->Branch("hiEEminus",&hiEEminus,"hiEEminus/F");
-  thi_->Branch("hiNpix",&hiNpix,"hiNpix/I");
-  thi_->Branch("hiNpixPlus",&hiNpixPlus,"hiNpixPlus/I");
-  thi_->Branch("hiNpixMinus",&hiNpixMinus,"hiNpixMinus/I");
-  thi_->Branch("hiNpixelTracks",&hiNpixelTracks,"hiNpixelTracks/I");
-  thi_->Branch("hiNpixelTracksPlus",&hiNpixelTracksPlus,"hiNpixelTracksPlus/I");
-  thi_->Branch("hiNpixelTracksMinus",&hiNpixelTracksMinus,"hiNpixelTracksMinus/I");
-  thi_->Branch("hiNtracks",&hiNtracks,"hiNtracks/I");
-  thi_->Branch("hiNtracksPtCut",&hiNtracksPtCut,"hiNtracksPtCut/I");
-  thi_->Branch("hiNtracksEtaCut",&hiNtracksEtaCut,"hiNtracksEtaCut/I");
-  thi_->Branch("hiNtracksEtaPtCut",&hiNtracksEtaPtCut,"hiNtracksEtaPtCut/I");
+  //thi_->Branch("hiET",&hiET,"hiET/F");
+  //thi_->Branch("hiEE",&hiEE,"hiEE/F");
+  //thi_->Branch("hiEB",&hiEB,"hiEB/F");
+  //thi_->Branch("hiEEplus",&hiEEplus,"hiEEplus/F");
+  //thi_->Branch("hiEEminus",&hiEEminus,"hiEEminus/F");
+  //thi_->Branch("hiNpix",&hiNpix,"hiNpix/I");
+  //thi_->Branch("hiNpixPlus",&hiNpixPlus,"hiNpixPlus/I");
+  //thi_->Branch("hiNpixMinus",&hiNpixMinus,"hiNpixMinus/I");
+  //thi_->Branch("hiNpixelTracks",&hiNpixelTracks,"hiNpixelTracks/I");
+  //thi_->Branch("hiNpixelTracksPlus",&hiNpixelTracksPlus,"hiNpixelTracksPlus/I");
+  //thi_->Branch("hiNpixelTracksMinus",&hiNpixelTracksMinus,"hiNpixelTracksMinus/I");
+  //thi_->Branch("hiNtracks",&hiNtracks,"hiNtracks/I");
+  //thi_->Branch("hiNtracksPtCut",&hiNtracksPtCut,"hiNtracksPtCut/I");
+  //thi_->Branch("hiNtracksEtaCut",&hiNtracksEtaCut,"hiNtracksEtaCut/I");
+  //thi_->Branch("hiNtracksEtaPtCut",&hiNtracksEtaPtCut,"hiNtracksEtaPtCut/I");
 
   // Event plane
   if (doEvtPlane_) {

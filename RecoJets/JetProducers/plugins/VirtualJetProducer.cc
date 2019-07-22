@@ -894,7 +894,6 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
   if ( verbosity_ >= 1 ) {
     std::cout << "<VirtualJetProducer::writeJetsWithConstituents (moduleLabel = " << moduleLabel_ << ")>:" << std::endl;
   }
-
   // get a list of output jets  MV: make this compatible with template
   auto jetCollection = std::make_unique<reco::PFJetCollection>();
   
@@ -931,15 +930,14 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
 
     // create the constituent list
     std::vector<fastjet::PseudoJet> constituents,ghosts;
-    if ( it->has_pieces() )
-      constituents = it->pieces();
-    else if ( it->has_constituents() )
-      fastjet::SelectorIsPureGhost().sift(it->constituents(), ghosts, constituents); //filter out ghosts
+    fastjet::SelectorIsPureGhost().sift(it->constituents(), ghosts, constituents); //filter out ghosts
 
     //loop over constituents of jet (can be subjets or normal constituents)
     indices[jetIndex].reserve(constituents.size());
+    
     constituentsSub.reserve(constituentsSub.size()+constituents.size());
     for (fastjet::PseudoJet const& constit : constituents) {
+      if(constit.user_index()<0) continue;
       indices[jetIndex].push_back( constituentsSub.size() );
       constituentsSub.push_back(constit);
     }
@@ -948,6 +946,7 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
   //Loop over constituents and store in the event
   static const reco::PFCandidate dummySinceTranslateIsNotStatic;
   for (fastjet::PseudoJet const& constit : constituentsSub) {
+    if(constit.user_index()<0) continue;
     auto orig = inputs_[constit.user_index()];
     auto id = dummySinceTranslateIsNotStatic.translatePdgIdToType(orig->pdgId());
     reco::PFCandidate pCand( reco::PFCandidate(orig->charge(), orig->p4(), id) );
@@ -957,6 +956,7 @@ void VirtualJetProducer::writeJetsWithConstituents(  edm::Event & iEvent, edm::E
     pCand.setSourceCandidatePtr( orig->sourceCandidatePtr(0) );
     constituentCollection->push_back(pCand);
   }
+
   // put constituents into event record
   constituentHandleAfterPut = iEvent.put(std::move(constituentCollection), jetCollInstanceName_ );
 

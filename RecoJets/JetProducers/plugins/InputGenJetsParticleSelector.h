@@ -35,7 +35,7 @@ class InputGenJetsParticleSelector : public edm::global::EDProducer<> {
   ~InputGenJetsParticleSelector() override; 
   // select object from a collection and 
   // possibly event content
-  void produce (edm::StreamID, edm::Event &evt, const edm::EventSetup &evtSetup) const override;
+  virtual void produce (edm::StreamID, edm::Event &evt, const edm::EventSetup &evtSetup) const override;
       
   bool getPartonicFinalState() const { return partonicFinalState; }
   bool getExcludeResonances() const { return excludeResonances; }
@@ -86,11 +86,17 @@ class InputGenJetsParticleSelector : public edm::global::EDProducer<> {
   void setExcludeFromResonancePids(const std::vector<unsigned int> &particleIDs);
   void setIgnoredParticles(const std::vector<unsigned int> &particleIDs);
   bool isExcludedFromResonance(int pdgId) const;
-  
+  bool isJMM(const reco::Candidate *particle) const;
+  bool isFromJMM(const reco::Candidate *particle) const;
+  bool isDKPi(const reco::Candidate *particle) const;
+  bool isFromDKPi(const reco::Candidate *particle) const;
+
   bool			partonicFinalState;
   bool			excludeResonances;
   bool			tausAsJets;
   bool			isMiniAOD;
+  bool			storeJMM;
+  bool			storeDKPi;
   double		ptMin;
   
   edm::EDGetTokenT<reco::CandidateView> input_genpartcoll_token_;

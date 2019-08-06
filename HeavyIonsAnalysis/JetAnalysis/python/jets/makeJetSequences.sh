@@ -189,7 +189,7 @@ do
                                     echo "${fulltag}patJetsWithBtagging.userData.userInts.src += ['${fulltag}Jets:droppedBranches']" >> $jetseqfile
                                 fi
 
-                                if [[ $sub =~ "Cs" ]] && [[ $sub =~ "FlowPuCs" ]] && [ $sample == "mc" ] && [ $reco == "pp" ]; then
+                                if [[ $sub =~ "Cs" ]] || [[ $sub =~ "FlowPuCs" ]] && [ $sample == "mc" ] && [ $reco == "pp" ]; then
 				    echo -e "\n" >> $jetseqfile
                                     echo "${fulltag}JetAnalyzer.matchJets = cms.untracked.bool(True)" >> $jetseqfile				    
                                     echo "${fulltag}JetAnalyzer.matchTag = cms.untracked.InputTag(\"ak"${radius}$"PFpatJetsWithBtagging\")" >> $jetseqfile

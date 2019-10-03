@@ -101,75 +101,78 @@ HiBadParticleFilter::filter(edm::StreamID iID, edm::Event& iEvent, const edm::Ev
 
     if(abs(pfCandidate.particleId()) == 3)     // muon cleaning    
       {
-	if(pfCandidate.pt() < minMuonPt_) continue;
-	if(!pfCandidate.muonRef()->isGlobalMuon() || !pfCandidate.muonRef()->isTrackerMuon() || !pfCandidate.trackRef().isNonnull())	
-	  {
-	    foundBadCandidate=true;
-	    break;
-	  }
-	reco::TrackRef track = pfCandidate.trackRef();
-
-	if(track->ptError()/track->pt()>minMuonTrackRelPtErr_){
-	  foundBadCandidate=true;
-	  break;	 
-	}
-	
-	if(track->algo()==13 || track->algo()==14){
-	  double dxySig = fabs(track->dxy());
-	  double dxyErr = track->dxyError();
-	  if(dxyErr>0) dxySig/=dxyErr;
-
-	  double dzSig = fabs(track->dz());
-	  double dzErr = track->dzError();
-	  if(dzErr>0) dzSig/=dzErr;
-
-	  if(dxySig > maxMuonSeededDxySig_ || dzSig > maxMuonSeededDzSig_){
+	if(pfCandidate.pt() < minMuonPt_){
+	  
+	  if(!pfCandidate.muonRef()->isGlobalMuon() || !pfCandidate.muonRef()->isTrackerMuon() || !pfCandidate.trackRef().isNonnull())	
+	    {
+	      foundBadCandidate=true;
+	      break;
+	    }
+	  reco::TrackRef track = pfCandidate.trackRef();
+	  
+	  if(track->ptError()/track->pt()>minMuonTrackRelPtErr_){
 	    foundBadCandidate=true;
 	    break;	 
-	  }	  	 
+	  }
+	  
+	  if(track->algo()==13 || track->algo()==14){
+	    double dxySig = fabs(track->dxy());
+	    double dxyErr = track->dxyError();
+	    if(dxyErr>0) dxySig/=dxyErr;
+	    
+	    double dzSig = fabs(track->dz());
+	    double dzErr = track->dzError();
+	    if(dzErr>0) dzSig/=dzErr;
+	    
+	    if(dxySig > maxMuonSeededDxySig_ || dzSig > maxMuonSeededDzSig_){
+	      foundBadCandidate=true;
+	      break;	 
+	    }	  	 
+	  }
 	}
       }
     else if(abs(pfCandidate.particleId()) == 1)  //charged hadron cleaning
       {
-	if(pfCandidate.pt() < minChargedHadronPt_) continue;
-	
-	reco::TrackRef track = pfCandidate.trackRef();
-
-	if(track->algo()==13 || track->algo()==14){
-	  double dxySig = fabs(track->dxy());
-	  double dxyErr = track->dxyError();
-	  if(dxyErr>0) dxySig/=dxyErr;
-	  
-	  double dzSig = fabs(track->dz());
-	  double dzErr = track->dzError();
-	  if(dzErr>0) dzSig/=dzErr;
-	  
-	  if(dxySig > maxMuonSeededDxySig_ || dzSig > maxMuonSeededDzSig_){
-	    foundBadCandidate=true;
-	    break;	 
-	  }	  	 
-	  	  	  
-	}
-
-	double caloEnergy = pfCandidate.ecalEnergy() + pfCandidate.hcalEnergy();
-	unsigned nHits = track->numberOfValidHits();
-	double relError =track->ptError()/track->pt();
-
-	
-	if(caloEnergy < track->p()*minCaloCompatibility_) 	// tight selection if calo incompatible
+	if(pfCandidate.pt() < minChargedHadronPt_)
 	  {
-	    if(relError > minTrackRelPtErrTight_  || nHits < minTrackNHitsTight_ ){
-	      foundBadCandidate=true;
-	      break;	 
-	    }	     
-	}
-	else {
-	    if(relError > minTrackRelPtErrLoose_  || nHits< minTrackNHitsLoose_ ){
-	      foundBadCandidate=true;
-	      break;	 
-	    }	 
-	}
-
+	    
+	    reco::TrackRef track = pfCandidate.trackRef();
+	    
+	    if(track->algo()==13 || track->algo()==14){
+	      double dxySig = fabs(track->dxy());
+	      double dxyErr = track->dxyError();
+	      if(dxyErr>0) dxySig/=dxyErr;
+	      
+	      double dzSig = fabs(track->dz());
+	      double dzErr = track->dzError();
+	      if(dzErr>0) dzSig/=dzErr;
+	      
+	      if(dxySig > maxMuonSeededDxySig_ || dzSig > maxMuonSeededDzSig_){
+		foundBadCandidate=true;
+		break;	 
+	      }	  	 
+	      
+	    }
+	    
+	    double caloEnergy = pfCandidate.ecalEnergy() + pfCandidate.hcalEnergy();
+	    unsigned nHits = track->numberOfValidHits();
+	    double relError =track->ptError()/track->pt();
+	    
+	    
+	    if(caloEnergy < track->p()*minCaloCompatibility_) 	// tight selection if calo incompatible
+	      {
+		if(relError > minTrackRelPtErrTight_  || nHits < minTrackNHitsTight_ ){
+		  foundBadCandidate=true;
+		  break;	 
+		}	     
+	      }
+	    else {
+	      if(relError > minTrackRelPtErrLoose_  || nHits< minTrackNHitsLoose_ ){
+		foundBadCandidate=true;
+		break;	 
+	      }	 
+	    }
+	  }
       }
 
     pOutputCandidateCollection->push_back(pfCandidate);

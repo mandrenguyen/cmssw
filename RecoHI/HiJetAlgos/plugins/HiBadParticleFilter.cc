@@ -101,7 +101,7 @@ HiBadParticleFilter::filter(edm::StreamID iID, edm::Event& iEvent, const edm::Ev
 
     if(abs(pfCandidate.particleId()) == 3)     // muon cleaning    
       {
-	if(pfCandidate.pt() < minMuonPt_) continue;
+	if(pfCandidate.pt() < minMuonPt_){
 	if(!pfCandidate.muonRef()->isGlobalMuon() || !pfCandidate.muonRef()->isTrackerMuon() || !pfCandidate.trackRef().isNonnull())	
 	  {
 	    foundBadCandidate=true;
@@ -129,9 +129,10 @@ HiBadParticleFilter::filter(edm::StreamID iID, edm::Event& iEvent, const edm::Ev
 	  }	  	 
 	}
       }
+      }
     else if(abs(pfCandidate.particleId()) == 1)  //charged hadron cleaning
       {
-	if(pfCandidate.pt() < minChargedHadronPt_) continue;
+	if(pfCandidate.pt() < minChargedHadronPt_){
 	
 	reco::TrackRef track = pfCandidate.trackRef();
 
@@ -169,7 +170,7 @@ HiBadParticleFilter::filter(edm::StreamID iID, edm::Event& iEvent, const edm::Ev
 	      break;	 
 	    }	 
 	}
-
+	}
       }
 
     pOutputCandidateCollection->push_back(pfCandidate);

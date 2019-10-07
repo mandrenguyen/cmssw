@@ -123,7 +123,7 @@ PFCandCompositeProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
     edm::Handle<reco::PFCandidateCollection> pfCands;
     iEvent.getByToken(pfCandToken_, pfCands);
 
-    prod->reserve(pfCands->size());
+    //prod->reserve(pfCands->size());  // is this needed?
           
     // first pass over composite candidates, apply selections and check for presence in PF candidates   
     for (std::vector<pat::CompositeCandidate>::const_iterator it=composites->begin();

@@ -20,6 +20,7 @@ if version == '':
     version = 'no git info'
 process.HiForest.HiForestVersion = cms.string(version)
 
+#process.SimpleMemoryCheck = cms.Service("SimpleMemoryCheck")
 ###############################################################################
 # Input source
 ###############################################################################
@@ -27,13 +28,19 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        "/store/user/anstahll/Dilepton/MC/Embedded/JPsiMM_5p02TeV_TuneCP5_Embd_RECO_20190326/JPsiMM_5p02TeV_TuneCP5_Embd/JPsiMM_5p02TeV_TuneCP5_Embd_RECO_20190326/190327_060527/0004/HIN-HINPbPbAutumn18DRHIMix-00008_step2_4159.root",
+        '/store/himc/HINPbPbAutumn18DR/BToJpsi_pThat-2_TuneCP5-EvtGen_HydjetDrumMB_5p02TeV_pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/70000/5D9BAB1A-404E-8F4C-8352-6D5E31667D7A.root'
         ),
+                            #skipEvents = cms.untracked.uint32(345),
+                            #eventsToProcess = cms.untracked.VEventRange('1:122132285','1:31168661','1:36773129','1:73149168','1:52837697','1:84568323','1:88776569','1:80650926','1:83899810','1:69117229'),
+                            #eventsToProcess = cms.untracked.VEventRange('1:80650926','1:39275208'),
+                            #eventsToProcess = cms.untracked.VEventRange('1:80650926','1:87315173','1:129327250','1:137860301','1:132726684','1:107977500','1:53024733','1:3359028','1:19692580','1:75155763','1:3920158','1:22539945','1:33718664'),
+                            #eventsToProcess = cms.untracked.VEventRange('1:134262352','1:117305567','1:101687943','1:117552381','1:85156814','1:39463652','1:29079604','1:31814529','1:78680964','1:130392318','1:137906932'),
+                            #eventsToProcess = cms.untracked.VEventRange('1:31373683'),
     )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
     )
 
 ###############################################################################
@@ -45,7 +52,7 @@ process.load('Configuration.Geometry.GeometryDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
-
+process.MessageLogger.cerr.FwkReport.reportEvery = 1
 from Configuration.AlCa.GlobalTag import GlobalTag
 #process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase1_2018_realistic_hi', '')
 process.GlobalTag = GlobalTag(process.GlobalTag, '103X_upgrade2018_realistic_HI_v11', '') 
@@ -83,7 +90,8 @@ process.TFileService = cms.Service("TFileService",
 # Jets
 #############################
 # jet reco sequence
-process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_cff')
+process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_JPsi_cff')
+#process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_JPsiDirectCs_cff')
 # replace above with this one for JEC:
 # process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_JEC_cff')
 
@@ -92,41 +100,27 @@ process.akPu4Calocorr.payload = "AK4Calo"
 process.akPu4PFcorr.payload = "AK4PF"
 process.akCs4PFcorr.payload = "AK4PF"
 process.akFlowPuCs4PFcorr.payload = "AK4PF"
-process.akPu4PFJets.jetPtMin = 1
+process.akPu4PFJets.jetPtMin = 20
+#process.akCs4PFJets.jetPtMin = 5.
+#process.akFlowPuCs4PFJets.jetPtMin = 5.
+
 
 process.akPu3Calocorr.payload = "AK3Calo"
 process.akPu3PFcorr.payload = "AK3PF"
 process.akCs3PFcorr.payload = "AK3PF"
 process.akFlowPuCs3PFcorr.payload = "AK3PF"
-process.akPu3PFJets.jetPtMin = 1
+process.akPu3PFJets.jetPtMin = 20
+#process.akCs3PFJets.jetPtMin = 5.
+#process.akFlowPuCs3PFJets.jetPtMin = 5.
+
+
+
 
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
 process.pfcandAnalyzer.doTrackMatching  = cms.bool(True)
 
 ###############################################################################
-
-process.hiPuRhoR3Analyzer = process.hiFJRhoAnalyzer.clone(etaMap = cms.InputTag('hiPuRhoR3Producer','mapEtaEdges','HiForest'),
-                                                          rho = cms.InputTag('hiPuRhoR3Producer','mapToRho'),
-                                                          rhoExtra = cms.InputTag('hiPuRhoR3Producer','mapToRhoExtra'),
-                                                          rhom = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          rhoCorr = cms.InputTag('hiPuRhoR3Producer','mapToRhoMedian'),
-                                                          rhomCorr = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          rhoCorr1Bin = cms.InputTag('hiPuRhoR3Producer','mapToRho'),
-                                                          rhomCorr1Bin = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          nTow = cms.InputTag('hiPuRhoR3Producer','mapToNTow'),
-                                                          towExcludePt = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludePt'),
-                                                          towExcludePhi = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludePhi'),
-                                                          towExcludeEta = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludeEta'),
-                                                          rhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapRhoVsEtaGrid'),
-                                                          meanRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapMeanRhoVsEtaGrid'),
-                                                          etaMaxRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapEtaMaxGrid'),
-                                                          etaMinRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapEtaMinGrid'),
-                                                          rhoFlowFitParams = cms.InputTag('hiFJRhoFlowModulationProducer','rhoFlowFitParams'),
-                                                          ptJets = cms.InputTag('hiPuRhoR3Producer', 'ptJets'),
-                                                          etaJets = cms.InputTag('hiPuRhoR3Producer', 'etaJets'),
-                                                          areaJets = cms.InputTag('hiPuRhoR3Producer', 'areaJets'),
-                                                          )
 
 
 
@@ -226,7 +220,9 @@ from HiAnalysis.HiOnia.oniaTreeAnalyzer_cff import oniaTreeAnalyzer
 #oniaTreeAnalyzer(process, muonTriggerList=[[],[],[],[]], HLTProName='HLT', muonSelection="Trk", useL1Stage2=True, isMC=True, pdgID=443, outputFileName="OniaTree.root", doTrimu=False)
 oniaTreeAnalyzer(process, muonSelection="Glb", isMC=True, outputFileName="HiForestAOD.root")
 
-process.pfcandAnalyzer.pfCandidateLabel = 'pfCandJPsi'
+#process.pfcandAnalyzerCS.pfCandidateLabel = 'pfCandComposites'
+#process.pfcandAnalyzerCS.pfCandidateLabel =  cms.InputTag("akFlowPuCs3PFJets","pfParticlesFlowPuCs3NoJPsi")
+process.pfcandAnalyzerCS.pfCandidateLabel = "pfCandsFlowPuCs3PlusJPsi"
 
 
 #########################
@@ -237,21 +233,21 @@ process.ana_step = cms.Path(
     process.offlinePrimaryVerticesRecovery +
     process.HiForest +
     process.runAnalyzer +
-    process.hltanalysis +
+    #process.hltanalysis +
     process.centralityBin +
     process.hiEvtAnalyzer +
-#    process.HiGenParticleAna +
+    #process.HiGenParticleAna +
     process.genSignalSequence +
     process.oniaTreeAna +
     process.particleFlowNoHF +
     process.pfCandComposites +
-    process.jetSequence +
+    process.jetSequence #+
 #    process.ggHiNtuplizer +
 #    process.ggHiNtuplizerGED +
 #    process.hiFJRhoAnalyzer +
-    process.pfcandAnalyzer +
-    process.pfcandAnalyzerCS +
-    process.trackSequencesPP #+
+    #process.pfcandAnalyzer +
+    #process.pfcandAnalyzerCS +
+    #process.trackSequencesPP #+
 #    process.rechitanalyzerpp
     )
 
@@ -266,7 +262,7 @@ process.ana_step = cms.Path(
 #    'drop *_akULPu4PFJets_*_*',
 #    )
 #)
-#
+
 #process.output_path = cms.EndPath(process.output)
 
 ###############################################################################
@@ -321,3 +317,10 @@ process.offlinePrimaryVerticesRecovery.oldVertexLabel = "offlinePrimaryVertices"
 ###############################################################################
 #process.akCs4PFJets.src = 'pfCandComposites'
 process.genParticlesForJets.storeJMM = cms.untracked.bool(True)
+
+
+from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
+process = MassReplaceInputTag(process,"particleFlow","pfCandComposites")
+process.particleFlowNoHF.src = "particleFlow"
+process.patMuonsWithoutTrigger.pfMuonSource = "particleFlow"
+process.pfcandAnalyzer.pfCandidateLabel = 'particleFlow'

@@ -883,8 +883,8 @@ HiOnia2MuMuPAT::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }//it2 muon
   }//it muon
 
-  //  std::sort(oniaOutput->begin(),oniaOutput->end(),pTComparator_);
-  std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
+  std::sort(oniaOutput->begin(),oniaOutput->end(),pTComparator_);
+  //std::sort(oniaOutput->begin(),oniaOutput->end(),vPComparator_);
   iEvent.put(std::move(oniaOutput),"");
 
   if(doTrimuons_){

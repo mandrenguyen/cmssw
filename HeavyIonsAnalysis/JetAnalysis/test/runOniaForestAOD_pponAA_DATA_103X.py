@@ -33,7 +33,7 @@ process.source = cms.Source("PoolSource",
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(5000)
+    input = cms.untracked.int32(-1)
     )
 
 ###############################################################################
@@ -102,16 +102,18 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_data_cff')
 process.akPu4Calocorr.payload = "AK4Calo"
 process.akPu4PFcorr.payload = "AK4PF"
 process.akCs4PFcorr.payload = "AK4PF"
-process.akPu4PFJets.jetPtMin = 1
+process.akFlowPuCs4PFcorr.payload = "AK4PF"
+process.akPu4PFJets.jetPtMin = 5
 process.akPu3Calocorr.payload = "AK3Calo"
 process.akPu3PFcorr.payload = "AK3PF"
 process.akCs3PFcorr.payload = "AK3PF"
-process.akPu3PFJets.jetPtMin = 1
+process.akFlowPuCs3PFcorr.payload = "AK3PF"
+process.akPu3PFJets.jetPtMin = 5
 
 #from RecoJets.JetProducers.ak4PFJets_cfi import ak4PFJets
 #process.ak4PFJets = ak4PFJets
 #from RecoJets.JetProducers.ak3PFJets_cfi import ak3PFJets
-#process.ak3PFJets = process.ak4PFJets.clone()
+#process.ak3PFJets = process.ak4PFJets.clone(rParam = 0.3)
 
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
@@ -181,6 +183,12 @@ process.akCs4PFJets.jetCollInstanceName = cms.string('pfParticlesCs4NoJPsi')
 process.akCs3PFJets.src = cms.InputTag("cs3CandsNoJPsi")
 process.akCs3PFJets.jetCollInstanceName = cms.string('pfParticlesCs3NoJPsi')
 
+process.akFlowPuCs4PFJets.src = cms.InputTag("cs4CandsNoJPsi")
+process.akFlowPuCs4PFJets.jetCollInstanceName = cms.string('pfParticlesFlowPuCs4NoJPsi')
+
+process.akFlowPuCs3PFJets.src = cms.InputTag("cs3CandsNoJPsi")
+process.akFlowPuCs3PFJets.jetCollInstanceName = cms.string('pfParticlesFlowPuCs3NoJPsi')
+
 ### put the J/Psi back with the candidates
 
 #here's the jpsi
@@ -204,6 +212,16 @@ process.pfCandsCs3PlusJPsi = cms.EDProducer(
                         cms.InputTag("pfCandJPsi"))    
 )
 
+process.pfCandsFlowPuCs4PlusJPsi = cms.EDProducer(
+    "PFCandidateListMerger",
+    src = cms.VInputTag(cms.InputTag("akFlowPuCs4PFJets","pfParticlesFlowPuCs4NoJPsi"),
+                        cms.InputTag("pfCandJPsi"))    
+)
+process.pfCandsFlowPuCs3PlusJPsi = cms.EDProducer(
+    "PFCandidateListMerger",
+    src = cms.VInputTag(cms.InputTag("akFlowPuCs3PFJets","pfParticlesFlowPuCs3NoJPsi"),
+                        cms.InputTag("pfCandJPsi"))    
+)
 
 
 process.akCs4PFJetsWithJPsi = process.ak4PFJets.clone(
@@ -218,6 +236,20 @@ process.akCs3PFJetsWithJPsi = process.ak3PFJets.clone(
     writeJetsWithConst = cms.bool(True)
 )
 
+
+
+process.akFlowPuCs4PFJetsWithJPsi = process.ak4PFJets.clone(
+    src = cms.InputTag("pfCandsFlowPuCs4PlusJPsi"),
+    jetCollInstanceName = cms.string('pfParticlesFlowPuCs4WithJPsi'),
+    writeJetsWithConst = cms.bool(True)
+)
+process.akFlowPuCs3PFJetsWithJPsi = process.ak3PFJets.clone(
+    src = cms.InputTag("pfCandsFlowPuCs3PlusJPsi"),
+    jetCollInstanceName = cms.string('pfParticlesFlowPuCs3WithJPsi'),
+    writeJetsWithConst = cms.bool(True)
+)
+
+
 process.akCs4PFcorr.src = "akCs4PFJetsWithJPsi"
 process.akCs4PFNjettiness.src = "akCs4PFJetsWithJPsi"
 process.akCs4PFpatJetsWithBtagging.jetSource = "akCs4PFJetsWithJPsi"
@@ -228,6 +260,16 @@ process.akCs3PFNjettiness.src = "akCs3PFJetsWithJPsi"
 process.akCs3PFpatJetsWithBtagging.jetSource = "akCs3PFJetsWithJPsi"
 process.akCs3PFJetAnalyzer.pfCandidateLabel = cms.untracked.InputTag('pfCandsCs3PlusJPsi')
 
+process.akFlowPuCs4PFcorr.src = "akFlowPuCs4PFJetsWithJPsi"
+process.akFlowPuCs4PFNjettiness.src = "akFlowPuCs4PFJetsWithJPsi"
+process.akFlowPuCs4PFpatJetsWithBtagging.jetSource = "akFlowPuCs4PFJetsWithJPsi"
+process.akFlowPuCs4PFJetAnalyzer.pfCandidateLabel = cms.untracked.InputTag('pfCandsFlowPuCs4PlusJPsi')
+
+process.akFlowPuCs3PFcorr.src = "akFlowPuCs3PFJetsWithJPsi"
+process.akFlowPuCs3PFNjettiness.src = "akFlowPuCs3PFJetsWithJPsi"
+process.akFlowPuCs3PFpatJetsWithBtagging.jetSource = "akFlowPuCs3PFJetsWithJPsi"
+process.akFlowPuCs3PFJetAnalyzer.pfCandidateLabel = cms.untracked.InputTag('pfCandsFlowPuCs3PlusJPsi')
+
 
 
 process.pfcandAnalyzer.pfCandidateLabel = 'pfCandJPsi'
@@ -235,23 +277,37 @@ process.pfcandAnalyzer.pfCandidateLabel = 'pfCandJPsi'
 
 
 process.jetSequence = cms.Sequence(
+    process.rhoSequence +
     process.highPurityTracks +
     process.pfCandJPsi +
-    process.ak4PFJetsWithJPsi +
-    process.ak4PFXJetsWithJPsi +
-    process.cs4CandsNoJPsi +
-    process.akCs4PFJets +
-    process.pfCandsCs4PlusJPsi +
-    process.akCs4PFJetsWithJPsi +
-    process.akCs4PFJetSequence +
-
+    
+#    process.ak4PFJetsWithJPsi +
+#    process.ak4PFXJetsWithJPsi +
+#    process.cs4CandsNoJPsi +
+#    process.akCs4PFJets +
+#    process.pfCandsCs4PlusJPsi +
+#    process.akCs4PFJetsWithJPsi +
+#    process.akCs4PFJetSequence +
+#
     process.ak3PFJetsWithJPsi +
     process.ak3PFXJetsWithJPsi +
     process.cs3CandsNoJPsi +
-    process.akCs3PFJets +
-    process.pfCandsCs3PlusJPsi +
-    process.akCs3PFJetsWithJPsi +
-    process.akCs3PFJetSequence 
+#    process.akCs3PFJets +
+#    process.pfCandsCs3PlusJPsi +
+#    process.akCs3PFJetsWithJPsi +
+#    process.akCs3PFJetSequence +
+#
+    #Add our hybrid jets to collection
+    process.akFlowPuCs3PFJets +
+    process.pfCandsFlowPuCs3PlusJPsi + 
+    process.akFlowPuCs3PFJetsWithJPsi +
+    #process.akFlowPuCs4PFJets +
+    #process.pfCandsFlowPuCs4PlusJPsi + 
+    #process.akFlowPuCs4PFJetsWithJPsi +
+    process.akFlowPuCs3PFJetSequence #+
+    #process.akFlowPuCs4PFJetSequence
+
+
     )
 
 
@@ -436,3 +492,9 @@ process.superFilterPath = cms.Path(process.superFilterSequence)
 process.skimanalysis.superFilters = cms.vstring("superFilterPath")
 for path in process.paths:
     getattr(process,path)._seq = process.superFilterSequence*getattr(process,path)._seq
+
+from HLTrigger.Configuration.CustomConfigs import MassReplaceInputTag
+process = MassReplaceInputTag(process,"particleFlow","pfCandComposites")
+process.particleFlowNoHF.src = "particleFlow"
+process.patMuonsWithoutTrigger.pfMuonSource = "particleFlow"
+process.pfcandAnalyzer.pfCandidateLabel = 'particleFlow'

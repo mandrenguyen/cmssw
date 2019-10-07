@@ -1,4 +1,4 @@
-### HiForest Configuration
+## HiForest Configuration
 # Collisions: PbPb
 # Type: Data
 # Input: AOD
@@ -187,6 +187,7 @@ process.ana_step = cms.Path(
     process.centralityBin +
     process.hiEvtAnalyzer +
     process.jetSequence +
+    process.hiPuRhoR3Analyzer +
     process.ggHiNtuplizer +
     process.ggHiNtuplizerGED +
     process.hiFJRhoAnalyzer +

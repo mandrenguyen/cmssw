@@ -249,10 +249,9 @@ bool InputGenJetsParticleSelector::isJMM(const reco::Candidate *particle) const
 
 bool InputGenJetsParticleSelector::isFromJMM(const reco::Candidate *particle) const
 {
-
   if(abs(particle->pdgId())!=13) return false;  
-  //int nMom = particle->numberOfMothers();
-  //cout<<" nMom "<<nMom<<"mother nDaug "<<particle->mother(0)->numberOfDaughters()<<endl;
+  if(particle->numberOfMothers()==0) return false;
+  //cout<<"mother nDaug "<<particle->mother(0)->numberOfDaughters()<<endl;
   //cout<<" mom pdg "<<particle->mother(0)->pdgId()<<endl;
   //if(nMom!=1) return false;
   //if(particle->mother(0)->numberOfDaughters()!=2) return false;
@@ -354,7 +353,7 @@ void InputGenJetsParticleSelector::produce (edm::StreamID, edm::Event &evt, cons
     }
     else if(storeDKPi && isDKPi(particle)) selected[i] = true;
     
-    
+    //std::cout<<" after jpsi part "<<std::endl;
     if (partonicFinalState && isParton(particle->pdgId())) {
       
       if (particle->numberOfDaughters()==0 &&

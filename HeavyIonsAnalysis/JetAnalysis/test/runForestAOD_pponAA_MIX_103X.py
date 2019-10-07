@@ -26,13 +26,14 @@ process.HiForest.HiForestVersion = cms.string(version)
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        "file:/afs/cern.ch/work/r/rbi/public/forest/HINPbPbAutumn18DR_Pythia8_Ze10e10_TuneCP5_5p02TeV_AODSIM.root"
+        #'/store/himc/HINPbPbAutumn18DR/BToJpsi_pThat-2_TuneCP5-EvtGen_HydjetDrumMB_5p02TeV_pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/260000/330454F4-FAB7-BC4F-9717-D4742DB9E062.root'
+        '/store/himc/HINPbPbAutumn18DR/JPsi_pThat-2_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/40001/851ECE56-FE77-F344-9CF8-76447FDDAD63.root'
         ),
     )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
     )
 
 ###############################################################################
@@ -90,35 +91,21 @@ process.load('HeavyIonsAnalysis.JetAnalysis.fullJetSequence_pponAA_MIX_cff')
 process.akPu4Calocorr.payload = "AK4Calo"
 process.akPu4PFcorr.payload = "AK4PF"
 process.akCs4PFcorr.payload = "AK4PF"
+process.akFlowPuCs4PFcorr.payload = "AK4PF"
 process.ak4PFcorr.payload = "AK4PF"
 process.akPu4PFJets.jetPtMin = 1
+process.akPu3Calocorr.payload = "AK3Calo"
+process.akPu3PFcorr.payload = "AK3PF"
+process.akCs3PFcorr.payload = "AK3PF"
+process.akFlowPuCs3PFcorr.payload = "AK3PF"
+process.ak3PFcorr.payload = "AK3PF"
+process.akPu3PFJets.jetPtMin = 1
 
 
 process.load('HeavyIonsAnalysis.JetAnalysis.hiFJRhoAnalyzer_cff')
 process.load("HeavyIonsAnalysis.JetAnalysis.pfcandAnalyzer_cfi")
 process.pfcandAnalyzer.doTrackMatching  = cms.bool(True)
 
-process.hiPuRhoR3Analyzer = process.hiFJRhoAnalyzer.clone(etaMap = cms.InputTag('hiPuRhoR3Producer','mapEtaEdges','HiForest'),
-                                                          rho = cms.InputTag('hiPuRhoR3Producer','mapToRho'),
-                                                          rhoExtra = cms.InputTag('hiPuRhoR3Producer','mapToRhoExtra'),
-                                                          rhom = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          rhoCorr = cms.InputTag('hiPuRhoR3Producer','mapToRhoMedian'),
-                                                          rhomCorr = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          rhoCorr1Bin = cms.InputTag('hiPuRhoR3Producer','mapToRho'),
-                                                          rhomCorr1Bin = cms.InputTag('hiPuRhoR3Producer','mapToRhoM'),
-                                                          nTow = cms.InputTag('hiPuRhoR3Producer','mapToNTow'),
-                                                          towExcludePt = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludePt'),
-                                                          towExcludePhi = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludePhi'),
-                                                          towExcludeEta = cms.InputTag('hiPuRhoR3Producer','mapToTowExcludeEta'),
-                                                          rhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapRhoVsEtaGrid'),
-                                                          meanRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapMeanRhoVsEtaGrid'),
-                                                          etaMaxRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapEtaMaxGrid'),
-                                                          etaMinRhoGrid = cms.InputTag('hiFJGridEmptyAreaCalculator','mapEtaMinGrid'),
-                                                          rhoFlowFitParams = cms.InputTag('hiFJRhoFlowModulationProducer','rhoFlowFitParams'),
-                                                          ptJets = cms.InputTag('hiPuRhoR3Producer', 'ptJets'),
-                                                          etaJets = cms.InputTag('hiPuRhoR3Producer', 'etaJets'),
-                                                          areaJets = cms.InputTag('hiPuRhoR3Producer', 'areaJets'),
-                                                          )
 
 ###############################################################################
 
@@ -210,23 +197,23 @@ process.ana_step = cms.Path(
     process.offlinePrimaryVerticesRecovery +
     process.HiForest +
     process.runAnalyzer +
-    process.hltanalysis +
-    process.hltobject +
+    #process.hltanalysis +
+    #process.hltobject +
     # process.l1object +
     process.centralityBin +
     process.hiEvtAnalyzer +
-    process.HiGenParticleAna +
+    #process.HiGenParticleAna +
     process.genSignalSequence +
     process.jetSequence +
     process.hiPuRhoR3Analyzer + 
-    process.ggHiNtuplizer +
-    process.ggHiNtuplizerGED +
+    #process.ggHiNtuplizer +
+    #process.ggHiNtuplizerGED +
     process.hiFJRhoAnalyzer +
-    process.hiFJRhoAnalyzerFinerBins +
-    process.pfcandAnalyzer +
-    process.pfcandAnalyzerCS +
-    process.trackSequencesPP +
-    process.rechitanalyzerpp
+    process.hiFJRhoAnalyzerFinerBins #+
+    #process.pfcandAnalyzer +
+    #process.pfcandAnalyzerCS +
+    #process.trackSequencesPP +
+    #process.rechitanalyzerpp
     )
 
 # # edm output for debugging purposes

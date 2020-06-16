@@ -120,7 +120,10 @@ def miniAOD_customizeCommon(process):
     
     from Configuration.Eras.Modifier_phase2_muon_cff import phase2_muon
     phase2_muon.toModify(process.selectedPatMuons, cut = "pt > 5 || isPFMuon || (pt > 3 && (isGlobalMuon || isStandAloneMuon || numberOfMatches > 0 || muonID('RPCMuLoose') || muonID('ME0MuonArbitrated') || muonID('GEMMuonArbitrated')) )")
-    
+
+    from Configuration.Eras.Modifier_pp_on_AA_2018_cff import pp_on_AA_2018
+    pp_on_AA_2018.toModify(process.selectedPatMuons, cut = "pt > 5 || isPFMuon || (pt > 1.2 && (isGlobalMuon || isStandAloneMuon) )")
+
     process.selectedPatElectrons.cut = cms.string("")
     process.selectedPatTaus.cut = cms.string("pt > 18. && tauID('decayModeFindingNewDMs')> 0.5")
     process.selectedPatPhotons.cut = cms.string("")
@@ -153,6 +156,11 @@ def miniAOD_customizeCommon(process):
     #noHF pfMET =========
 
     task = getPatAlgosToolsTask(process)
+
+    from PhysicsTools.PatAlgos.producersHeavyIons.heavyIonJetSetup import setupHeavyIonJetsWithBTagging
+    from Configuration.Eras.Modifier_pp_on_AA_2018_cff import pp_on_AA_2018
+    pp_on_AA_2018.toModify(process, func = lambda proc:
+	setupHeavyIonJetsWithBTagging(proc, 'akFlowPuCs4PF', 4, task, True))
 
     process.noHFCands = cms.EDFilter("GenericPFCandidateSelector",
                                      src=cms.InputTag("particleFlow"),
@@ -515,14 +523,61 @@ def miniAOD_customizeData(process):
     task = getPatAlgosToolsTask(process)
     task.add(process.ctppsLocalTrackLiteProducer)
 
+def miniAOD_customizeHeavyIon(process, data):
+    from PhysicsTools.PatAlgos.producersHeavyIons.heavyIonJetSetup import aliasFlowPuCsJets, removeL1FastJetJECs, removeJECsForMC, addJECsForData
+    from Configuration.Eras.Modifier_pp_on_AA_2018_cff import pp_on_AA_2018
+    pp_on_AA_2018.toModify(process.slimmedJets, src = 'selectedPatJets')
+    pp_on_AA_2018.toModify(process.slimmedCaloJets, src = 'akPu4CaloJets')
+
+    pp_on_AA_2018.toModify(process.ak8PFJetsPuppi, src = 'pfNoPileUpJMEHI')
+    pp_on_AA_2018.toModify(process.patJetsAK8Puppi, jetSource = 'ak8PFJetsPuppi')
+    pp_on_AA_2018.toModify(process.slimmedJetsAK8, src = 'patJetsAK8Puppi')
+
+    pp_on_AA_2018.toModify(process.ak4PFJetsPuppi, src = 'pfNoPileUpJMEHI')
+    pp_on_AA_2018.toModify(process.patJetsPuppi, jetSource = 'ak4PFJetsPuppi')
+    pp_on_AA_2018.toModify(process.slimmedJetsPuppi, src = 'patJetsPuppi')
+
+    pp_on_AA_2018.toModify(process.slimmedJetsAK8PFPuppiSoftDropPacked, jetSrc = 'patJetsAK8Puppi', subjetSrc = 'patJetsAK8Puppi')
+
+    if data is False:
+        pp_on_AA_2018.toModify(process.slimmedGenJets, src = 'ak4HiGenJets')
+        pp_on_AA_2018.toModify(process.slimmedGenJetsFlavourPlaceholder, jets = 'ak4HiGenJets')
+        pp_on_AA_2018.toModify(process.slimmedGenJetsFlavourInfos, genJets = 'ak4HiGenJets', genJetFlavourInfos = 'slimmedGenJetsFlavourPlaceholder')
+        pp_on_AA_2018.toModify(process.slimmedGenJetsAK8, cut = 'pt>9999', nLoose = 0)
+        pp_on_AA_2018.toModify(process.slimmedGenJetsAK8SoftDropSubJets, cut = 'pt>9999', nLoose = 0)
+
+    pp_on_AA_2018.toModify(process, func = lambda proc: removeL1FastJetJECs(proc))
+    pp_on_AA_2018.toModify(process, func = lambda proc:
+	aliasFlowPuCsJets(proc, 'akFlowPuCs4PF'))
+
+    modifyJECs = addJECsForData if data is True else removeJECsForMC
+    pp_on_AA_2018.toModify(process, func = lambda proc: modifyJECs(proc))
+
+    pp_on_AA_2018.toModify(process.pfMetPuppi, src = 'pfNoPileUpJMEHI')
+    pp_on_AA_2018.toModify(process.patMETsPuppi, computeMETSignificance = False, metSource = 'pfMetPuppi')
+    pp_on_AA_2018.toModify(process.slimmedMETsPuppi,
+        chsMET = 'patMETsPuppi',
+        rawVariation = 'patMETsPuppi',
+        t01Variation = 'patMETsPuppi',
+        t1SmearedVarsAndUncs = 'patMETsPuppi',
+        t1Uncertainties = 'patMETsPuppi',
+        tXYUncForRaw = 'patMETsPuppi',
+        tXYUncForT01 = 'patMETsPuppi',
+        tXYUncForT01Smear = 'patMETsPuppi',
+        tXYUncForT1 = 'patMETsPuppi',
+        tXYUncForT1Smear = 'patMETsPuppi',
+        trkMET = 'patMETsPuppi')
+
 def miniAOD_customizeAllData(process):
     miniAOD_customizeCommon(process)
     miniAOD_customizeData(process)
+    miniAOD_customizeHeavyIon(process, True)
     return process
 
 def miniAOD_customizeAllMC(process):
     miniAOD_customizeCommon(process)
     miniAOD_customizeMC(process)
+    miniAOD_customizeHeavyIon(process, False)
     return process
 
 def miniAOD_customizeAllMCFastSim(process):

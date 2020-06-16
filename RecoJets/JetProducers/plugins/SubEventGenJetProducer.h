@@ -10,6 +10,7 @@
 
  ************************************************************/
 
+#include <memory>
 #include <vector>
 #include "RecoJets/JetProducers/plugins/VirtualJetProducer.h"
 #include "DataFormats/JetReco/interface/GenJetCollection.h"
@@ -24,12 +25,16 @@ namespace cms
     ~SubEventGenJetProducer() override {}
     void produce(edm::Event&, const edm::EventSetup&) override;
     void runAlgorithm(edm::Event&, const edm::EventSetup&) override;
+
+    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+    static void fillDescriptionsFromSubEventGenJetProducer(edm::ParameterSetDescription& desc);
     
   protected:
    std::vector<std::vector<fastjet::PseudoJet> > subInputs_;
-   std::vector<reco::GenJet>* subJets_;
+   std::unique_ptr<std::vector<reco::GenJet>> jets_;
    std::vector<int> hydroTag_;
    std::vector<int> nSubParticles_;
+   bool signalOnly_;
    bool ignoreHydro_;
 
   protected:

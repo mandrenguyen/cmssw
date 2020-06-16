@@ -35,8 +35,10 @@ SubEventGenJetProducer::SubEventGenJetProducer(edm::ParameterSet const& conf):
   VirtualJetProducer( conf )
 {
    //   mapSrc_ = conf.getParameter<edm::InputTag>( "srcMap");
+   signalOnly_ = conf.getParameter<bool>("signalOnly");
    ignoreHydro_ = conf.getUntrackedParameter<bool>("ignoreHydro", true);
-   produces<reco::BasicJetCollection>();
+
+   if (signalOnly_) ignoreHydro_ = false;
   // the subjet collections are set through the config file in the "jetCollInstanceName" field.
 
    input_cand_token_ = consumes<reco::CandidateView>(src_);
@@ -58,6 +60,7 @@ void SubEventGenJetProducer::inputTowers( )
       edm::Ptr<reco::Candidate> p = inputs_[i - inBegin];
       const GenParticle * pref = dynamic_cast<const GenParticle *>(p.get());
       int subevent = pref->collisionId();
+      if (signalOnly_ && subevent != 0) continue;
       LogDebug("SubEventContainers")<<"SubEvent is : "<<subevent<<endl;
       LogDebug("SubEventContainers")<<"SubSize is : "<<subInputs_.size()<<endl;
 
@@ -69,7 +72,7 @@ void SubEventGenJetProducer::inputTowers( )
       }
 
       LogDebug("SubEventContainers")<<"HydroTag is : "<<hydroTag_[subevent]<<endl;
-      if(hydroTag_[subevent] != 0) hydroTag_[subevent] = (int)checkHydro(pref);
+      if (ignoreHydro_ && hydroTag_[subevent] != 0) hydroTag_[subevent] = (int)checkHydro(pref);
 
       subInputs_[subevent].push_back(fastjet::PseudoJet(input->px(),input->py(),input->pz(),
 						input->energy()));
@@ -104,8 +107,7 @@ void SubEventGenJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& i
 
    ////////////////
 
-   auto jets = std::make_unique<std::vector<GenJet>>();
-   subJets_ = jets.get();
+   jets_ = std::make_unique<std::vector<GenJet>>();
 
    LogDebug("VirtualJetProducer") << "Inputted towers\n";
 
@@ -122,7 +124,7 @@ void SubEventGenJetProducer::produce(edm::Event& iEvent,const edm::EventSetup& i
    //Finalize
    LogDebug("SubEventJetProducer") << "Wrote jets\n";
 
-   iEvent.put(std::move(jets));  
+   iEvent.put(std::move(jets_));
    return;
 }
 
@@ -162,8 +164,24 @@ void SubEventGenJetProducer::runAlgorithm( edm::Event & iEvent, edm::EventSetup 
     jet.setJetArea (jetArea);
     jet.setPileup (pu);
     
-    subJets_->push_back(jet);
+    jets_->push_back(jet);
    }   
+}
+
+void SubEventGenJetProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+   edm::ParameterSetDescription descSubEventJetProducer;
+   fillDescriptionsFromSubEventGenJetProducer(descSubEventJetProducer);
+   VirtualJetProducer::fillDescriptionsFromVirtualJetProducer(descSubEventJetProducer);
+   descSubEventJetProducer.add<string>("jetCollInstanceName", "");
+   descSubEventJetProducer.add<bool>("sumRecHits", false);
+
+   descriptions.add("SubEventGenJetProducer", descSubEventJetProducer);
+}
+
+void SubEventGenJetProducer::fillDescriptionsFromSubEventGenJetProducer(
+      edm::ParameterSetDescription& desc) {
+   desc.add<bool>("signalOnly", false);
+   desc.addUntracked<bool>("ignoreHydro", true);
 }
 
 DEFINE_FWK_MODULE(SubEventGenJetProducer);

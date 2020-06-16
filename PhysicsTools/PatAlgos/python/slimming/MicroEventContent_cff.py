@@ -137,3 +137,30 @@ cms.untracked.PSet(branch = cms.untracked.string("EcalRecHitsSorted_reducedEgamm
 _phase2_hgc_extraCommands = ["keep *_slimmedElectronsFromMultiCl_*_*", "keep *_slimmedPhotonsFromMultiCl_*_*"]
 from Configuration.Eras.Modifier_phase2_hgcal_cff import phase2_hgcal
 phase2_hgcal.toModify(MicroEventContentMC, outputCommands = MicroEventContentMC.outputCommands + _phase2_hgc_extraCommands)
+
+_pp_on_AA_2018_extraCommands = [
+    'keep recoCentrality*_hiCentrality_*_*',
+    'keep recoClusterCompatibility*_hiClusterCompatibility_*_*',
+    'keep *_hiCentrality_*_*',
+    'keep *_hiFJRhoProducer_*_*',
+    'keep *_hiFJRhoFlowModulationProducer_*_*',
+    'keep *_hiPuRhoProducer_*_*',
+    'keep *_slimmedJets_pfCandidates_*',
+    'keep *_zdcreco_*_*',
+    'keep ZDCDataFramesSorted_hcalDigis_*_*',
+    'keep ZDCDataFramesSorted_castorDigis_*_*',
+    'keep QIE10DataFrameHcalDataFrameContainer_hcalDigis_ZDC_*',
+    'keep CrossingFramePlaybackInfoNew_mix_*_*',
+    'keep booledmValueMap_*MuonID_*_*',
+    'keep floatedmValueMap_*TrackChi2_*_*',
+    'keep patPackedCandidates_hipixeltracks_*_*',
+    'keep ints_hihffilter_*_*',
+]
+
+_pp_on_AA_2018_extraCommandsGEN = [
+    'keep *_heavyIon_*_*',
+]
+
+from Configuration.Eras.Modifier_pp_on_AA_2018_cff import pp_on_AA_2018
+pp_on_AA_2018.toModify(MicroEventContent, outputCommands = MicroEventContent.outputCommands + _pp_on_AA_2018_extraCommands)
+pp_on_AA_2018.toModify(MicroEventContentMC, outputCommands = MicroEventContentMC.outputCommands + _pp_on_AA_2018_extraCommands + _pp_on_AA_2018_extraCommandsGEN)

@@ -28,10 +28,10 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-                            #fileNames = cms.untracked.vstring('/store/hidata/HIRun2018A/HIHardProbes/AOD/04Apr2019-v1/260004/8017154E-8248-6C44-8B98-D0CF1FEBB2CD.root'),
+                            fileNames = cms.untracked.vstring('/store/hidata/HIRun2018A/HIHardProbes/AOD/04Apr2019-v1/260004/8017154E-8248-6C44-8B98-D0CF1FEBB2CD.root'),
                             #fileNames = cms.untracked.vstring('file:/tmp/mnguyen/8017154E-8248-6C44-8B98-D0CF1FEBB2CD.root'),
                             #fileNames = cms.untracked.vstring('file:/tmp/mnguyen/D993B187-FDC6-CB44-991F-CA023BDEEC00.root'),
-                            fileNames = cms.untracked.vstring('file:D993B187-FDC6-CB44-991F-CA023BDEEC00.root'),
+                            #fileNames = cms.untracked.vstring('file:D993B187-FDC6-CB44-991F-CA023BDEEC00.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 

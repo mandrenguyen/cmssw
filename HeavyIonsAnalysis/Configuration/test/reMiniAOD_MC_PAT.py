@@ -29,9 +29,9 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-                            #fileNames = cms.untracked.vstring('/store/himc/HINPbPbAutumn18DR/DiJet_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/50000/FF707B12-46F8-8C45-8D10-A336E1260A24.root'),
+                            fileNames = cms.untracked.vstring('/store/himc/HINPbPbAutumn18DR/DiJet_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/50000/FF707B12-46F8-8C45-8D10-A336E1260A24.root'),
                             #fileNames = cms.untracked.vstring('/store/himc/HINPbPbAutumn18DR/JPsi_pThat-2_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/AODSIM/mva98_103X_upgrade2018_realistic_HI_v11-v1/40001/EC02B6A4-B279-1846-BE66-38B0A10217CA.root'),
-                            fileNames = cms.untracked.vstring('file:/tmp/mnguyen/EC02B6A4-B279-1846-BE66-38B0A10217CA.root'),
+                            #fileNames = cms.untracked.vstring('file:/tmp/mnguyen/EC02B6A4-B279-1846-BE66-38B0A10217CA.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -119,6 +119,14 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase1_2018_realistic_hi', '')
+process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
+process.GlobalTag.toGet.extend([
+    cms.PSet(record = cms.string("HeavyIonRcd"),
+        tag = cms.string("CentralityTable_HFtowers200_HydjetDrum5Ev8_v1030pre5x02_mc"),
+        connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
+        label = cms.untracked.string("HFtowers")
+        ),
+    ])
 
 # Path and EndPath definitions
 process.Flag_trackingFailureFilter = cms.Path(process.goodVertices+process.trackingFailureFilter)

@@ -61,7 +61,10 @@ from PhysicsTools.PatAlgos.packedPFCandidateMuonID_cfi import packedPFCandidateM
 from PhysicsTools.PatAlgos.packedPFCandidateTrackChi2_cfi import packedPFCandidateTrackChi2
 from RecoHI.HiTracking.hipixeltracks_miniAOD_cfi import hipixeltracks
 from RecoHI.HiCentralityAlgos.hihffilter_miniAOD_cfi import hihffilter
+from RecoHI.HiCentralityAlgos.CentralityBin_cfi import centralityBin
+from RecoHI.HiEvtPlaneAlgos.HiEvtPlane_cfi import hiEvtPlane
+from RecoHI.HiEvtPlaneAlgos.hiEvtPlaneFlat_cfi import hiEvtPlaneFlat
 pp_on_AA_2018.toModify(packedPFCandidateMuonID, muonSelectors = cms.vstring(["AllTrackerMuons", "TMOneStationTight"]))
 lostTrackMuonID = packedPFCandidateMuonID.clone(candidates = cms.InputTag("lostTracks"))
 lostTrackChi2 = packedPFCandidateTrackChi2.clone(candidates = cms.InputTag("lostTracks"))
-pp_on_AA_2018.toReplaceWith(slimmingTask, cms.Task(slimmingTask.copy(), packedPFCandidateMuonID, lostTrackMuonID, packedPFCandidateTrackChi2 , lostTrackChi2, hipixeltracks, hihffilter))
+pp_on_AA_2018.toReplaceWith(slimmingTask, cms.Task(slimmingTask.copy(), packedPFCandidateMuonID, lostTrackMuonID, packedPFCandidateTrackChi2 , lostTrackChi2, hipixeltracks, hihffilter, centralityBin, hiEvtPlane, hiEvtPlaneFlat))

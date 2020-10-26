@@ -118,6 +118,10 @@ from Configuration.Eras.Modifier_pp_on_PbPb_run3_cff import pp_on_PbPb_run3
                                                "jetProbabilityBJetTags",
                                                "trackCountingHighEffBJetTags",
                                                "trackCountingHighPurBJetTags",
+                                               "pfDeepCSVJetTags:probb",
+                                               "pfDeepCSVJetTags:probc",
+                                               "pfDeepCSVJetTags:probudsg",
+                                               "pfDeepCSVJetTags:probbb",
                                            ],
                                            addJetCharge = False,
 )

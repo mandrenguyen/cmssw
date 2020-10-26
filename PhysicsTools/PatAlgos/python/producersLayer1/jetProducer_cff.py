@@ -45,7 +45,8 @@ _makePatJetsWithDeepFlavorTask.add(
 )
 
 from Configuration.Eras.Modifier_run2_miniAOD_80XLegacy_cff import run2_miniAOD_80XLegacy
-run2_miniAOD_80XLegacy.toReplaceWith(
+from Configuration.ProcessModifiers.run2_miniAOD_pp_on_AA_103X_cff import run2_miniAOD_pp_on_AA_103X
+(run2_miniAOD_80XLegacy | run2_miniAOD_pp_on_AA_103X).toReplaceWith(
     makePatJetsTask, _makePatJetsWithDeepFlavorTask
 )
 

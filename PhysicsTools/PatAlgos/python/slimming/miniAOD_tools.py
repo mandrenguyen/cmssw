@@ -258,15 +258,13 @@ def miniAOD_customizeCommon(process):
     process.patJets.userData.userInts.src += [ 'hfJetShowerShape:centralEtaStripSize', 'hfJetShowerShape:adjacentEtaStripsSize']
 
     ## DeepCSV meta discriminators (simple arithmethic on output probabilities)
-    def _add_deepFlavour(process):
-        process.load('RecoBTag.Combined.deepFlavour_cff')
-        task.add(process.pfDeepCSVDiscriminatorsJetTags)
-        process.patJets.discriminatorSources.extend([
-            'pfDeepCSVDiscriminatorsJetTags:BvsAll',
-            'pfDeepCSVDiscriminatorsJetTags:CvsB',
-            'pfDeepCSVDiscriminatorsJetTags:CvsL',
-        ])
-    (~_hiGeneral).toModify(process, _add_deepFlavour)
+    process.load('RecoBTag.Combined.deepFlavour_cff')
+    task.add(process.pfDeepCSVDiscriminatorsJetTags)
+    process.patJets.discriminatorSources.extend([
+        'pfDeepCSVDiscriminatorsJetTags:BvsAll',
+        'pfDeepCSVDiscriminatorsJetTags:CvsB',
+        'pfDeepCSVDiscriminatorsJetTags:CvsL',
+    ])
 
     ## CaloJets
     process.caloJetMap = cms.EDProducer("RecoJetDeltaRValueMapProducer",

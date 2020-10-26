@@ -23,3 +23,5 @@ pfImpactParameterTagInfos = cms.EDProducer("CandIPProducer",
 from Configuration.Eras.Modifier_pp_on_AA_2018_cff import pp_on_AA_2018
 from Configuration.Eras.Modifier_pp_on_PbPb_run3_cff import pp_on_PbPb_run3
 (pp_on_AA_2018 | pp_on_PbPb_run3).toModify(pfImpactParameterTagInfos, jets = "akCs4PFJets")
+from Configuration.ProcessModifiers.run2_miniAOD_pp_on_AA_103X_cff import run2_miniAOD_pp_on_AA_103X
+run2_miniAOD_pp_on_AA_103X.toModify(pfImpactParameterTagInfos, candidates = 'cleanedParticleFlow')

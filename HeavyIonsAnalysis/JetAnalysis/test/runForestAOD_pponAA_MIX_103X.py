@@ -3,9 +3,7 @@
 # Type: Embedded Monte Carlo
 # Input: AOD
 
-# keep disabled by default until fully commissioned
-cleanJets = False
-
+cleanJets = True
 
 import FWCore.ParameterSet.Config as cms
 process = cms.Process('HiForest')

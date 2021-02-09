@@ -92,6 +92,7 @@ HiInclusiveJetAnalyzer::HiInclusiveJetAnalyzer(const edm::ParameterSet& iConfig)
     simpleSVHighEffBJetTags_ = "simpleSecondaryVertexHighEffBJetTags";
     simpleSVHighPurBJetTags_ = "simpleSecondaryVertexHighPurBJetTags";
     combinedSVV2BJetTags_ = "combinedSecondaryVertexV2BJetTags";
+    deepCSVJetTags_ = "pfDeepCSVJetTags:probb";
   }
 
   doSubEvent_ = false;
@@ -245,9 +246,8 @@ void HiInclusiveJetAnalyzer::beginJob() {
   if (doLifeTimeTagging_) {
     t->Branch("discr_ssvHighEff", jets_.discr_ssvHighEff, "discr_ssvHighEff[nref]/F");
     t->Branch("discr_ssvHighPur", jets_.discr_ssvHighPur, "discr_ssvHighPur[nref]/F");
-
-    t->Branch("discr_csvV1", jets_.discr_csvV1, "discr_csvV1[nref]/F");
     t->Branch("discr_csvV2", jets_.discr_csvV2, "discr_csvV2[nref]/F");
+    t->Branch("discr_deepCSV", jets_.discr_deepCSV, "discr_deepCSV[nref]/F");
     t->Branch("discr_muByIp3", jets_.discr_muByIp3, "discr_muByIp3[nref]/F");
     t->Branch("discr_muByPt", jets_.discr_muByPt, "discr_muByPt[nref]/F");
     t->Branch("discr_prob", jets_.discr_prob, "discr_prob[nref]/F");
@@ -389,6 +389,7 @@ void HiInclusiveJetAnalyzer::beginJob() {
   if (doLifeTimeTagging_) {
     /* clear arrays */
     memset(jets_.discr_csvV2, 0, MAXJETS * sizeof(float));
+    memset(jets_.discr_deepCSV, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_muByIp3, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_muByPt, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_prob, 0, MAXJETS * sizeof(float));
@@ -486,6 +487,7 @@ void HiInclusiveJetAnalyzer::analyze(const Event& iEvent, const EventSetup& iSet
       jets_.discr_ssvHighEff[jets_.nref] = jet.bDiscriminator(simpleSVHighEffBJetTags_);
       jets_.discr_ssvHighPur[jets_.nref] = jet.bDiscriminator(simpleSVHighPurBJetTags_);
       jets_.discr_csvV2[jets_.nref] = jet.bDiscriminator(combinedSVV2BJetTags_);
+      jets_.discr_deepCSV[jets_.nref]=jet.bDiscriminator(deepCSVJetTags_);
       jets_.discr_prob[jets_.nref] = jet.bDiscriminator(jetPBJetTags_);
       jets_.discr_probb[jets_.nref] = jet.bDiscriminator(jetBPBJetTags_);
       jets_.discr_tcHighEff[jets_.nref] = jet.bDiscriminator(trackCHEBJetTags_);

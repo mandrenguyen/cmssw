@@ -117,6 +117,7 @@ private:
   std::string simpleSVHighEffBJetTags_;
   std::string simpleSVHighPurBJetTags_;
   std::string combinedSVV2BJetTags_;
+  std::string deepCSVJetTags_;
 
   static const int MAXJETS = 1000;
   static const int MAXTRACKS = 5000;
@@ -253,8 +254,8 @@ private:
     int matchedHadronFlavor[MAXJETS]={0};
     int matchedPartonFlavor[MAXJETS]={0};
 
-    float discr_csvV1[MAXJETS]={0};
     float discr_csvV2[MAXJETS]={0};
+    float discr_deepCSV[MAXJETS]={0};
     float discr_muByIp3[MAXJETS]={0};
     float discr_muByPt[MAXJETS]={0};
     float discr_prob[MAXJETS]={0};

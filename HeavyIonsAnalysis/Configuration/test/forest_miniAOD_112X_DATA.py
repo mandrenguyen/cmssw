@@ -133,6 +133,33 @@ process.forest = cms.Path(
 
 #customisation
 
+
+addCandidateTagging = False
+
+if addCandidateTagging:
+    process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
+    
+    from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
+    updateJetCollection(
+        process,
+        jetSource = cms.InputTag('slimmedJets'),
+        jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+        btagDiscriminators = ['pfCombinedSecondaryVertexV2BJetTags', 'pfDeepCSVDiscriminatorsJetTags:BvsAll', 'pfDeepCSVDiscriminatorsJetTags:CvsB', 'pfDeepCSVDiscriminatorsJetTags:CvsL'], ## to add discriminators,
+        btagPrefix = 'TEST',
+    )
+    
+    process.updatedPatJets.addJetCorrFactors = False
+    process.updatedPatJets.discriminatorSources = cms.VInputTag(
+        cms.InputTag('pfDeepCSVJetTags:probb'),
+        cms.InputTag('pfDeepCSVJetTags:probc'),
+        cms.InputTag('pfDeepCSVJetTags:probudsg'),
+        cms.InputTag('pfDeepCSVJetTags:probbb'),
+    )
+    
+    process.akCs4PFJetAnalyzer.jetTag = "updatedPatJets"
+
+    process.forest.insert(1,process.candidateBtagging*process.updatedPatJets)
+
 #########################
 # Event Selection -> add the needed filters here
 #########################

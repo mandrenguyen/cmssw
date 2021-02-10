@@ -1,13 +1,13 @@
 # hltGetConfiguration --cff --data /dev/CMSSW_11_2_0/GRun --type GRun
 
-# /dev/CMSSW_11_2_0/GRun/V18 (CMSSW_11_2_0)
+# /dev/CMSSW_11_2_0/GRun/V19 (CMSSW_11_2_0)
 
 import FWCore.ParameterSet.Config as cms
 
 fragment = cms.ProcessFragment( "HLT" )
 
 fragment.HLTConfigVersion = cms.PSet(
-  tableName = cms.string('/dev/CMSSW_11_2_0/GRun/V18')
+  tableName = cms.string('/dev/CMSSW_11_2_0/GRun/V19')
 )
 
 fragment.transferSystem = cms.PSet( 
@@ -77181,7 +77181,7 @@ fragment.hltIterL3OIMuonTrackCutClassifierScoutingNoVtx = cms.EDProducer( "Track
         d0err_par = cms.vdouble( 0.001, 0.001, 3.40282346639E38 )
       ),
       maxLostLayers = cms.vint32( 4, 3, 2 ),
-      min3DLayers = cms.vint32( 0, 0, 2 ),
+      min3DLayers = cms.vint32( 0, 0, 0 ),
       dz_par = cms.PSet( 
         dz_par1 = cms.vdouble( 0.4, 0.4, 3.40282346639E38 ),
         dz_par2 = cms.vdouble( 0.35, 0.35, 3.40282346639E38 ),

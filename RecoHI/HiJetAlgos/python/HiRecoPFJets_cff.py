@@ -7,7 +7,7 @@ from RecoHI.HiJetAlgos.HiPFJetParameters_cff import *
 #pseudo towers for noise suppression background subtraction
 PFTowers = cms.EDProducer("ParticleTowerProducer",
                           src = cms.InputTag("particleFlow"),
-                          useHF = cms.bool(False)
+                          useHF = cms.bool(True)
                           )
 
 #dummy sequence to speed-up reconstruction in pp_on_AA era
@@ -69,6 +69,7 @@ akCs4PFJets = cms.EDProducer(
     etaMap    = cms.InputTag('hiFJRhoProducer','mapEtaEdges'),
     rho       = cms.InputTag('hiFJRhoProducer','mapToRho'),
     rhom      = cms.InputTag('hiFJRhoProducer','mapToRhoM'),
+    useModulatedRho = cms.bool(False),
     csRParam  = cms.double(-1.),
     csAlpha   = cms.double(2.),
     writeJetsWithConst = cms.bool(True),

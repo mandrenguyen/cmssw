@@ -1,3 +1,4 @@
+
 // -*- C++ -*-
 //
 // Package:    HLTMuTree
@@ -34,13 +35,11 @@ using namespace HepMC;
 HLTMuTree::HLTMuTree(const edm::ParameterSet& iConfig)
 {
   //now do what ever initialization is needed
-  //tagRecoMu = iConfig.getParameter<edm::InputTag>("muons");
   tagRecoMu = consumes<edm::View<reco::Muon> >(iConfig.getParameter<edm::InputTag>("muons"));
-  //tagVtx = iConfig.getParameter<edm::InputTag>("vertices");
   tagVtx = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"));
   doReco = iConfig.getUntrackedParameter<bool>("doReco");
   doGen = iConfig.getUntrackedParameter<bool>("doGen");
-  tagGenPtl = iConfig.getParameter<edm::InputTag>("genparticle");
+  tagGenPtl = consumes<edm::View<pat::PackedGenParticle> >(iConfig.getParameter<edm::InputTag>("genparticle"));
   tagSimTrk = iConfig.getParameter<edm::InputTag>("simtrack");
   // tagCompVtx = iConfig.getParameter<edm::InputTag>("
   //higherPuritySelection_(iConfig.getParameter<std::string>("higherPuritySelection")),
@@ -134,28 +133,31 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //Loop over GenParticles, g4SimHits
   if (doGen) {
+    
     int nGen = 0;
+    edm::Handle<edm::View<pat::PackedGenParticle> > genColl;
+    iEvent.getByToken(tagGenPtl, genColl);
 
-    edm::Handle<reco::GenParticleCollection> genColl;
-    iEvent.getByLabel(tagGenPtl,genColl);
     if (genColl.isValid()) {
-      for (reco::GenParticleCollection::size_type i=0; i+1<genColl.product()->size(); i++) {
-        const GenParticleRef genPtl(genColl,i);
-        if (abs(genPtl->pdgId()) == 13 && genPtl->status() == 1) {
-          GenMu.pt[nGen] = genPtl->pt();
-          GenMu.p[nGen] = genPtl->p();
-          GenMu.eta[nGen] = genPtl->eta();
-          GenMu.phi[nGen] = genPtl->phi();
-          GenMu.status[nGen] = genPtl->status();
-          GenMu.pid[nGen] = genPtl->pdgId();
 
+    for (unsigned j = 0; j < genColl->size(); ++j) {
+      pat::PackedGenParticle const& genPtl = genColl->at(j);
+
+
+        if (abs(genPtl.pdgId()) == 13 && genPtl.status() == 1) {
+          GenMu.pt[nGen] = genPtl.pt();
+          GenMu.p[nGen] = genPtl.p();
+          GenMu.eta[nGen] = genPtl.eta();
+          GenMu.phi[nGen] = genPtl.phi();
+          GenMu.status[nGen] = genPtl.status();
+          GenMu.pid[nGen] = genPtl.pdgId();
           GenMu.mom[nGen] = 10;
-          if (genPtl->numberOfMothers() > 0 ) {
+          if (genPtl.numberOfMothers() > 0 ) {
             vector<int> momid;
             vector<int>::iterator it_jpsi, it_ups;
-            for (unsigned int mom = 0; mom < genPtl->numberOfMothers(); mom++) {
-              //cout << "mom pid: " << genPtl->mother(mom)->pdgId() << endl;
-              momid.push_back(genPtl->mother(mom)->pdgId());
+            for (unsigned int mom = 0; mom < genPtl.numberOfMothers(); mom++) {
+              //cout << "mom pid: " << genPtl.mother(mom)->pdgId() << endl;
+              momid.push_back(genPtl.mother(mom)->pdgId());
             }
 
             if (!momid.empty()) {
@@ -166,7 +168,7 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
               //No J/psi, Y mother -> Should check grandmother
               if (it_jpsi == momid.end() && it_ups == momid.end()) {
-                const Candidate *mother = genPtl->mother(0);
+                const Candidate *mother = genPtl.mother(0);
                 momid.clear();
                 for (unsigned int mom = 0; mom < mother->numberOfMothers(); mom++) {
                   //cout << "grand mom pid: " << mother->mother(mom)->pdgId() << endl;
@@ -186,9 +188,9 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
           }
           nGen++;
 
-/*          if (genPtl->numberOfMothers() > 0 ) {
-            GenMu.mom[nGen] = genPtl->mother(0)->pdgId();
-            cout << "mom pid: " << genPtl->mother(0)->pdgId() << endl;
+/*          if (genPtl.numberOfMothers() > 0 ) {
+            GenMu.mom[nGen] = genPtl.mother(0)->pdgId();
+            cout << "mom pid: " << genPtl.mother(0)->pdgId() << endl;
 	    } else {
             GenMu.mom[nGen] = 10;
 	    }*/
@@ -252,7 +254,6 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     // iEvent.getByLabel(
 
     edm::Handle< edm::View<reco::Muon> > muons;
-    //iEvent.getByLabel(tagRecoMu,muons);
     iEvent.getByToken(tagRecoMu,muons);
 
     int nGlb = 0;
@@ -325,7 +326,6 @@ HLTMuTree::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     //vertex probability cuts
     edm::Handle< edm::View<reco::Muon> > muons2;
-    //iEvent.getByLabel(tagRecoMu,muons2);
     iEvent.getByToken(tagRecoMu,muons2);
 
     edm::ESHandle<TransientTrackBuilder> theTTBuilder;

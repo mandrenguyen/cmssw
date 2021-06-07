@@ -40,6 +40,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingParticle.h"
 #include "SimDataFormats/TrackingAnalysis/interface/TrackingParticleFwd.h"
+#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
@@ -80,11 +81,9 @@ private:
   virtual void endJob() ;
 
   // ----------member data ---------------------------
-  //edm::InputTag   tagRecoMu;
   edm::EDGetTokenT<edm::View<reco::Muon> >  tagRecoMu;
-  edm::InputTag   tagGenPtl;
+  edm::EDGetTokenT<edm::View<pat::PackedGenParticle> >  tagGenPtl;
   edm::InputTag   tagSimTrk;
-  //edm::InputTag   tagVtx;
   edm::EDGetTokenT<reco::VertexCollection> tagVtx;
   edm::InputTag   MuCandTag1;
   edm::InputTag   MuCandTag2;

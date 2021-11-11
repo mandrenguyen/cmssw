@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 source = cms.Source("EmptySource")
 
-from GeneratorInterface.Hydjet2Interface.hydjet2DefaultParameters2_cff import *
+from GeneratorInterface.Hydjet2Interface.hydjet2DefaultParameters_cff import *
 
 generator = cms.EDFilter("Hydjet2GeneratorFilter",
 	collisionParameters5020GeV,

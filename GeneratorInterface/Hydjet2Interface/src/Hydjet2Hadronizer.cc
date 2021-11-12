@@ -35,17 +35,11 @@
 #include "SimDataFormats/GeneratorProducts/interface/HepMCProduct.h"
 #include "SimDataFormats/HiGenData/interface/GenHIEvent.h"
 
-#include <TStopwatch.h>
-#include <time.h>
-
 CLHEP::HepRandomEngine *hjRandomEngine;
 
 using namespace edm;
 using namespace std;
 using namespace gen;
-clock_t cl = clock();
-
-TStopwatch timer;
 
 bool ev = false;
 namespace {
@@ -62,7 +56,7 @@ int convertStatusForComponents(int sta, int typ) {
   else
     return sta;
 }
-/*
+
 int convertStatus(int st) {
   if (st <= 0)
     return 0;
@@ -76,7 +70,6 @@ int convertStatus(int st) {
   else
     return st;
 }
-*/
 } // namespace
 
 const std::vector<std::string> Hydjet2Hadronizer::theSharedResources = {edm::SharedResourceNames::kPythia6}; //, gen::FortranInstance::kFortranInstance};
@@ -166,7 +159,7 @@ Hydjet2Hadronizer::Hydjet2Hadronizer(const edm::ParameterSet &pset, edm::Consume
 
   // PYLIST Verbosity Level
   // Valid PYLIST arguments are: 1, 2, 3, 5, 7, 11, 12, 13
-  pythiaPylistVerbosity_ = pset.getUntrackedParameter<int>("pythiaPylistVerbosity", 1);
+  pythiaPylistVerbosity_ = pset.getUntrackedParameter<int>("pythiaPylistVerbosity", 0);
   LogDebug("PYLISTverbosity") << "Pythia PYLIST verbosity level = " << pythiaPylistVerbosity_;
   //Max number of events printed on verbosity level
   maxEventsToPrint_ = pset.getUntrackedParameter<int>("maxEventsToPrint", 0);
@@ -176,17 +169,6 @@ Hydjet2Hadronizer::Hydjet2Hadronizer(const edm::ParameterSet &pset, edm::Consume
     src_ = iC.consumes<CrossingFrame<edm::HepMCProduct>>(
         pset.getUntrackedParameter<edm::InputTag>("backgroundLabel", edm::InputTag("mix", "generatorSmeared")));
   }
-
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: constructor ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
-//std::cout << std::setfill ('*') << std::setw (10)<<std::endl;
-//std::cout << "* This is HYDJET v."<<Hydjet2::GetVersion().at(0)<<"."<<Hydjet2::GetVersion().at(1)<< "."<<Hydjet2::GetVersion().at(2) << " *"<<std::endl;
-//std::cout << std::setfill ('*') << std::setw (10)<<std::endl;
-
-
-
 }
 //__________________________________________________________________________________________
 Hydjet2Hadronizer::~Hydjet2Hadronizer() {
@@ -206,7 +188,6 @@ bool Hydjet2Hadronizer::readSettings(int) {
   Pythia6Service::InstanceWrapper guard(pythia6Service_);
   pythia6Service_->setGeneralParams();
 
-  //SERVICE.iseed_fromC
   fParams.fSeed = hjRandomEngine->CLHEP::HepRandomEngine::getSeed();
   LogInfo("Hydjet2Hadronizer|GenSeed") << "Seed for random number generation: "
                                        << hjRandomEngine->CLHEP::HepRandomEngine::getSeed();
@@ -234,9 +215,6 @@ bool Hydjet2Hadronizer::initializeForInternalPartons() {
 bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
   Pythia6Service::InstanceWrapper guard(pythia6Service_);
 
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: EVENT ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
   // generate single event
   if (fParams.femb == 1) {
     const edm::Event &e = getEDMEvent();
@@ -293,11 +271,7 @@ bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
   nhard_ = 0;
 
   // generate one HYDJET event
-  int ntry = 0, xxx=0;
-
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: generating event ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
+  int ntry = 0;
 
   while (nsoft_ == 0 && nhard_ == 0) {
     if (ntry > 100) {
@@ -310,18 +284,9 @@ bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
       throw except;
     } else {
 
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: generating event core::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
       hj2->GenerateEvent(fParams.fBfix);
 
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: generating event core - done::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
       if (hj2->IsEmpty()){
-       xxx++;  
        continue;
       }
 
@@ -334,12 +299,6 @@ bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
     }
   }
 
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: generating event - done ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
-
-  std::cout<< "Waisted events: "<< xxx << " ntry: "<< ntry<<std::endl;
   if (ev == 0) {
     Sigin = hj2->GetSigin();
     Sigjet = hj2->GetSigjet();
@@ -352,16 +311,8 @@ bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
   // event information
   HepMC::GenEvent *evt = new HepMC::GenEvent();
 
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: getting particles ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
   if (nhard_ > 0 || nsoft_ > 0)
     get_particles(evt);
-
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: getting particles - done ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
 
   evt->set_signal_process_id(pypars.msti[0]); // type of the process
   evt->set_event_scale(pypars.pari[16]);      // Q^2
@@ -379,11 +330,6 @@ bool Hydjet2Hadronizer::generatePartonsAndHadronize() {
   LogDebug("HEPEVT_info") << "Ev numb: " << HepMC::HEPEVT_Wrapper::event_number() << " Entries number: " << HepMC::HEPEVT_Wrapper::number_entries() << " Max. entries " << HepMC::HEPEVT_Wrapper::max_number_entries() << std::endl;
 
   event().reset(evt);
-  
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: EVENT - done ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
   return kTRUE;
 }
 
@@ -417,11 +363,7 @@ void Hydjet2Hadronizer::rotateEvtPlane() {
 
 //_____________________________________________________________________
 bool Hydjet2Hadronizer::get_particles(HepMC::GenEvent *evt) {
-  cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: gp init::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
 
-  //int Ntot = hj2->GetNtot();
   LogDebug("SubEvent") << " Number of sub events " << nsub_;
   LogDebug("Hydjet") << " Number of hard events " << hj2->GetNjet();
   LogDebug("Hydjet") << " Number of hard particles " << nhard_;
@@ -429,7 +371,6 @@ bool Hydjet2Hadronizer::get_particles(HepMC::GenEvent *evt) {
   LogDebug("Hydjet") << " nhard_ + nsoft_ = " << nhard_ + nsoft_ << " Ntot = " << hj2->GetNtot() << endl;
 
   int ihy = 0;
-  //int isub = -1;
   int isub_l = -1;
   int stab = 0;
 
@@ -438,58 +379,9 @@ bool Hydjet2Hadronizer::get_particles(HepMC::GenEvent *evt) {
 
   HepMC::GenVertex *sub_vertices = new HepMC::GenVertex(HepMC::FourVector(0, 0, 0, 0), 0); // just initialization
 
-  //std::vector<int> iJet;
-  //iJet = hj2->GetiJet();
-  //std::vector<int> pythiaStatus;
-  //pythiaStatus = hj2->GetPythiaStatus();
-  //std::vector<int> pdg;
-  //pdg = hj2->GetPdg();
-  //std::vector<int> MotherIndex;
-  //MotherIndex = hj2->GetMotherIndex();
-  //std::vector<int> FirstDaughterIndex;
-  //FirstDaughterIndex = hj2->GetFirstDaughterIndex();
-  //std::vector<int> LastDaughterIndex;
-  //LastDaughterIndex = hj2->GetLastDaughterIndex();
-  //std::vector<double> X;
-  //X = hj2->GetX();
-  //std::vector<double> Y;
-  //Y = hj2->GetY();
-  //std::vector<double> Z;
-  //Z = hj2->GetZ();
-  //std::vector<int> ifFinal;
-  //ifFinal = hj2->GetFinal();
-
-//TBenchmark time;
-TStopwatch timeAll;
-
- cl = clock();
-  if ( cl != (clock_t)-1 )
-        std::cout<<"::: gp loop ::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
-
-
-timer.Stop();
-timer.Reset();
-
   while (ihy < hj2->GetNtot()) {
 
-
-    //time.Start("gpl");
-    //time.Reset();
-    //time.Start("gpl0");
-    //time.Stop("gpl0");
-
-    //isub = hj2->GetiJet().at(ihy);
-
-    //time.Stop();
-
-
-//cl = clock();
-//  if ( cl != (clock_t)-1 )
-//        std::cout<<std::fixed<<std::setprecision(10)<<"::: gpl 1  ::: "<< cl << std::endl;
-//    time.Stop("gpl0");
-   // time.Start("gpl1");
-
-    if ((hj2->GetiJet().at(ihy)) != isub_l) {
+   if ((hj2->GetiJet().at(ihy)) != isub_l) {
       sub_vertices = new HepMC::GenVertex(HepMC::FourVector(0, 0, 0, 0), hj2->GetiJet().at(ihy));
       evt->add_vertex(sub_vertices);
       if (!evt->signal_process_vertex())
@@ -499,24 +391,13 @@ timer.Reset();
 
     if ((hj2->GetFinal().at(ihy)) == 1) //convertStatus(hj2->GetPythiaStatus().at(ihy)) == 1)
       stab++;
-/*    LogDebug("Hydjet_array") << ihy << " MULTin ev.:" << hj2->GetNtot() << " SubEv.#" << isub << " Part #" << ihy + 1
-                             << ", PDG: " << pdg.at(ihy) << " (st. " << convertStatus(pythiaStatus.at(ihy))
-                             << ") mother=" << MotherIndex.at(ihy) + 1 << ", childs ("
-                             << FirstDaughterIndex.at(ihy) + 1 << "-" << LastDaughterIndex.at(ihy) + 1 << "), vtx ("
-                             << X.at(ihy) << "," << Y.at(ihy) << "," << Z.at(ihy) << ") "
+    LogDebug("Hydjet_array") << ihy << " MULTin ev.:" << hj2->GetNtot() << " SubEv.#" << hj2->GetiJet().at(ihy) << " Part #" << ihy + 1
+                             << ", PDG: " << hj2->GetPdg().at(ihy) << " (st. " << convertStatus(hj2->GetPythiaStatus().at(ihy))
+                             << ") mother=" << hj2->GetMotherIndex().at(ihy) + 1 << ", childs ("
+                             << hj2->GetFirstDaughterIndex().at(ihy) + 1 << "-" << hj2->GetLastDaughterIndex().at(ihy) + 1 << "), vtx ("
+                             << hj2->GetX().at(ihy) << "," << hj2->GetY().at(ihy) << "," << hj2->GetZ().at(ihy) << ") "
                              << std::endl;
-*/
 
-
-//cl = clock();
-//  if ( cl != (clock_t)-1 )
-//        std::cout<<std::fixed<<std::setprecision(10)<<"::: gpl 2  ::: "<< cl << std::endl;
-
-   // time.Stop("gpl1");
-   // time.Start("gpl2");
-
-
-//    time.Start(kFALSE);
     if ((hj2->GetMotherIndex().at(ihy)) <= 0) {
       primary_particle.at(ihy) = build_hyjet2(ihy, ihy + 1);
       sub_vertices->add_particle_out(primary_particle.at(ihy));
@@ -525,49 +406,15 @@ timer.Reset();
       particle.at(ihy) = build_hyjet2(ihy, ihy + 1);
       int mid = hj2->GetMotherIndex().at(ihy);
       int mid_t = mid;
-  //  time.Stop();
-
-//cl = clock();
-//  if ( cl != (clock_t)-1 )
-//        std::cout<<std::fixed<<std::setprecision(10)<<"::: gpl 3  ::: "<< (long long)cl << std::endl;
-
-  //  time.Stop("gpl2");
-  //  time.Start("gpl3");
-
 
       while ((mid < ihy) && ((hj2->GetPdg().at(ihy)) < 100) && ((hj2->GetFirstDaughterIndex().at(ihy)) == ihy))
         mid++;
-
-//cl = clock();
-//  if ( cl != (clock_t)-1 )
-//        std::cout<<std::fixed<<std::setprecision(10)<<"::: gpl 4  ::: "<< cl << std::endl;
-  //  time.Stop("gpl3");
-  //  time.Start("gpl4");
-
 
       if ((hj2->GetPdg().at(ihy)) < 100)
         mid = mid_t;
 
       HepMC::GenParticle *mother = primary_particle.at(mid);
-
-//TBenchmark time;
-//  time.Start("time");
-//  std::cout<<"CPU time = "<<time.GetCpuTime("time")<<", Real time = "<<time.GetRealTime("time")<<std::endl; 
-
-  //  time.Stop("gpl4");
-  //  time.Start("gpl5");
-
-	//    time.Start(kFALSE); //timeAll.Start(kFALSE);
-	      HepMC::GenVertex *prods = build_hyjet2_vertex(ihy, (hj2->GetiJet().at(ihy)));
-	//timeAll.Stop();
-
-	//time.Stop();
-	//time.Stop("time");
-	//  std::cout<<"CPU time = "<<time.GetCpuTime("time")<<", Real time = "<<time.GetRealTime("time")<<std::endl;  
-
-	  //  time.Stop("gpl5");
-	  //  time.Start("gpl6");
-
+      HepMC::GenVertex *prods = build_hyjet2_vertex(ihy, (hj2->GetiJet().at(ihy)));
 
 	      if (!mother) {
 		mother = particle.at(mid);
@@ -588,33 +435,9 @@ timer.Reset();
 		delete prods;
 	    }
 
-	//cl = clock();
-	//  if ( cl != (clock_t)-1 )
-	//        std::cout<<std::fixed<<std::setprecision(10)<<"::: gpl 5  ::: "<< cl << std::endl;
-	   // time.Stop("gpl6");
-
 	    ihy++;
 
-	   // time.Stop("gpl");
-	//timeAll.Stop();
 	  }
-
-	  //std::cout<<"time = "<<timer.CpuTime()<<std::endl;
-	  //std::cout<<"timeAll = "<<timeAll.CpuTime()<<std::endl;
-
-
-	  //std::cout<<"gpl = "<<time.GetCpuTime("gpl")<<", Real time = "<<time.GetRealTime("gpl")<<std::endl;
-	  //std::cout<<"gpl0 = "<<time.GetCpuTime("gpl0")<<", Real time = "<<time.GetRealTime("gpl0")<<std::endl;
-	  //std::cout<<"gpl1 = "<<time.GetCpuTime("gpl1")<<", Real time = "<<time.GetRealTime("gpl1")<<std::endl;  
-	  //std::cout<<"gpl2 = "<<time.GetCpuTime("gpl2")<<", Real time = "<<time.GetRealTime("gpl2")<<std::endl;       
-	  //std::cout<<"gpl3 = "<<time.GetCpuTime("gpl3")<<", Real time = "<<time.GetRealTime("gpl3")<<std::endl;       
-	  //std::cout<<"gpl4 = "<<time.GetCpuTime("gpl4")<<", Real time = "<<time.GetRealTime("gpl4")<<std::endl;       
-	  //std::cout<<"gpl5 = "<<time.GetCpuTime("gpl5")<<", Real time = "<<time.GetRealTime("gpl5")<<std::endl;       
-	  //std::cout<<"gpl6 = "<<time.GetCpuTime("gpl6")<<", Real time = "<<time.GetRealTime("gpl6")<<std::endl;       
-
-	  cl = clock();
-	  if ( cl != (clock_t)-1 )
-		std::cout<<"::: gp loop - done::: "<< (double)cl / (double)CLOCKS_PER_SEC<< std::endl;
 
 	LogDebug("Hydjet_array") << " MULTin ev.:" << hj2->GetNtot() << ", last index: " << ihy - 1
 				   << ", stable particles: " << stab << std::endl;
@@ -625,28 +448,7 @@ timer.Reset();
 	//___________________________________________________________________
 	HepMC::GenParticle *Hydjet2Hadronizer::build_hyjet2(int index, int barcode) {
 	  // Build particle object corresponding to index in hyjets (soft+hard)
-	/*
-	  std::vector<double> vPx;
-	  vPx = hj2->GetPx();
 
-	  std::vector<double> vPy;
-	  vPy = hj2->GetPy();
-
-	  std::vector<double> vPz;
-	  vPz = hj2->GetPz();
-
-	  std::vector<double> vE;
-	  vE = hj2->GetE();
-
-	  std::vector<int> vPdg;
-	  vPdg = hj2->GetPdg();
-
-	  std::vector<int> vFinal;
-	  vFinal = hj2->GetFinal();
-
-	  std::vector<int> vType;
-	  vType = hj2->GetType();
-	*/
 	  double px0 = (hj2->GetPx()).at(index);//vPx[index];//(hj2->GetPx()).at(index);
 	  double py0 = (hj2->GetPy()).at(index);//vPy[index];//(hj2->GetPy()).at(index);
 
@@ -655,12 +457,12 @@ timer.Reset();
 
 	  HepMC::GenParticle *p = new HepMC::GenParticle(HepMC::FourVector(px,				// px
 									   py,          		// py
-									   (hj2->GetPz()).at(index),//vPz.at(index),//(hj2->GetPz()).at(index),    // pz
-									   (hj2->GetE()).at(index)),//vE.at(index)),//(hj2->GetE()).at(index)),    // E
-									   (hj2->GetPdg()).at(index),//vPdg.at(index),//(hj2->GetPdg()).at(index),   // id
+									   (hj2->GetPz()).at(index),    // pz
+									   (hj2->GetE()).at(index)),    // E
+									   (hj2->GetPdg()).at(index),   // id
 									   convertStatusForComponents(
-											(hj2->GetFinal()).at(index),//vFinal.at(index),//(hj2->GetFinal()).at(index), 
-											(hj2->GetType()).at(index)//vType.at(index)//(hj2->GetType()).at(index)
+											(hj2->GetFinal()).at(index), 
+											(hj2->GetType()).at(index)
 									   ) // status
 	  );
 
@@ -671,40 +473,14 @@ timer.Reset();
 	//___________________________________________________________________
 	HepMC::GenVertex *Hydjet2Hadronizer::build_hyjet2_vertex(int i, int id) {
 	  // build verteces for the hyjets stored events
-	 //   timer.Start(kFALSE);
-	 /*  
-	  std::vector<double> vX;
-	//    timer.Start(kFALSE);
-
-	  vX = hj2->GetX();
-	//timer.Stop();
-
-	  std::vector<double> vY;
-	  vY = hj2->GetY();
-
-	timer.Stop();
-
-
-	  std::vector<double> vZ;
-	  vZ = hj2->GetZ();
-
-	  std::vector<double> vT;
-	  vT = hj2->GetT();
-	*/
-	//timer.Stop();
-	  double x0 = (hj2->GetX()).at(i);//vX[i];//(hj2->GetX()).at(i);
-	  double y0 = (hj2->GetY()).at(i);//vY[i];//(hj2->GetY()).at(i);
-
-	//timer.Stop();
-
+	  double x0 = (hj2->GetX()).at(i);
+	  double y0 = (hj2->GetY()).at(i);
 	  double x = x0 * cosphi0_ - y0 * sinphi0_;
 	  double y = y0 * cosphi0_ + x0 * sinphi0_;
-	  double z = (hj2->GetZ()).at(i);//vZ[i];//(hj2->GetZ()).at(i);
-	  double t = (hj2->GetT()).at(i);//vT[i];//(hj2->GetT()).at(i);
+	  double z = (hj2->GetZ()).at(i);
+	  double t = (hj2->GetT()).at(i);
 
 	  HepMC::GenVertex *vertex = new HepMC::GenVertex(HepMC::FourVector(x, y, z, t), id);
-
-	//timer.Stop();
 
 	  return vertex;
 	}
@@ -712,11 +488,8 @@ timer.Reset();
 	//_____________________________________________________________________
 	void Hydjet2Hadronizer::add_heavy_ion_rec(HepMC::GenEvent *evt) {
 	  // heavy ion record in the final CMSSW Event
-	  //double npart = hj2->GetNpart();
 	  int nproj = static_cast<int>((hj2->GetNpart()) / 2);
 	  int ntarg = static_cast<int>((hj2->GetNpart()) - nproj);
-	  //double Bgen = hj2->GetBgen();
-	  //int Nbcol = hj2->GetNbcol();
 
 	  HepMC::HeavyIon *hi = new HepMC::HeavyIon(nsub_,                             // Ncoll_hard/N of SubEvents
 						    nproj,                             // Npart_proj

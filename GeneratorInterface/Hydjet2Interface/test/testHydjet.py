@@ -5,7 +5,6 @@ process = cms.Process("ANA")
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 process.load("Configuration.StandardSequences.Services_cff")
 process.load("GeneratorInterface.Hydjet2Interface.hydjet2Default_cfi")
-#process.load("GeneratorInterface.Hydjet2Interface.hydjet2_RHIC200GV_cfi")
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 
@@ -57,7 +56,7 @@ process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
 
 
 process.TFileService = cms.Service('TFileService',
-	fileName = cms.string('Hydjet2_5020GeV.root')
+	fileName = cms.string('Hydjet2_MB_5020GeV.root')
 )
 
 process.p = cms.Path(process.generator*process.ana)

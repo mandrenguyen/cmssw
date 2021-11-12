@@ -24,10 +24,10 @@
 class Hydjet2 {
 
 public:
-  Hydjet2(InitialParamsHydjet_t); ///< Constructor of Hydjet2 with input parameters structure (InitialParams.h) as input parameter
+  Hydjet2(InitialParamsHydjet_t&); ///< Constructor of Hydjet2 with input parameters structure (InitialParams.h) as input parameter
   ~Hydjet2();
 
-  void GenerateEvent(Double_t); ///< Generate one event
+  void GenerateEvent(Double_t&); ///< Generate one event
 
   //ref-qualified getters
 
@@ -60,7 +60,7 @@ public:
   Double_t &GetSigin() & { return Sigin; } ///< Getter (lvalue) for output information: total inelastic NN cross section at given "fSqrtS" (in mb)
   Double_t &GetSigjet() & { return Sigjet; } ///< Getter (lvalue) for output information: hard scattering NN cross section at given "fSqrtS" & "fPtmin" (in mb)
   Double_t &GetPsiv3() & { return v3psi; } ///< Getter (lvalue) for output information: angle for third Fourier harmonic of azimuthal particle distribution
-  Int_t &GetNev() & { return Nev; } ///< Getter (lvalue) for output information: requested number of events
+  Int_t &GetNev() & { return nev; } ///< Getter (lvalue) for output information: requested number of events
   Bool_t &IsEmpty() & { return emptyEvent; } ///< Getter (lvalue) for output information: if true - the event is empty
   std::vector<Int_t> &GetVersion() & {return Version; } ///< Getter (lvalue) for output information: version information
 
@@ -93,7 +93,7 @@ public:
   Double_t GetSigin() && { return std::move(Sigin); } ///< Getter (rvalue) for output information: total inelastic NN cross section at given "fSqrtS" (in mb)
   Double_t GetSigjet() && { return std::move(Sigjet); } ///< Getter (rvalue) for output information: hard scattering NN cross section at given "fSqrtS"  &  &  "fPtmin" (in mb)
   Double_t GetPsiv3() && { return std::move(v3psi); } ///< Getter (rvalue) for output information: angle for third Fourier harmonic of azimuthal particle distribution
-  Int_t GetNev() && { return std::move(Nev); } ///< Getter (rvalue) for output information: requested number of events
+  Int_t GetNev() && { return std::move(nev); } ///< Getter (rvalue) for output information: requested number of events
   Bool_t IsEmpty() && { return std::move(emptyEvent); } ///< Getter (rvalue) for output information: if true - the event is empty
   std::vector<Int_t> GetVersion() && {return std::move(Version); } ///< Getter (rvalue) for output information: version information
 
@@ -103,15 +103,17 @@ private:
   std::vector<Int_t> Version = std::vector<Int_t>{0, 0, 0};
   clock_t start;
   Bool_t emptyEvent=false;
-  ///define event number
-  Int_t Nev = 0;
+  Bool_t FirstEv;
 
   ///define event characteristics:
+  Int_t nev;
+
   ///total event multiplicity, number of produced hadrons in hard part/soft part
   Int_t Ntot = 0, Npyt = 0, Nhyd = 0;
 
   /// number of jets, number of binary collisions, number of participants :
-  Int_t Njet = 0, Nbcol = 0, Npart = 0;
+  //Int_t Njet = null, Nbcol = null, Npart = null;
+  Int_t Njet, Nbcol, Npart;
 
   ///impact parameter
   Double_t Bgen, Sigin, Sigjet, v3psi;

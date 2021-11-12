@@ -1,7 +1,7 @@
 #ifndef INITALPARAMS
 #define INITALPARAMS
 
-struct InitialParamsHydjet_t { 
+struct InitialParamsHydjet_t {
 
   Int_t fNevnt;    ///< number of events
   Int_t femb;      ///< embedding flag
@@ -88,14 +88,14 @@ struct InitialParamsHydjet_t {
   Int_t fIanglu;  ///< \brief flag to fix type of angular distribution of in-medium emitted gluons
                   ///< \details 0: small-angular, 1: wide-angular, 2:collinear (default: 0).
 
-  Char_t partDat[256] = ""; ///< path to the particle data file
+  Char_t partDat[256] = "";  ///< path to the particle data file
   Char_t tabDecay[256] = ""; ///< path to the particle decay table
 
-  Bool_t fPythiaTune = false; ///< Flag to use castom PYTHIA tune
+  Bool_t fPythiaTune = false;  ///< Flag to use castom PYTHIA tune
   Char_t pythiaTune[256] = ""; ///< path to the Pythia tune file
 
-  Bool_t doPrintInfo = true;  ///< Flag to turn ON/OFF additional info
+  Bool_t doPrintInfo = true;      ///< Flag to turn ON/OFF additional info
   Bool_t allowEmptyEvent = false; ///< Allow or not empty events
-};///< Structure of input parameters
+};                                ///< Structure of input parameters
 
 #endif

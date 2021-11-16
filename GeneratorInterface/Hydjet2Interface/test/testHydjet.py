@@ -6,7 +6,7 @@ process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 process.load("Configuration.StandardSequences.Services_cff")
 process.load("GeneratorInterface.Hydjet2Interface.hydjet2Default_cfi")
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
 
 process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
 

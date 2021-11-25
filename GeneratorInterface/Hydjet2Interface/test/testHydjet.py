@@ -6,7 +6,7 @@ process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
 process.load("Configuration.StandardSequences.Services_cff")
 process.load("GeneratorInterface.Hydjet2Interface.hydjet2Default_cfi")
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(1000))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 
 process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
 
@@ -14,7 +14,9 @@ process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
                 userHistos = cms.untracked.bool(False),
 		#doAnalysis = cms.untracked.bool(True),
 
-		#Settings for USER histos
+		###Settings for USER histos
+
+		#status
                 uStatus = cms.untracked.int32(1), #1 - it's 1,2,3,4,5 of Pythia status; 2 - 11,12,13,14,15; 3 - All
 
 		#up to 3 abs(PDG) for selection, if less needed just comment not used
@@ -22,10 +24,11 @@ process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
                 uPDG_2 = cms.untracked.int32(321),
                 uPDG_3 = cms.untracked.int32(2212),
 
-                #Eta cut for pT dep.dist.
-		uPTetaCut = cms.untracked.double(4.),
-                dPTetaCut = cms.untracked.double(2.5),
-                                                                                                                                                                                        #Vectors of bins borders(when 0 - uniform bins would be used)
+                # |eta| cut for pT dep.dist.
+                dPTetaCut = cms.untracked.double(0.), #down
+                uPTetaCut = cms.untracked.double(0.8), #up
+
+                #Vectors of bins borders(when 0 - uniform bins would be used)
                 PtBins = cms.untracked.vdouble(0.), #, 1., 2., 3., 4., 5., 6., 8., 12., 16., 20.),
                 EtaBins = cms.untracked.vdouble(0.),
                 PhiBins = cms.untracked.vdouble(0.),
@@ -53,7 +56,8 @@ process.ana = cms.EDAnalyzer('Hydjet2Analyzer',
 
 )
 
-
+#to separate hydro and jet parts of hydjet2	
+process.generator.separateHydjetComponents = cms.untracked.bool(True)
 
 process.TFileService = cms.Service('TFileService',
 	fileName = cms.string('Hydjet2_MB_5020GeV.root')

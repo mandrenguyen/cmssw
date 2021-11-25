@@ -42,6 +42,8 @@ using namespace std;
 using namespace gen;
 
 bool ev = false;
+bool separateHydjetComponents_;
+
 namespace {
 int convertStatusForComponents(int sta, int typ) {
   if (sta == 1 && typ == 0)
@@ -58,17 +60,17 @@ int convertStatusForComponents(int sta, int typ) {
 }
 
 int convertStatus(int st) {
-  if (st <= 0)
-    return 0;
-  if (st <= 10)
-    return 1;
-  if (st <= 20)
-    return 2;
-  if (st <= 30)
-    return 3;
-
-  else
-    return st;
+  if (!separateHydjetComponents_){
+    if (st <= 0)
+      return 0;
+    if (st <= 10)
+      return 1;
+    if (st <= 20)
+      return 2;
+    if (st <= 30)
+      return 3;
+  }
+  return st;
 }
 } // namespace
 
@@ -169,6 +171,8 @@ Hydjet2Hadronizer::Hydjet2Hadronizer(const edm::ParameterSet &pset, edm::Consume
     src_ = iC.consumes<CrossingFrame<edm::HepMCProduct>>(
         pset.getUntrackedParameter<edm::InputTag>("backgroundLabel", edm::InputTag("mix", "generatorSmeared")));
   }
+  
+  separateHydjetComponents_ = pset.getUntrackedParameter<bool>("separateHydjetComponents", false);
 }
 //__________________________________________________________________________________________
 Hydjet2Hadronizer::~Hydjet2Hadronizer() {
@@ -460,10 +464,10 @@ bool Hydjet2Hadronizer::get_particles(HepMC::GenEvent *evt) {
 									   (hj2->GetPz()).at(index),    // pz
 									   (hj2->GetE()).at(index)),    // E
 									   (hj2->GetPdg()).at(index),   // id
-									   convertStatusForComponents(
+									   convertStatus(convertStatusForComponents(
 											(hj2->GetFinal()).at(index), 
 											(hj2->GetType()).at(index)
-									   ) // status
+									   )) // status
 	  );
 
 	  p->suggest_barcode(barcode);

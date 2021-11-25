@@ -103,6 +103,7 @@ private:
   Pythia6Service *pythia6Service_;
   edm::EDGetTokenT<CrossingFrame<edm::HepMCProduct>> src_;
 };
+
 double Hydjet2Hadronizer::nuclear_radius() const {
   // Return the nuclear radius derived from the
   // beam/target atomic mass number.

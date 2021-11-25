@@ -833,11 +833,6 @@ void Hydjet2Analyzer::beginJob() {
 
   if (doHistos_) {
     if (userHistos_) {
-      cout << "---------------------------------------------------------------INPUT------------------------------------"
-              "-------------------------------"
-           << endl;
-      cout << "etaCut for pT = " << downTetaCut_ << " - " << upTetaCut_ << endl;
-
       //pt
       uhpt = new TH1D("uhpt", "uhpt", nintPt, ptBins);
       uhptj = new TH1D("uhptj", "uhptj", nintPt, ptBins);

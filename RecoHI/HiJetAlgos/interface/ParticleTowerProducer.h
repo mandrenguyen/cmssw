@@ -39,15 +39,17 @@ class ParticleTowerProducer : public edm::EDProducer {
   //  uint32_t denseIndex(int ieta, int iphi, double eta) const;
   int eta2ieta(double eta) const;
   int phi2iphi(double phi, int ieta) const;
-  
+  double ieta2eta(int ieta) const;
+  double iphi2phi(int iphi, int ieta) const;
   // ----------member data ---------------------------
 
   edm::EDGetTokenT<reco::PFCandidateCollection> src_;
   bool useHF_;
   
-  std::map<DetId,double> towers_;
-  
-  
+  typedef std::pair<int,int> EtaPhi;
+  typedef std::map<EtaPhi,double> EtaPhiMap;
+  EtaPhiMap towers_;
+
   double PI;
   TRandom* random_;
   
@@ -57,7 +59,7 @@ class ParticleTowerProducer : public edm::EDProducer {
   static const double etatow[];
   static const double etacent[];
   double etaedge[42];
-  
+  static constexpr int ietaMax = 42;  
   
  
   

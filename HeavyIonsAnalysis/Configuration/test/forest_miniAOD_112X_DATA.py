@@ -146,20 +146,20 @@ process.forest = cms.Path(
 
 #customisation
 
-addR3Jets = False
-addR4Jets = True
+addR2Jets = True
+addR4Jets = False
 
-if addR3Jets or addR4Jets :
+if addR2Jets or addR4Jets :
     process.load("HeavyIonsAnalysis.JetAnalysis.extraJets_cff")
     from HeavyIonsAnalysis.JetAnalysis.clusterJetsFromMiniAOD_cff import setupHeavyIonJets
 
-    if addR3Jets :
-        process.jetsR3 = cms.Sequence()
-        setupHeavyIonJets('akCs3PF', process.jetsR3, process, isMC = 0, radius = 0.30, JECTag = 'AK3PF')
-        process.akCs3PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
+    if addR2Jets :
+        process.jetsR2 = cms.Sequence()
+        setupHeavyIonJets('akCs2PF', process.jetsR2, process, isMC = 0, radius = 0.20, JECTag = 'AK2PF')
+        process.akCs2PFpatJetCorrFactors.levels = ['L2Relative', 'L2L3Residual']
         process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
-        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs3PFpatJets", jetName = 'akCs3PF')
-        process.forest += process.extraJetsData * process.jetsR3 * process.akCs3PFJetAnalyzer
+        process.akCs2PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs2PFpatJets", jetName = 'akCs2PF')
+        process.forest += process.extraJetsData * process.jetsR2 #* process.akCs2PFJetAnalyzer
 
     if addR4Jets :
         # Recluster using an alias "0" in order not to get mixed up with the default AK4 collections
@@ -170,6 +170,13 @@ if addR3Jets or addR4Jets :
         process.akCs4PFJetAnalyzer.jetTag = 'akCs0PFpatJets'
         process.akCs4PFJetAnalyzer.jetName = 'akCs0PF'
         process.forest += process.extraJetsData * process.jetsR4 * process.akCs4PFJetAnalyzer
+
+
+process.load("RecoHI.HiJetAlgos.dynGroomedPFJets_cfi")
+process.dynGroomedPFJets.jetSrc = 'akCs2PFJets'
+process.jetsR2 += process.dynGroomedPFJets * process.akCs2PFJetAnalyzer
+
+
 
 # this is only for non-reclustered jets
 addCandidateTagging = False

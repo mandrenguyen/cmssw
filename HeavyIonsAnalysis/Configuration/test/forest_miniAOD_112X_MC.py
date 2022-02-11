@@ -26,7 +26,8 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 112X, mc")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/m/mnguyen/public/integration/CMSSW_11_2_4_patch4/src/step3_inMINIAODSIM.root'
+        #'file:/afs/cern.ch/work/m/mnguyen/public/integration/CMSSW_11_2_4_patch4/src/step3_inMINIAODSIM.root'
+        'file:./step3_inMINIAODSIM.root'
     ),
 )
 
@@ -142,20 +143,20 @@ process.forest = cms.Path(
 
 #customisation
 
-addR3Jets = False
-addR4Jets = True
+addR2Jets = True
+addR4Jets = False
 
-if addR3Jets or addR4Jets :
+if addR2Jets or addR4Jets :
     process.load("HeavyIonsAnalysis.JetAnalysis.extraJets_cff")
     from HeavyIonsAnalysis.JetAnalysis.clusterJetsFromMiniAOD_cff import setupHeavyIonJets
 
-    if addR3Jets :
-        process.jetsR3 = cms.Sequence()
-        setupHeavyIonJets('akCs3PF', process.jetsR3, process, isMC = 1, radius = 0.30, JECTag = 'AK3PF')
-        process.akCs3PFpatJetCorrFactors.levels = ['L2Relative', 'L3Absolute']
+    if addR2Jets :
+        process.jetsR2 = cms.Sequence()
+        setupHeavyIonJets('akCs2PF', process.jetsR2, process, isMC = 1, radius = 0.20, JECTag = 'AK2PF')
+        process.akCs2PFpatJetCorrFactors.levels = ['L2Relative', 'L3Absolute']
         process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
-        process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs3PFpatJets", jetName = 'akCs3PF', genjetTag = "ak3GenJetsNoNu")      
-        process.forest += process.extraJetsMC * process.jetsR3 * process.akCs3PFJetAnalyzer
+        process.akCs2PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(jetTag = "akCs2PFpatJets", jetName = 'akCs2PF', genjetTag = "ak2GenJetsNoNu")      
+        process.forest += process.extraJetsMC * process.jetsR2 #* process.akCs2PFJetAnalyzer
 
     if addR4Jets :
         # Recluster using an alias "0" in order not to get mixed up with the default AK4 collections
@@ -167,6 +168,12 @@ if addR3Jets or addR4Jets :
         process.akCs4PFJetAnalyzer.jetName = 'akCs0PF'
         process.forest += process.extraJetsMC * process.jetsR4 * process.akCs4PFJetAnalyzer
 
+
+process.load("RecoHI.HiJetAlgos.dynGroomedPFJets_cfi")
+process.dynGroomedPFJets.jetSrc = 'akCs2PFJets'
+process.load("RecoHI.HiJetAlgos.dynGroomedGenJets_cfi")
+process.dynGroomedGenJets.jetSrc = 'ak2GenJetsNoNu'
+process.jetsR2 += process.dynGroomedGenJets * process.dynGroomedPFJets * process.akCs2PFJetAnalyzer
 
 
 addCandidateTagging = False

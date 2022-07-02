@@ -61,7 +61,7 @@ from RecoTracker.TkTrackingRegions.globalTrackingRegionWithVertices_cff import g
 (pp_on_XeXe_2017 | pp_on_AA).toReplaceWith(detachedTripletStepTrackingRegions, 
                 _globalTrackingRegionWithVertices.clone(RegionPSet=dict(
                     fixedError   = 2.5,
-                    ptMin        = 0.9,
+                    ptMin        = 0.7,
                     originRadius = 1.5)
                 )
 )
@@ -155,7 +155,7 @@ trackingLowPU.toReplaceWith(detachedTripletStepTrajectoryFilterBase, _detachedTr
     constantValueForLostHitsFractionFilter = 0.701,
 ))
 
-(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedTripletStepTrajectoryFilterBase, minPt=0.9)
+(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedTripletStepTrajectoryFilterBase, minPt=0.7)
 
 import RecoPixelVertexing.PixelLowPtUtilities.StripSubClusterShapeTrajectoryFilter_cfi
 detachedTripletStepTrajectoryFilterShape = RecoPixelVertexing.PixelLowPtUtilities.StripSubClusterShapeTrajectoryFilter_cfi.StripSubClusterShapeTrajectoryFilterTIX12.clone()
@@ -242,7 +242,7 @@ trackingMkFitDetachedTripletStep.toReplaceWith(detachedTripletStepTrackCandidate
     mkFitSeeds = 'detachedTripletStepTrackCandidatesMkFitSeeds',
     tracks = 'detachedTripletStepTrackCandidatesMkFit',
 ))
-(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedTripletStepTrackCandidatesMkFitConfig, minPt=0.9)
+(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedTripletStepTrackCandidatesMkFitConfig, minPt=0.7)
 
 import FastSimulation.Tracking.TrackCandidateProducer_cfi
 _fastSim_detachedTripletStepTrackCandidates = FastSimulation.Tracking.TrackCandidateProducer_cfi.trackCandidateProducer.clone(

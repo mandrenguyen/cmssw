@@ -46,7 +46,7 @@ from RecoTracker.TkTrackingRegions.globalTrackingRegionWithVertices_cff import g
 (pp_on_XeXe_2017 | pp_on_AA).toReplaceWith(detachedQuadStepTrackingRegions, 
                 _globalTrackingRegionWithVertices.clone(RegionPSet=dict(
                     fixedError   = 3.75,
-                    ptMin        = 0.9,
+                    ptMin        = 0.7,
                     originRadius = 1.5
                 )
                                                                       )
@@ -134,7 +134,7 @@ trackingPhase2PU140.toModify(detachedQuadStepTrajectoryFilter,
     filters = detachedQuadStepTrajectoryFilter.filters.value()+[cms.PSet(refToPSet_ = cms.string('ClusterShapeTrajectoryFilter'))]
 )
 
-(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedQuadStepTrajectoryFilterBase, minPt=0.9)
+(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedQuadStepTrajectoryFilterBase, minPt=0.7)
 
 import RecoTracker.MeasurementDet.Chi2ChargeMeasurementEstimator_cfi
 detachedQuadStepChi2Est = RecoTracker.MeasurementDet.Chi2ChargeMeasurementEstimator_cfi.Chi2ChargeMeasurementEstimator.clone(
@@ -212,7 +212,7 @@ trackingMkFitDetachedQuadStep.toReplaceWith(detachedQuadStepTrackCandidates, mkF
     mkFitSeeds = 'detachedQuadStepTrackCandidatesMkFitSeeds',
     tracks = 'detachedQuadStepTrackCandidatesMkFit',
 ))
-(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedQuadStepTrackCandidatesMkFitConfig, minPt=0.9)
+(pp_on_XeXe_2017 | pp_on_AA).toModify(detachedQuadStepTrackCandidatesMkFitConfig, minPt=0.7)
 
 #For FastSim phase1 tracking 
 import FastSimulation.Tracking.TrackCandidateProducer_cfi

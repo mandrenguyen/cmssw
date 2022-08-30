@@ -361,8 +361,6 @@ void TrackListMerger::produce(edm::Event& e, const edm::EventSetup& es) {
     return;
   }
 
-  statCount.begin(rSize);
-
   //
   //  quality cuts first
   //
@@ -446,6 +444,13 @@ void TrackListMerger::produce(edm::Event& e, const edm::EventSetup& es) {
     }    //end more than 0 track
   }      // loop over trackcolls
 
+  if (ngood == 0) {
+    // output empty collections and early return
+    this->returnEmptyCollections(e);
+    return;
+  }
+
+  statCount.begin(rSize);
   statCount.pre(ngood);
 
   //cache the id and rechits of valid hits

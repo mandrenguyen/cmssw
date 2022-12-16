@@ -1,0 +1,57 @@
+the following are test run results (using the recommended setting) on svmit2.
+
+pp B Double Mu
+evt: 20000/82718
+size: 20MB
+real    19m39.898s
+user    12m46.033s
+sys 2m9.920s
+
+pp D HeavyFlavor
+evt: 20000/99983
+size: 29MB
+real	15m41.314s
+user	15m24.070s
+sys	0m6.093s
+
+pp D MB
+evt: 20000/98927
+size: 7.8MB expected total output = 975G for 2500000000 events
+real	2m33.399s
+user	1m46.599s
+sys	0m4.106s
+
+PbPb B Double Mu
+evt: 500/2164
+size: 70M
+real    43m14.353s
+user    41m52.789s
+sys     0m30.825s
+
+PbPb D HardProbe
+evt: 2359/2359
+size: 3MB
+real	21m33.273s
+user	20m1.509s
+sys	1m6.064s
+
+PbPb D MB
+evt: 10000/35087
+size: 40MB, expected total output = 800G for 200000000 events
+real    41m21.648s
+user    41m5.765s
+sys     0m10.680s
+
+PbPb B MC
+evt: 360
+size: 47MB
+real	20m29.188s
+user	19m41.802s
+sys	0m13.771s
+
+PbPb D* MC
+evt: 200
+size: 0.7MB
+real	3m18.188s
+user	2m53.022s
+sys	0m9.140s

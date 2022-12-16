@@ -65,6 +65,9 @@ InputGenJetsParticleSelector::InputGenJetsParticleSelector(const edm::ParameterS
     partonicFinalState = false;
   }
 
+  storeJMM = params.getUntrackedParameter<bool>("storeJMM", false);
+  storeDKPi = params.getUntrackedParameter<bool>("storeDKPi", false);
+
   produces <reco::CandidatePtrVector> ();
 
   input_genpartcoll_token_ = consumes<reco::CandidateView>(inTag);
@@ -227,12 +230,74 @@ InputGenJetsParticleSelector::fromResonance(ParticleBitmap &invalid,
 return kNo;
 }
 
-    
+
 bool InputGenJetsParticleSelector::hasPartonChildren(ParticleBitmap &invalid,
 						     const ParticleVector &p,
 						     const reco::Candidate *particle) const {
   return testPartonChildren(invalid, p, particle) > 0;
 }
+
+bool InputGenJetsParticleSelector::isJMM(const reco::Candidate *particle) const
+{
+
+  if(abs(particle->pdgId())!=443) return false;
+  //if(particle->numberOfDaughters()!=2) return false;                                                                                                                               
+  bool foundMuP = false;
+  bool foundMuM = false;
+  for(unsigned int i = 0; i<particle->numberOfDaughters(); i++){
+    if(particle->daughter(i)->pdgId()==13) foundMuP = true;
+    else if(particle->daughter(i)->pdgId()==-13) foundMuM = true;
+  }
+  if(!foundMuP||!foundMuM) return false;
+  return true;
+}
+
+
+bool InputGenJetsParticleSelector::isFromJMM(const reco::Candidate *particle) const
+{
+
+  if(abs(particle->pdgId())!=13) return false;
+  //int nMom = particle->numberOfMothers();                                                                                                                                          
+  //cout<<" nMom "<<nMom<<"mother nDaug "<<particle->mother(0)->numberOfDaughters()<<endl;                                                                                           
+  //cout<<" mom pdg "<<particle->mother(0)->pdgId()<<endl;                                                                                                                           
+  //if(nMom!=1) return false;                                                                                                                                                        
+  //if(particle->mother(0)->numberOfDaughters()!=2) return false;                                                                                                                    
+  if(abs(particle->mother(0)->pdgId())==443){
+    //cout<<" found a muon from j/psi "<<endl;                                                                                                                                       
+    return true;
+  }
+  else return isFromJMM(particle->mother(0));
+
+  return false;
+}
+
+bool InputGenJetsParticleSelector::isDKPi(const reco::Candidate *particle) const
+{
+
+  if(abs(particle->pdgId())!=421) return false;
+  if(particle->numberOfDaughters()!=2) return false;
+  int pidDau1 = abs(particle->daughter(0)->pdgId());
+  int pidDau2 = abs(particle->daughter(1)->pdgId());
+
+  if( !(pidDau1 == 321 || pidDau2 == 321) ) return false;
+  if( !(pidDau1 == 211 || pidDau2 == 211) ) return false;
+
+  return true;
+}
+
+bool InputGenJetsParticleSelector::isFromDKPi(const reco::Candidate *particle) const
+{
+
+  if(abs(particle->pdgId())!=211 && abs(particle->pdgId())!=321) return false;
+  int nMom = particle->numberOfMothers();
+  if(nMom!=1) return false;
+  if(particle->mother(0)->numberOfDaughters()!=2) return false;
+
+  if(abs(particle->mother(0)->pdgId())==421) return true;
+
+  return false;
+}
+
     
 //######################################################
 //function NEEDED and called per EVENT by FRAMEWORK:
@@ -271,14 +336,30 @@ void InputGenJetsParticleSelector::produce (edm::StreamID, edm::Event &evt, cons
   ParticleBitmap selected(size, false);
   ParticleBitmap invalid(size, false);
 
+  int nJPsi = 0;
+  int nD = 0;
   for(unsigned int i = 0; i < size; i++) {
     const reco::Candidate *particle = particles[i];
+    //const reco::Candidate& particle = *particles[i];
+
     if (invalid[i])
       continue;
-    if (particle->status() == 1) // selecting stable particles
+    if (particle->status() == 1){ // selecting stable particles
+      if(storeJMM && isFromJMM(particle)) continue;
+      if(storeDKPi && isFromDKPi(particle)) continue;
       selected[i] = true;
+    }  
+    else if(storeJMM && isJMM(particle)){
+      selected[i] = true;
+      nJPsi++;      
+    }
+    else if(storeDKPi && isDKPi(particle)){
+      selected[i] = true;
+      nD++;
+    }
+    
     if (partonicFinalState && isParton(particle->pdgId())) {
-	  
+      
       if (particle->numberOfDaughters()==0 &&
 	  particle->status() != 1) {
 	// some brokenness in event...
@@ -294,6 +375,7 @@ void InputGenJetsParticleSelector::produce (edm::StreamID, edm::Event &evt, cons
   }
 
   for(size_t idx = 0; idx < size; ++idx){ 
+    //const reco::Candidate& particle = *particles[idx];
     const reco::Candidate *particle = particles[idx];
     if (!selected[idx] || invalid[idx]){
       continue;

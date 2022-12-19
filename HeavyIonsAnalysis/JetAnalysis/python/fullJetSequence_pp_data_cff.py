@@ -13,7 +13,7 @@ jetSequence = cms.Sequence(
     # ak4CaloJets +
 
     ak3PFJets +
-    # ak4PFJets +
+    ak4PFJets +
 
     highPurityTracks +
 

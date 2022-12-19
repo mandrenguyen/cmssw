@@ -14,7 +14,7 @@ genJetSequence = cms.Sequence(
     genParticlesForJets +
 
     ak3GenJets +
-    # ak4GenJets +
+    ak4GenJets +
 
     ak3GenNjettiness +
     ak4GenNjettiness
@@ -24,7 +24,7 @@ jetSequence = cms.Sequence(
     # ak4CaloJets +
 
     ak3PFJets +
-    # ak4PFJets +
+     ak4PFJets +
 
     highPurityTracks +
 

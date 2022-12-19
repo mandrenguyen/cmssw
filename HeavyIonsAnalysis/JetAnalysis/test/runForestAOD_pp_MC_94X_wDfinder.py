@@ -146,6 +146,30 @@ for idmod in my_id_modules:
     setupAllVIDIdsInModule(process,idmod,setupVIDElectronSelection)
 
 #####################################################################################
+#################### D/B finder ################# 
+AddCaloMuon = False 
+runOnMC = True ## !!
+HIFormat = False 
+UseGenPlusSim = False 
+VtxLabel = "offlinePrimaryVerticesWithBS" 
+TrkLabel = "generalTracks" 
+useL1Stage2 = True
+HLTProName = "HLT"
+from Bfinder.finderMaker.finderMaker_75X_cff import finderMaker_75X 
+finderMaker_75X(process, AddCaloMuon, runOnMC, HIFormat, UseGenPlusSim, VtxLabel, TrkLabel, useL1Stage2, HLTProName)
+process.Dfinder.MVAMapLabel = cms.InputTag(TrkLabel,"MVAValues")
+process.Dfinder.makeDntuple = cms.bool(True)
+process.Dfinder.tkPtCut = cms.double(0.5) # before fit
+process.Dfinder.tkEtaCut = cms.double(2.5) # before fit
+process.Dfinder.dPtCut = cms.vdouble(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0) # before fit
+process.Dfinder.VtxChiProbCut = cms.vdouble(0.05, 0.05, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05)
+process.Dfinder.dCutSeparating_PtVal = cms.vdouble(5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.)
+process.Dfinder.tktkRes_svpvDistanceCut_lowptD = cms.vdouble(0., 0., 0., 0., 0., 0., 0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0.)
+process.Dfinder.tktkRes_svpvDistanceCut_highptD = cms.vdouble(0., 0., 0., 0., 0., 0., 0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0.)
+process.Dfinder.svpvDistanceCut_lowptD = cms.vdouble(0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0., 0., 0., 0., 0., 2.5, 2.5)
+process.Dfinder.svpvDistanceCut_highptD = cms.vdouble(0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0., 0., 0., 0., 0., 2.5, 2.5)
+process.Dfinder.Dchannel = cms.vint32(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+process.Dfinder.printInfo = False
 
 #########################
 # Main analysis list
@@ -157,6 +181,7 @@ process.ana_step = cms.Path(
     #process.hltobject +
     # process.l1object +
     #process.HiGenParticleAna*
+    process.DfinderSequence +
     process.genJetSequence +
     process.jetSequence +
     # Should be added in the path for VID module
@@ -211,34 +236,29 @@ process.pAna = cms.EndPath(process.skimanalysis)
 
 # Customization
 
+# Switch jet reco input to composites
+process.load("RecoHI.HiJetAlgos.PFCandCompositeProducer_cfi")
+process.pfCandComposites.compositeTag = cms.InputTag('Dfinder')
+process.pfCandComposites.removeDKPi = True
+process.ak4PFJets.src = 'pfCandComposites'
+process.jetSequence.insert(0,process.pfCandComposites)
+
+#filter out jets with a D candidate to reduce output size
+process.ak4PFXpatJets = cms.EDFilter("PatJetXSelector",
+                                     src = cms.InputTag("ak4PFpatJetsWithBtagging"),
+                                     cut = cms.string("pt > 10.0 && abs(rapidity()) < 2.4")
+                                     )
+
+process.ak4PFJetSequence.remove(process.ak4PFJetAnalyzer)
+process.ak4PFJetSequence*=process.ak4PFXpatJets
+process.ak4PFJetSequence*=process.ak4PFJetAnalyzer
+process.ak4PFJetAnalyzer.jetTag = "ak4PFXpatJets"
+
+
 #gen reclustring                                                                                                                                                                                                                                                                                                                                          
 process.genParticlesForJets.storeDKPi = cms.untracked.bool(True)
 
-#################### D/B finder ################# 
-AddCaloMuon = False 
-runOnMC = True ## !!
-HIFormat = False 
-UseGenPlusSim = False 
-VtxLabel = "offlinePrimaryVerticesWithBS" 
-TrkLabel = "generalTracks" 
-useL1Stage2 = True
-HLTProName = "HLT"
-from Bfinder.finderMaker.finderMaker_75X_cff import finderMaker_75X 
-finderMaker_75X(process, AddCaloMuon, runOnMC, HIFormat, UseGenPlusSim, VtxLabel, TrkLabel, useL1Stage2, HLTProName)
-process.Dfinder.MVAMapLabel = cms.InputTag(TrkLabel,"MVAValues")
-process.Dfinder.makeDntuple = cms.bool(True)
-process.Dfinder.tkPtCut = cms.double(0.5) # before fit
-process.Dfinder.tkEtaCut = cms.double(2.5) # before fit
-process.Dfinder.dPtCut = cms.vdouble(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0) # before fit
-process.Dfinder.VtxChiProbCut = cms.vdouble(0.05, 0.05, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.05)
-process.Dfinder.dCutSeparating_PtVal = cms.vdouble(5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.)
-process.Dfinder.tktkRes_svpvDistanceCut_lowptD = cms.vdouble(0., 0., 0., 0., 0., 0., 0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0.)
-process.Dfinder.tktkRes_svpvDistanceCut_highptD = cms.vdouble(0., 0., 0., 0., 0., 0., 0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0.)
-process.Dfinder.svpvDistanceCut_lowptD = cms.vdouble(0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0., 0., 0., 0., 0., 2.5, 2.5)
-process.Dfinder.svpvDistanceCut_highptD = cms.vdouble(0., 0., 2.5, 2.5, 2.5, 2.5, 2.5, 2.5, 0., 0., 0., 0., 0., 0., 2.5, 2.5)
-process.Dfinder.Dchannel = cms.vint32(1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
-process.dfinder = cms.Path(process.DfinderSequence)
 
 
 

@@ -5,13 +5,16 @@
 #include "Bfinder/Bfinder/interface/format.h"
 #include "Bfinder/Bfinder/interface/Dntuple.h"
 #include "Bfinder/Bfinder/interface/utilities.h"
+#include "DataFormats/PatCandidates/interface/CompositeCandidate.h"
+#include "CommonTools/Utils/interface/PtComparator.h"
+#include "FWCore/Framework/interface/EDProducer.h"
 //
 // class declaration
 //
 
 using namespace std;
 
-class Dfinder : public edm::EDAnalyzer
+class Dfinder : public edm::EDProducer
 {//{{{
     public:
         explicit Dfinder(const edm::ParameterSet&);
@@ -20,7 +23,8 @@ class Dfinder : public edm::EDAnalyzer
 
     private:
         virtual void beginJob() ;
-        virtual void analyze(const edm::Event&, const edm::EventSetup&);
+        virtual void produce(edm::Event&, const edm::EventSetup&);
+  //virtual void analyze(const edm::Event&, const edm::EventSetup&);
         virtual void endJob() ;
 
         virtual void beginRun(edm::Run const&, edm::EventSetup const&);
@@ -174,7 +178,8 @@ class Dfinder : public edm::EDAnalyzer
         std::vector<TH1F*> DMassCutLevel;
         // mva values
         std::vector<TH1F*> TMVADisVal;
-
+        GreaterByPt<pat::CompositeCandidate> pTComparator_;
+  
 };//}}}
 
 void Dfinder::beginJob()
@@ -285,6 +290,8 @@ Dfinder::Dfinder(const edm::ParameterSet& iConfig):theConfig(iConfig)
         TH1F* DMassCutLevel_temp      = fs->make<TH1F>(TString::Format("DMassCutLevel_i")   ,TString::Format("DMassCutLevel_i")  , 10, 0, 10);
         DMassCutLevel.push_back(DMassCutLevel_temp);
     }
+    produces<pat::CompositeCandidateCollection>();
+
 }//}}}
 
 Dfinder::~Dfinder()
@@ -298,7 +305,8 @@ Dfinder::~Dfinder()
 //
 
 // ------------ method called for each event  ------------
-void Dfinder::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+//void Dfinder::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+void Dfinder::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     //checking input parameter size
     if((Dchannel_.size() != dCutSeparating_PtVal_.size())
@@ -340,6 +348,11 @@ void Dfinder::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     //std::cout << "*************************\nReconstructing event number: " << iEvent.id() << "\n";
     using namespace edm;
     using namespace reco;
+
+    //std::auto_ptr<pat::CompositeCandidateCollection> d0Candidates(new pat::CompositeCandidateCollection);
+    std::unique_ptr<pat::CompositeCandidateCollection> d0Candidates(new pat::CompositeCandidateCollection);
+    typedef Candidate::PolarLorentzVector PolarLorentzVector;
+
     //ESHandle<MagneticField> bField;
     iSetup.get<IdealMagneticFieldRecord>().get(bField);
 
@@ -925,9 +938,28 @@ void Dfinder::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 					}    
 				}    
 
+				
+				// write d0's in edm format.   Currently assumes that only d0 is being run                                                                                                                                               
+				auto outSize = DInfo.size;
+				
+				d0Candidates->reserve(outSize);
 
+				for(auto i = 0; i < outSize; i++){
 
+				  pat::CompositeCandidate myCand;
 
+				  PolarLorentzVector myD0(DInfo.pt[i],DInfo.eta[i],DInfo.phi[i],DInfo.mass[i]);
+				  myCand.setP4(myD0);
+				  myCand.setCharge(0);
+
+				  pat::GenericParticle track1 = input_tracks[ DInfo.rftk1_index[i] ];
+				  pat::GenericParticle track2 = input_tracks[ DInfo.rftk2_index[i] ];
+				  myCand.addDaughter(track1, "track1");
+				  myCand.addDaughter(track2, "track2");
+				  
+				  d0Candidates->push_back(myCand);
+				}
+		
                 if(printInfo_){
                     printf("D_counter: ");
                     for(unsigned int i = 0; i < Dchannel_.size(); i++){
@@ -1381,7 +1413,8 @@ void Dfinder::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
             Dntuple->makeDNtuple(isDchannel, Dtypesize, REAL, fillZeroCandEvt, doDntupleSkim_, &EvtInfo, &VtxInfo, &TrackInfo, &DInfo, &GenInfo, ntD1, ntD2, ntD3, ntD4, ntD5, ntD6, ntD7, ntD8);
             if(!REAL) Dntuple->fillDGenTree(ntGen, &GenInfo);
         }
-
+	std::sort(d0Candidates->begin(),d0Candidates->end(),pTComparator_);
+        iEvent.put(std::move(d0Candidates));
     }
 
     // ------------ method called once each job just after ending the event loop  ------------{{{

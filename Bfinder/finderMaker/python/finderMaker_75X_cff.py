@@ -198,7 +198,7 @@ def finderMaker_75X(process, AddCaloMuon = False, runOnMC = True, HIFormat = Fal
         readDedx = cms.bool(True),
 	)
 	### Set Dfinder option
-	process.Dfinder = cms.EDAnalyzer('Dfinder',
+	process.Dfinder = cms.EDProducer('Dfinder',
 		Dchannel 		= cms.vint32(
 	        1,#RECONSTRUCTION: K+pi- : D0bar
 	        1,#RECONSTRUCTION: K-pi+ : D0

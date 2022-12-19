@@ -293,8 +293,10 @@ bool InputGenJetsParticleSelector::isFromDKPi(const reco::Candidate *particle) c
   if(nMom!=1) return false;
   if(particle->mother(0)->numberOfDaughters()!=2) return false;
 
-  if(abs(particle->mother(0)->pdgId())==421) return true;
-
+  if(abs(particle->mother(0)->pdgId())==421){
+    //cout<<" is from a D "<<endl;
+    return true;
+  }
   return false;
 }
 
@@ -355,6 +357,7 @@ void InputGenJetsParticleSelector::produce (edm::StreamID, edm::Event &evt, cons
     }
     else if(storeDKPi && isDKPi(particle)){
       selected[i] = true;
+      //cout<<" found a D "<<endl;
       nD++;
     }
     

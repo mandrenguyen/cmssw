@@ -83,12 +83,13 @@ TriggerAnalyzer::TriggerAnalyzer(edm::ParameterSet const& conf)
   // open the tree file and initialize the tree
   edm::Service<TFileService> fs;
   t_ = fs->make<TTree>("HltTree", "");
-
+  /*
   t_->Branch("Event", &fEvent, "Event/l");
   t_->Branch("LumiBlock", &fLumiBlock, "LumiBlock/I");
   t_->Branch("Run", &fRun, "Run/I");
   t_->Branch("Bx", &fBx, "Bx/I");
   t_->Branch("Orbit", &fOrbit, "Orbit/I");
+  */
 }
 
 TriggerAnalyzer::~TriggerAnalyzer() {
@@ -130,20 +131,42 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
       int itdum = 0;
       for (auto const& dummy : hltdummies) {
         TString dummyname(dummy.data());
-        t_->Branch(dummyname, hltflag + itdum, dummyname + "/I");
-        t_->Branch(dummyname + "_Prescl", hltPrescl + itdum, dummyname + "_Prescl/I");
-        pathtoindex[dummy] = itdum;
-        ++itdum;
+        if(dummyname.Contains("HLT_HIL3Mu5Eta2p5_PuAK4CaloJet") || dummyname.Contains("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet") || dummyname.Contains("HLT_HIPuAK4CaloJet")
+           || dummyname.Contains("HLT_HIL3Mu3_NHitQ10_v") || dummyname.Contains("HLT_HIL3Mu5_NHitQ10_v") ||  dummyname.Contains("HLT_HIL3Mu7_NHitQ10_v") ){
+          if(dummyname.Contains("fwd", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("0p7", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("1p1", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("filter", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("centrality", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("csv", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("45_45", TString::kIgnoreCase)) continue; 
+
+	  t_->Branch(dummyname, hltflag + itdum, dummyname + "/I");
+	  t_->Branch(dummyname + "_Prescl", hltPrescl + itdum, dummyname + "_Prescl/I");
+	  pathtoindex[dummy] = itdum;
+	  ++itdum;
+	}
       }
 
       for (int itrig = 0; itrig != ntrigs; ++itrig) {
         const std::string& trigname = triggerNames.triggerName(itrig);
         if (pathtoindex.find(trigname) == pathtoindex.end()) {
           TString hltname = trigname;
-          t_->Branch(hltname, hltflag + itdum + itrig, hltname + "/I");
-          t_->Branch(hltname + "_Prescl", hltPrescl + itdum + itrig, hltname + "_Prescl/I");
-          pathtoindex[trigname] = itdum + itrig;
-        }
+	  if(hltname.Contains("HLT_HIL3Mu5Eta2p5_PuAK4CaloJet") || hltname.Contains("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet") || hltname.Contains("HLT_HIPuAK4CaloJet")
+	     || hltname.Contains("HLT_HIL3Mu3_NHitQ10_v") || hltname.Contains("HLT_HIL3Mu5_NHitQ10_v") ||  hltname.Contains("HLT_HIL3Mu7_NHitQ10_v") ){
+	    if(hltname.Contains("fwd", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("0p7", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("1p1", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("filter", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("centrality", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("csv", TString::kIgnoreCase)) continue;
+	    if(hltname.Contains("45_45", TString::kIgnoreCase)) continue; 
+	    
+	    t_->Branch(hltname, hltflag + itdum + itrig, hltname + "/I");
+	    t_->Branch(hltname + "_Prescl", hltPrescl + itdum + itrig, hltname + "_Prescl/I");
+	    pathtoindex[trigname] = itdum + itrig;
+	  }
+	}
       }
 
       HltEvtCnt++;
@@ -182,12 +205,21 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
       int itdum = 0;
       for (auto const& dummy : l1dummies) {
         TString dummyname(dummy.data());
-        t_->Branch(dummyname, l1flag + itdum, dummyname + "/I");
-        t_->Branch(dummyname + "_Prescl", l1Prescl + itdum, dummyname + "_Prescl/I");
-        pathtoindex[dummy] = itdum;
-        ++itdum;
+        if(dummyname.Contains("HLT_HIL3Mu5Eta2p5_PuAK4CaloJet") || dummyname.Contains("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet") || dummyname.Contains("HLT_HIPuAK4CaloJet")
+           || dummyname.Contains("HLT_HIL3Mu3_NHitQ10_v") || dummyname.Contains("HLT_HIL3Mu5_NHitQ10_v") ||  dummyname.Contains("HLT_HIL3Mu7_NHitQ10_v") ){
+          if(dummyname.Contains("fwd", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("0p7", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("1p1", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("filter", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("centrality", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("csv", TString::kIgnoreCase)) continue;
+          if(dummyname.Contains("45_45", TString::kIgnoreCase)) continue;       
+	  t_->Branch(dummyname, l1flag + itdum, dummyname + "/I");
+	  t_->Branch(dummyname + "_Prescl", l1Prescl + itdum, dummyname + "_Prescl/I");
+	  pathtoindex[dummy] = itdum;
+	  ++itdum;
+	}
       }
-
       int il1 = 0;
       // get the bit/name association
       for (auto const& keyval : menu->getAlgorithmMap()) {
@@ -195,10 +227,20 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
 
         if (pathtoindex.find(trigname) == pathtoindex.end()) {
           TString l1name = trigname;
-          t_->Branch(l1name, l1flag + itdum + il1, l1name + "/I");
-          t_->Branch(l1name + "_Prescl", l1Prescl + itdum + il1, l1name + "_Prescl/I");
-          pathtoindex[trigname] = itdum + il1;
-          ++il1;
+	  if(l1name.Contains("HLT_HIL3Mu5Eta2p5_PuAK4CaloJet") || l1name.Contains("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet") || l1name.Contains("HLT_HIPuAK4CaloJet")
+	     || l1name.Contains("HLT_HIL3Mu3_NHitQ10_v") || l1name.Contains("HLT_HIL3Mu5_NHitQ10_v") ||  l1name.Contains("HLT_HIL3Mu7_NHitQ10_v") ){
+	    if(l1name.Contains("fwd", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("0p7", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("1p1", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("filter", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("centrality", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("csv", TString::kIgnoreCase)) continue;
+	    if(l1name.Contains("45_45", TString::kIgnoreCase)) continue;
+	    t_->Branch(l1name, l1flag + itdum + il1, l1name + "/I");
+	    t_->Branch(l1name + "_Prescl", l1Prescl + itdum + il1, l1name + "_Prescl/I");
+	    pathtoindex[trigname] = itdum + il1;
+	    ++il1;
+	  }
         }
       }  // end algo Map
 

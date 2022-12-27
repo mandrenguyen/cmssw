@@ -67,14 +67,17 @@ process.GlobalTag.toGet.extend([
         connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
         ),
     ])
-
+print('\n\033[31m~*~ "using swapped HI JP calib! ~*~\033[0m\n')  
 process.GlobalTag.toGet.extend([
     cms.PSet(
         record = cms.string("BTagTrackProbability3DRcd"),
-        tag = cms.string("JPcalib_Data103X_2018PbPb_v1"),
+        #tag = cms.string("JPcalib_Data103X_2018PbPb_v1"),
+        tag = cms.string("JPcalib_MC103X_2018PbPb_v4"), 
         connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS"),
         )
     ])
+
+
 
 ###############################################################################
 
@@ -103,7 +106,15 @@ process.load('HeavyIonsAnalysis.EventAnalysis.hltobject_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 
 from HeavyIonsAnalysis.EventAnalysis.hltobject_cfi import trigger_list_data
-process.hltobject.triggerNames = trigger_list_data
+#process.hltobject.triggerNames = trigger_list_data
+process.hltobject.triggerNames = cms.vstring("HLT_HIL3Mu3_NHitQ10_v1","HLT_HIL3Mu5_NHitQ10_v1","HLT_HIL3Mu7_NHitQ10_v1")    
+process.hltobject.triggerNames += cms.vstring("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet40Eta2p1_v","HLT_HIL3Mu5Eta2p5_PuAK4CaloJet40Eta2p1_v")
+process.hltobject.triggerNames += cms.vstring("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet60Eta2p1_v","HLT_HIL3Mu5Eta2p5_PuAK4CaloJet60Eta2p1_v")
+process.hltobject.triggerNames += cms.vstring("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet80Eta2p1_v","HLT_HIL3Mu5Eta2p5_PuAK4CaloJet80Eta2p1_v")
+process.hltobject.triggerNames += cms.vstring("HLT_HIL3Mu3Eta2p5_PuAK4CaloJet100Eta2p1_v","HLT_HIL3Mu5Eta2p5_PuAK4CaloJet100Eta2p1_v")
+
+#process.hltobject.triggerNames = cms.vstring("HLT_HIPuAK4CaloJet100Eta5p1_v","HLT_HIPuAK4CaloJet80Eta5p1_v")
+#process.hltobject.triggerNames = cms.vstring("HLT_HIPuAK4CaloJet4Eta5p1_v","HLT_HIPuAK4CaloJet60Eta5p1_v")
 
 process.load('HeavyIonsAnalysis.EventAnalysis.particleFlowAnalyser_cfi')
 ################################
@@ -118,7 +129,9 @@ process.ggHiNtuplizer.electronSrc = "correctedElectrons"
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 ################################
 # jet reco sequence
-process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFJetSequence_pponPbPb_data_cff')
+process.load("HeavyIonsAnalysis.JetAnalysis.extraJets_cff")
+process.load('HeavyIonsAnalysis.JetAnalysis.akCs3PFMuonJetSequence_pponPbPb_data_cff')
+process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFMuonJetSequence_pponPbPb_data_cff')
 ################################
 # tracks
 process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
@@ -132,61 +145,20 @@ process.forest = cms.Path(
     process.HiForestInfo +
     process.hltanalysis +
     process.hltobject +
-    process.l1object +
-    process.trackSequencePbPb +
-    process.particleFlowAnalyser +
+    #process.l1object +
+    #process.trackSequencePbPb +
+    #process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
-    process.unpackedMuons +
-    process.correctedElectrons +
-    process.ggHiNtuplizer +
-    process.akCs4PFJetAnalyzer
+    #process.unpackedMuons +
+    #process.correctedElectrons +
+    #process.ggHiNtuplizer +
+    process.extraJetsData +
+    process.akCs3PFJetSequence +
+    process.akCs4PFJetSequence
+    #process.akCs4PFJetAnalyzer
     )
 
 #customisation
-
-addR3Jets = False
-
-if addR3Jets :
-    process.load("HeavyIonsAnalysis.JetAnalysis.extraJets_cff")
-    from HeavyIonsAnalysis.JetAnalysis.clusterJetsFromMiniAOD_cff import setupHeavyIonJets
-    setupHeavyIonJets('akCs3PF', process.extraJetsData, process, 0)
-    process.akCs3PFpatJetCorrFactors.levels = ['L2Relative','L2L3Residual']
-    process.akCs3PFJetAnalyzer = process.akCs4PFJetAnalyzer.clone(
-        jetTag = "akCs3PFpatJets",
-    )
-
-    process.forest += process.extraJetsData * process.akCs3PFJetAnalyzer
-
-
-
-
-addCandidateTagging = True
-
-if addCandidateTagging:
-    process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
-
-    from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
-    updateJetCollection(
-        process,
-        jetSource = cms.InputTag('slimmedJets'),
-        jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
-        btagDiscriminators = ['pfCombinedSecondaryVertexV2BJetTags', 'pfDeepCSVDiscriminatorsJetTags:BvsAll', 'pfDeepCSVDiscriminatorsJetTags:CvsB', 'pfDeepCSVDiscriminatorsJetTags:CvsL'], ## to add discriminators,
-        btagPrefix = 'TEST',
-    )
-
-    process.updatedPatJets.addJetCorrFactors = False
-    process.updatedPatJets.discriminatorSources = cms.VInputTag(
-        cms.InputTag('pfDeepCSVJetTags:probb'),
-        cms.InputTag('pfDeepCSVJetTags:probc'),
-        cms.InputTag('pfDeepCSVJetTags:probudsg'),
-        cms.InputTag('pfDeepCSVJetTags:probbb'),
-    )
-
-    process.akCs4PFJetAnalyzer.jetTag = "updatedPatJets"
-
-    process.forest.insert(1,process.candidateBtagging*process.updatedPatJets)
-
-    process.akCs4PFJetAnalyzer.addDeepCSV = True
 
 #########################
 # Event Selection -> add the needed filters here
@@ -198,3 +170,28 @@ process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
 process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
+
+
+from HLTrigger.HLTfilters.hltHighLevel_cfi import hltHighLevel
+process.hltfilter = hltHighLevel.clone(
+    HLTPaths = [
+        "HLT_HIL3Mu*_NHitQ10_v*",                                                                                                                           
+        "HLT_HIL3Mu*Eta2p5_PuAK4CaloJet*Eta2p1_v*",
+        #"HLT_HIPuAK4CaloJet*Eta5p1_v*",                                                                                                                           
+        #"HLT_HIPuAK4CaloJet100Eta5p1_v*",                                                                                                                        
+        #"HLT_HIPuAK4CaloJet80Eta5p1_v*",                                                                                                                        
+        #"HLT_HIPuAK4CaloJet60Eta5p1_v*",                                                                                                                      
+        #"HLT_HIPuAK4CaloJet40Eta5p1_v*",                                                                                                                         
+    ]
+)
+
+process.filterSequence = cms.Sequence(
+    process.hltfilter
+)
+
+process.superFilterPath = cms.Path(process.filterSequence)
+process.skimanalysis.superFilters = cms.vstring("superFilterPath")
+
+# filter all path with the production filter sequence                                                                                                               
+for path in process.paths:                                       
+    getattr(process, path)._seq = process.filterSequence * getattr(process,path)._seq 

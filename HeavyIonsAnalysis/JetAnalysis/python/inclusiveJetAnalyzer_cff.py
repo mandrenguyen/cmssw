@@ -28,4 +28,5 @@ inclusiveJetAnalyzer = cms.EDAnalyzer(
     doHiJetID = cms.untracked.bool(False),
     doStandardJetID = cms.untracked.bool(False),
     doSubEvent = cms.untracked.bool(False),
+    matchJets = cms.untracked.bool(False),
     )

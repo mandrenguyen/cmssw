@@ -25,11 +25,13 @@ public:
 private:
   void produce(edm::StreamID, edm::Event&, const edm::EventSetup&) const override;
 
-  edm::EDGetTokenT<edm::View<reco::GenParticle> > genParticleSrc_;
+  //edm::EDGetTokenT<edm::View<reco::GenParticle> > genParticleSrc_;
+  edm::EDGetTokenT<std::vector<reco::GenParticle> > genParticleSrc_;
 };
 
 HiSignalParticleProducer::HiSignalParticleProducer(const edm::ParameterSet& iConfig)
-    : genParticleSrc_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("src"))) {
+  //: genParticleSrc_(consumes<edm::View<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("src"))) {
+  : genParticleSrc_(consumes<std::vector<reco::GenParticle> >(iConfig.getParameter<edm::InputTag>("src"))) {
   std::string alias = (iConfig.getParameter<edm::InputTag>("src")).label();
   produces<reco::GenParticleCollection>().setBranchAlias(alias);
 }
@@ -37,12 +39,16 @@ HiSignalParticleProducer::HiSignalParticleProducer(const edm::ParameterSet& iCon
 void HiSignalParticleProducer::produce(edm::StreamID, edm::Event& iEvent, const edm::EventSetup&) const {
   auto signalGenParticles = std::make_unique<reco::GenParticleCollection>();
 
-  edm::Handle<edm::View<reco::GenParticle> > genParticles;
+  //edm::Handle<edm::View<reco::GenParticle> > genParticles;
+  edm::Handle<std::vector<reco::GenParticle> > genParticles;
   iEvent.getByToken(genParticleSrc_, genParticles);
+  std::cout<<" hello "<<std::endl;
 
   for (const reco::GenParticle& genParticle : *genParticles) {
+    std::cout<<" inside loop "<<std::endl;
     if (genParticle.collisionId() == 0) {
       signalGenParticles->push_back(genParticle);
+      std::cout<<" found one "<<std::endl;
     }
   }
 

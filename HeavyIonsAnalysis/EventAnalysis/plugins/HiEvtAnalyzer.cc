@@ -453,6 +453,7 @@ HiEvtAnalyzer::beginJob()
   // Centrality
   thi_->Branch("hiBin",&hiBin,"hiBin/I");
   thi_->Branch("hiHF",&hiHF,"hiHF/F");
+  /*
   thi_->Branch("hiHFplus",&hiHFplus,"hiHFplus/F");
   thi_->Branch("hiHFminus",&hiHFminus,"hiHFminus/F");
   thi_->Branch("hiHFECut",&hiHFECut,"hiHFECut/F");
@@ -474,13 +475,17 @@ HiEvtAnalyzer::beginJob()
   thi_->Branch("hiEB",&hiEB,"hiEB/F");
   thi_->Branch("hiEEplus",&hiEEplus,"hiEEplus/F");
   thi_->Branch("hiEEminus",&hiEEminus,"hiEEminus/F");
+  */
   thi_->Branch("hiNpix",&hiNpix,"hiNpix/I");
+  /*
   thi_->Branch("hiNpixPlus",&hiNpixPlus,"hiNpixPlus/I");
   thi_->Branch("hiNpixMinus",&hiNpixMinus,"hiNpixMinus/I");
   thi_->Branch("hiNpixelTracks",&hiNpixelTracks,"hiNpixelTracks/I");
   thi_->Branch("hiNpixelTracksPlus",&hiNpixelTracksPlus,"hiNpixelTracksPlus/I");
   thi_->Branch("hiNpixelTracksMinus",&hiNpixelTracksMinus,"hiNpixelTracksMinus/I");
+  */
   thi_->Branch("hiNtracks",&hiNtracks,"hiNtracks/I");
+  /*
   thi_->Branch("hiNtracksPtCut",&hiNtracksPtCut,"hiNtracksPtCut/I");
   thi_->Branch("hiNtracksEtaCut",&hiNtracksEtaCut,"hiNtracksEtaCut/I");
   thi_->Branch("hiNtracksEtaPtCut",&hiNtracksEtaPtCut,"hiNtracksEtaPtCut/I");
@@ -495,7 +500,7 @@ HiEvtAnalyzer::beginJob()
   thi_->Branch("numMinHFTower3",&numMinHFTower3,"numMinHFTower3/I");
   thi_->Branch("numMinHFTower4",&numMinHFTower4,"numMinHFTower4/I");
   thi_->Branch("numMinHFTower5",&numMinHFTower5,"numMinHFTower5/I");
-
+  */
 }
 
 // ------------ method called once each job just after ending the event loop  ------------

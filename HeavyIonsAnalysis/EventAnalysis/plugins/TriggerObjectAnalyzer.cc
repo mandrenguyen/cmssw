@@ -107,7 +107,7 @@ TriggerObjectAnalyzer::TriggerObjectAnalyzer(const edm::ParameterSet& ps)
     nt_[itrig]->Branch("pt",&(pt[itrig]));
     nt_[itrig]->Branch("eta",&(eta[itrig]));
     nt_[itrig]->Branch("phi",&(phi[itrig]));
-    nt_[itrig]->Branch("mass",&(mass[itrig]));
+    //nt_[itrig]->Branch("mass",&(mass[itrig]));
   }
 
 

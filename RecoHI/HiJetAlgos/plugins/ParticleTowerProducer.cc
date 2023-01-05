@@ -91,7 +91,7 @@ void ParticleTowerProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
 
 
   edm::Handle<reco::PFCandidateCollection> pfCandHandle;
-  //edm::Handle<edm::View<pat::PackedCandidate> > packedPFCandHandle;
+  edm::Handle<edm::View<pat::PackedCandidate> > packedPFCandHandle;
 
   bool isPF = iEvent.getByToken(src_, pfCandHandle);
   bool isPackedPF = iEvent.getByToken(srcPacked_, packedPFCandHandle);

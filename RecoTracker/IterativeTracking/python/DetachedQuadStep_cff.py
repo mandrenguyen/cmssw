@@ -242,7 +242,10 @@ detachedQuadStep = TrackMVAClassifierDetached.clone(
     src         = 'detachedQuadStepTracks',
     qualityCuts = [-0.5,0.0,0.5]
 )
-
+pp_on_AA.toModify(detachedQuadStep, 
+        mva         = dict(GBRForestLabel = 'HIMVASelectorDetachedQuadStep_Phase1'),
+        qualityCuts = [-0.2, 0.2, 0.5],
+)
 from RecoTracker.FinalTrackSelectors.trackTfClassifier_cfi import *
 from RecoTracker.FinalTrackSelectors.trackSelectionTf_cfi import *
 from RecoTracker.FinalTrackSelectors.trackSelectionTf_CKF_cfi import *
@@ -253,10 +256,7 @@ trackdnn.toReplaceWith(detachedQuadStep, trackTfClassifier.clone(
 
 
 highBetaStar_2018.toModify(detachedQuadStep,qualityCuts = [-0.7,0.0,0.5])
-pp_on_AA.toModify(detachedQuadStep, 
-        mva         = dict(GBRForestLabel = 'HIMVASelectorDetachedQuadStep_Phase1'),
-        qualityCuts = [-0.2, 0.2, 0.5],
-)
+
 
 fastSim.toModify(detachedQuadStep,vertices = 'firstStepPrimaryVerticesBeforeMixing')
 

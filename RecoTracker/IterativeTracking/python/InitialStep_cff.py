@@ -344,6 +344,11 @@ trackingPhase1.toReplaceWith(initialStep, initialStepClassifier1.clone(
      qualityCuts = [-0.95,-0.85,-0.75]
 ))
 
+pp_on_AA.toModify(initialStep, 
+        mva         = dict(GBRForestLabel = 'HIMVASelectorInitialStep_Phase1'),
+        qualityCuts = [-0.9, -0.5, 0.2],
+)
+
 from RecoTracker.FinalTrackSelectors.trackTfClassifier_cfi import *
 from RecoTracker.FinalTrackSelectors.trackSelectionTf_cfi import *
 from RecoTracker.FinalTrackSelectors.trackSelectionTf_CKF_cfi import *
@@ -354,11 +359,6 @@ trackdnn.toReplaceWith(initialStep, trackTfClassifier.clone(
 
 (trackdnn & fastSim).toModify(initialStep,vertices = 'firstStepPrimaryVerticesBeforeMixing')
 
-
-pp_on_AA.toModify(initialStep, 
-        mva         = dict(GBRForestLabel = 'HIMVASelectorInitialStep_Phase1'),
-        qualityCuts = [-0.9, -0.5, 0.2],
-)
 
 # For LowPU and Phase2PU140
 import RecoTracker.FinalTrackSelectors.multiTrackSelector_cfi

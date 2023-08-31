@@ -54,7 +54,7 @@ pdigi_valid_nogen=cms.Sequence(pdigiTask_nogen)
 
 from GeneratorInterface.HiGenCommon.HeavyIon_cff import *
 pdigiTask_hi = cms.Task(pdigiTask, heavyIon)
-pdigiTask_hi_nogen = cms.Task(pdigiTask_nogen, genJetMETTask, heavyIon)
+pdigiTask_hi_nogen = cms.Task(pdigiTask_nogen, genJetMETTask, heavyIon, tpPruningTask)
 pdigi_hi=cms.Sequence(pdigiTask_hi)
 pdigi_hi_nogen=cms.Sequence(pdigiTask_hi_nogen)
 

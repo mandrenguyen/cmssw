@@ -173,7 +173,6 @@ if addCandidateTagging:
             'pfParticleNetAK4JetTags:probuds', 'pfParticleNetAK4JetTags:probundef'],
     )
 
-
     process.pfParticleNetAK4TagInfosDeepFlavour = process.pfParticleNetAK4TagInfos.clone(
         jets = "updatedPatJetsDeepFlavour",
         pf_candidates = "packedPFCandidates",
@@ -184,16 +183,7 @@ if addCandidateTagging:
     )
     process.pfParticleNetAK4JetTagsDeepFlavour = process.pfParticleNetAK4JetTags.clone(src = "pfParticleNetAK4TagInfosDeepFlavour")
 
-    process.patJetCorrFactorsDeepFlavour.useRho= False
-    process.patJetCorrFactorsDeepFlavour.useNPV= False
-    process.patJetCorrFactorsDeepFlavour.payload = 'AK4PF'
-
-    process.patJetCorrFactorsTransientCorrectedDeepFlavour.levels = ['L2Relative','L3Absolute']
-    process.patJetCorrFactorsTransientCorrectedDeepFlavour.payload = 'AK4PF'
-    process.patJetCorrFactorsTransientCorrectedDeepFlavour.useNPV = False
-    process.patJetCorrFactorsTransientCorrectedDeepFlavour.useRho = False
-    
-    process.ak4PFJetAnalyzer.jetTag = "updatedPatJetsDeepFlavour"
+    process.ak4PFJetAnalyzer.jetTag = "selectedUpdatedPatJetsDeepFlavour"
 
     process.forest.insert(1,process.candidateBtagging*process.updatedPatJets*
                           process.patJetCorrFactorsDeepFlavour * process.updatedPatJetsDeepFlavour*

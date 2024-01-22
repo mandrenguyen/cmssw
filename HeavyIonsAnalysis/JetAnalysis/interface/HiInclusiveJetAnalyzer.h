@@ -259,6 +259,7 @@ private:
     float discr_csvV2[MAXJETS]={0};
     float discr_deepCSV[MAXJETS]={0};
     float discr_pfJP[MAXJETS]={0};
+    float discr_pnet[MAXJETS]={0};
     float discr_muByIp3[MAXJETS]={0};
     float discr_muByPt[MAXJETS]={0};
     float discr_prob[MAXJETS]={0};

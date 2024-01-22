@@ -268,6 +268,7 @@ void HiInclusiveJetAnalyzer::beginJob() {
   if(doCandidateBtagging_){
     t->Branch("discr_deepCSV", jets_.discr_deepCSV, "discr_deepCSV[nref]/F");
     t->Branch("discr_pfJP", jets_.discr_pfJP, "discr_pfJP[nref]/F");
+    t->Branch("discr_pnet", jets_.discr_pnet, "discr_pnet[nref]/F");
     }
   if (isMC_) {
     if (useHepMC_) {
@@ -406,6 +407,7 @@ void HiInclusiveJetAnalyzer::beginJob() {
   if (doCandidateBtagging_) {
     memset(jets_.discr_deepCSV, 0, MAXJETS * sizeof(float));
     memset(jets_.discr_pfJP, 0, MAXJETS * sizeof(float));
+    memset(jets_.discr_pnet, 0, MAXJETS * sizeof(float));
   }
 }
 
@@ -494,6 +496,7 @@ void HiInclusiveJetAnalyzer::analyze(const Event& iEvent, const EventSetup& iSet
     if (doCandidateBtagging_){
       jets_.discr_deepCSV[jets_.nref]=jet.bDiscriminator(deepCSVJetTags_);
       jets_.discr_pfJP[jets_.nref]=jet.bDiscriminator(pfJPJetTags_);
+      jets_.discr_pnet[jets_.nref]=jet.bDiscriminator("pfParticleNetAK4JetTags:probb");
     }
     if (doLegacyBtagging_) {
       jets_.discr_ssvHighEff[jets_.nref] = jet.bDiscriminator(simpleSVHighEffBJetTags_);

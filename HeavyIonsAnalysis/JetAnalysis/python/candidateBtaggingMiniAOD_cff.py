@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from RecoBTag.ImpactParameter.pfImpactParameterTagInfos_cfi import pfImpactParameterTagInfos
 pfImpactParameterTagInfos.jets = "slimmedJets"
 pfImpactParameterTagInfos.candidates = "packedPFCandidates"
-pfImpactParameterTagInfos.primaryVertex = "offlineSlimmedPrimaryVerticesRecovery"
+pfImpactParameterTagInfos.primaryVertex = "offlineSlimmedPrimaryVertices"
 from RecoBTag.SecondaryVertex.pfSecondaryVertexTagInfos_cfi import pfSecondaryVertexTagInfos
 # leave IVF workflow commented out for reference -matt
 #from RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff import inclusiveCandidateVertexFinder
@@ -33,5 +33,5 @@ candidateBtagging = cms.Sequence(
     #pfInclusiveSecondaryVertexFinderTagInfos +
     pfJetProbabilityBJetTags +
     pfDeepCSVTagInfos + 
-    pfDeepCSVJetTags
+    pfDeepCSVJetTags 
 )

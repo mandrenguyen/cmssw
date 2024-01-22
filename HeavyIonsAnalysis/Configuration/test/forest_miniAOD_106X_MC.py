@@ -23,7 +23,8 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 106X, mc")
 # input files
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
-                            fileNames = cms.untracked.vstring('/store/mc/RunIISummer19UL17MiniAOD/QCD_Pt_1400to1800_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/100000/BFAAC85A-F5C5-8843-8D2A-76A9E873E24B.root'),
+                            #fileNames = cms.untracked.vstring('/store/mc/RunIISummer19UL17MiniAOD/QCD_Pt_1400to1800_TuneCP5_13TeV_pythia8/MINIAODSIM/106X_mc2017_realistic_v6-v2/100000/BFAAC85A-F5C5-8843-8D2A-76A9E873E24B.root'),
+                            fileNames = cms.untracked.vstring('/store/user/mnguyen//Herwig_CH3_qcd_5TeV/Herwig_CH3_qcd_5TeV_MINI_v7/240110_112918/0009/mini_PAT_9097.root'),
                         )
 
 
@@ -133,7 +134,7 @@ process.forest = cms.Path(
 
 #customisation
 
-addCandidateTagging = False
+addCandidateTagging = True
 
 if addCandidateTagging:
     process.load("HeavyIonsAnalysis.JetAnalysis.candidateBtaggingMiniAOD_cff")
@@ -155,9 +156,53 @@ if addCandidateTagging:
         cms.InputTag('pfDeepCSVJetTags:probbb'),
     )
 
-    process.ak4PFJetAnalyzer.jetTag = "updatedPatJets"
+    # add in PNET
+    process.load("RecoBTag.ONNXRuntime.pfParticleNetAK4_cff")
 
-    process.forest.insert(1,process.candidateBtagging*process.updatedPatJets)
+    updateJetCollection(
+        process,
+        labelName = "DeepFlavour",
+        jetSource = cms.InputTag('updatedPatJets'),
+        pvSource = cms.InputTag('offlineSlimmedPrimaryVertices'),
+        svSource = cms.InputTag('slimmedSecondaryVertices'),
+        jetCorrections = ('AK4PFchs', cms.vstring(['L1FastJet', 'L2Relative', 'L3Absolute']), 'None'),
+        btagInfos = ['pfParticleNetAK4TagInfos'],
+        btagDiscriminators = [
+            'pfParticleNetAK4JetTags:probpu', 'pfParticleNetAK4JetTags:probb', 'pfParticleNetAK4JetTags:probg',
+            'pfParticleNetAK4JetTags:probcc', 'pfParticleNetAK4JetTags:probbb', 'pfParticleNetAK4JetTags:probc',
+            'pfParticleNetAK4JetTags:probuds', 'pfParticleNetAK4JetTags:probundef'],
+    )
+
+
+    process.pfParticleNetAK4TagInfosDeepFlavour = process.pfParticleNetAK4TagInfos.clone(
+        jets = "updatedPatJetsDeepFlavour",
+        pf_candidates = "packedPFCandidates",
+        puppi_value_map = '',
+        vertex_associator = "",
+        vertices = "offlineSlimmedPrimaryVertices",
+        secondary_vertices = 'slimmedSecondaryVertices',
+    )
+    process.pfParticleNetAK4JetTagsDeepFlavour = process.pfParticleNetAK4JetTags.clone(src = "pfParticleNetAK4TagInfosDeepFlavour")
+
+    process.patJetCorrFactorsDeepFlavour.useRho= False
+    process.patJetCorrFactorsDeepFlavour.useNPV= False
+    process.patJetCorrFactorsDeepFlavour.payload = 'AK4PF'
+
+    process.patJetCorrFactorsTransientCorrectedDeepFlavour.levels = ['L2Relative','L3Absolute']
+    process.patJetCorrFactorsTransientCorrectedDeepFlavour.payload = 'AK4PF'
+    process.patJetCorrFactorsTransientCorrectedDeepFlavour.useNPV = False
+    process.patJetCorrFactorsTransientCorrectedDeepFlavour.useRho = False
+    
+    process.ak4PFJetAnalyzer.jetTag = "updatedPatJetsDeepFlavour"
+
+    process.forest.insert(1,process.candidateBtagging*process.updatedPatJets*
+                          process.patJetCorrFactorsDeepFlavour * process.updatedPatJetsDeepFlavour*
+                          process.pfParticleNetAK4TagInfosDeepFlavour * process.pfParticleNetAK4JetTagsDeepFlavour*
+                          process.patJetCorrFactorsTransientCorrectedDeepFlavour*process.updatedPatJetsTransientCorrectedDeepFlavour*process.selectedUpdatedPatJetsDeepFlavour)
+
+    
+
+
 
 
 #########################

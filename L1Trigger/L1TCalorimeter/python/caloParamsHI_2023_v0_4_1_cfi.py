@@ -63,6 +63,9 @@ caloStage2Params = L1Trigger.L1TCalorimeter.caloParams_cfi.caloParams.clone(
     etSumCentralityUpper = [5.5, 37.0, 182.5, 502.5, 1244.0, 6000.0, 6000.0, 65535.0],
     etSumCentralityLower = [0.0,  5.0,  28.5, 148.0, 427.0, 4662.5, 4810.5, 65535.0],
 
+
+    zdcLUTFile              = cms.FileInPath("L1Trigger/L1TZDC/data/Run3Sept2023_v5_4.txt"),
+
     # Layer 1 SF
     layer1ECalScaleETBins = cms.vint32([3, 6, 9, 12, 15, 20, 25, 30, 35, 40, 45, 55, 70, 256]),
     layer1ECalScaleFactors = cms.vdouble([

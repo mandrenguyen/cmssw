@@ -14,17 +14,31 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 132X, mc")
 
 ###############################################################################
 
+
+
+
 # input files
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-        'root://eoscms.cern.ch//store/group/phys_heavyions/jviinika/PythiaHydjetRun3_5p36TeV_dijet_ptHat15_100kEvents_miniAOD_2023_08_30/PythiaHydjetDijetRun3/PythiaHydjetRun3_dijet_ptHat15_5p36TeV_miniAOD/230830_165931/0000/pythiaHydjet_miniAOD_11.root'
+        'file:/afs/cern.ch/user/n/ncrepet/work/public/root4Matt/cjet/reco_RAW2DIGI_L1Reco_RECO_PAT_inMINIAODSIM_gg2cc_10GevCut_bias.root'
     ),
+                            secondaryFileNames = cms.untracked.vstring(
+                                'file:/afs/cern.ch/user/n/ncrepet/work/public/root4Matt/cjet/digi_DIGI_L1_DIGI2RAW_HLT_PU_gg2cc_10GevCut_bias.root'
+                            ),
+                            dropDescendantsOfDroppedBranches=cms.untracked.bool(False),
+                            inputCommands = cms.untracked.vstring(
+                                'keep *',
+                                'drop *_hltGtStage2Digis_*_HLT',
+                                'drop *_gtStage2Digis_*_RECO',
+                            )
 )
+
+
 
 # number of events to process, set to -1 to process all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(20)
+    input = cms.untracked.int32(-1)
     )
 
 ###############################################################################
@@ -35,6 +49,48 @@ process.load('Configuration.StandardSequences.Services_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
+
+#for L1 ########################
+process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+process.load('Configuration.EventContent.EventContent_cff')
+process.load('SimGeneral.MixingModule.mixNoPU_cfi')
+process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.RawToDigi_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
+
+process.options = cms.untracked.PSet(
+    FailPath = cms.untracked.vstring(),
+    IgnoreCompletely = cms.untracked.vstring(),
+    Rethrow = cms.untracked.vstring(),
+    SkipEvent = cms.untracked.vstring(),
+    accelerators = cms.untracked.vstring('*'),
+    allowUnscheduled = cms.obsolete.untracked.bool,
+    canDeleteEarly = cms.untracked.vstring(),
+    deleteNonConsumedUnscheduledModules = cms.untracked.bool(True),
+    dumpOptions = cms.untracked.bool(False),
+    emptyRunLumiMode = cms.obsolete.untracked.string,
+    eventSetup = cms.untracked.PSet(
+        forceNumberOfConcurrentIOVs = cms.untracked.PSet(
+            allowAnyLabel_=cms.required.untracked.uint32
+        ),
+        numberOfConcurrentIOVs = cms.untracked.uint32(0)
+    ),
+    fileMode = cms.untracked.string('FULLMERGE'),
+    forceEventSetupCacheClearOnNewRun = cms.untracked.bool(False),
+    holdsReferencesToDeleteEarly = cms.untracked.VPSet(),
+    makeTriggerResults = cms.obsolete.untracked.bool,
+    modulesToIgnoreForDeleteEarly = cms.untracked.vstring(),
+    numberOfConcurrentLuminosityBlocks = cms.untracked.uint32(0),
+    numberOfConcurrentRuns = cms.untracked.uint32(1),
+    numberOfStreams = cms.untracked.uint32(0),
+    numberOfThreads = cms.untracked.uint32(1),
+    printDependencies = cms.untracked.bool(False),
+    sizeOfStackForThreadsInKB = cms.optional.untracked.uint32,
+    throwIfIllegalParameter = cms.untracked.bool(True),
+    wantSummary = cms.untracked.bool(False)
+)
+
+#END for L1 ########################
 
 
 from Configuration.AlCa.GlobalTag import GlobalTag
@@ -223,9 +279,69 @@ if addCandidateTagging:
 # Event Selection -> add the needed filters here
 #########################
 
+################ for L1
+
 process.load('HeavyIonsAnalysis.EventAnalysis.collisionEventSelection_cff')
 process.pclusterCompatibilityFilter = cms.Path(process.clusterCompatibilityFilter)
 process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
 process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
+
+
+process.raw2digi_step = cms.Path(process.RawToDigi)
+process.endjob_step = cms.EndPath(process.endOfProcess)
+
+# Schedule definition
+process.schedule = cms.Schedule(process.forest,process.raw2digi_step,process.endjob_step)
+from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
+associatePatAlgosToolsTask(process)
+
+#from Configuration.Applications.ConfigBuilder import MassReplaceInputTag
+#MassReplaceInputTag(process, new="rawDataMapperByLabel", old="rawDataCollector")
+
+# customisation of the process.                                                                                                                                                                                  
+
+# Automatic addition of the customisation function from L1Trigger.Configuration.customiseReEmul                                                                                                                  
+from L1Trigger.Configuration.customiseReEmul import L1TReEmulFromRAW
+
+#call to customisation function L1TReEmulFromRAW imported from L1Trigger.Configuration.customiseReEmul                                                                                                           
+process = L1TReEmulFromRAW(process)
+
+# Automatic addition of the customisation function from L1Trigger.L1TNtuples.customiseL1Ntuple                                                                                                                   
+from L1Trigger.L1TNtuples.customiseL1Ntuple import L1NtupleRAWEMU
+
+#call to customisation function L1NtupleRAWEMU imported from L1Trigger.L1TNtuples.customiseL1Ntuple                                                                                                              
+process = L1NtupleRAWEMU(process)
+
+# Automatic addition of the customisation function from L1Trigger.Configuration.customiseSettings                                                                                                                
+from L1Trigger.Configuration.customiseSettings import L1TSettingsToCaloParamsHI_2023_v0_4_2
+
+#call to customisation function L1TSettingsToCaloParamsHI_2023_v0_4_2 imported from L1Trigger.Configuration.customiseSettings                                                                                    
+process = L1TSettingsToCaloParamsHI_2023_v0_4_2(process)
+
+# Automatic addition of the customisation function from L1Trigger.Configuration.customiseUtils                                                                                                                   
+from L1Trigger.Configuration.customiseUtils import L1TGlobalMenuXML
+
+#call to customisation function L1TGlobalMenuXML imported from L1Trigger.Configuration.customiseUtils                                                                                                            
+process = L1TGlobalMenuXML(process)
+
+# End of customisation functions                                                                                                                                                                                 
+
+
+# Customisation from command line                                                                                                                                                                                
+
+# Add early deletion of temporary data products to reduce peak memory need                                                                                                                                       
+from Configuration.StandardSequences.earlyDeleteSettings_cff import customiseEarlyDelete
+process = customiseEarlyDelete(process)
+# End adding early deletion                                                                                                                                                                                      
+
+process.HFAdcana = cms.EDAnalyzer("HFAdcToGeV",
+    digiLabel = cms.untracked.InputTag("hcalDigis"),
+    minimized = cms.untracked.bool(True),
+    fillhf = cms.bool(False)
+)
+
+process.HFAdc = cms.Path(process.HFAdcana)
+process.schedule.append(process.HFAdc)
+

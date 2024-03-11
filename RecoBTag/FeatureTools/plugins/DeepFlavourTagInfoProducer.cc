@@ -78,6 +78,7 @@ private:
   const bool flip_;
 
   edm::EDGetTokenT<edm::View<reco::Jet>> jet_token_;
+  edm::EDGetTokenT<edm::View<reco::Jet>> unsubJet_token_;
   edm::EDGetTokenT<VertexCollection> vtx_token_;
   edm::EDGetTokenT<SVCollection> sv_token_;
   edm::EDGetTokenT<ShallowTagInfoCollection> shallow_tag_info_token_;
@@ -113,6 +114,7 @@ DeepFlavourTagInfoProducer::DeepFlavourTagInfoProducer(const edm::ParameterSet& 
       min_candidate_pt_(iConfig.getParameter<double>("min_candidate_pt")),
       flip_(iConfig.getParameter<bool>("flip")),
       jet_token_(consumes<edm::View<reco::Jet>>(iConfig.getParameter<edm::InputTag>("jets"))),
+      unsubJet_token_(consumes<edm::View<reco::Jet>>(iConfig.getParameter<edm::InputTag>("unsubJets"))),
       vtx_token_(consumes<VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
       sv_token_(consumes<SVCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices"))),
       shallow_tag_info_token_(
@@ -161,6 +163,7 @@ void DeepFlavourTagInfoProducer::fillDescriptions(edm::ConfigurationDescriptions
   desc.add<edm::InputTag>("puppi_value_map", edm::InputTag("puppi"));
   desc.add<edm::InputTag>("secondary_vertices", edm::InputTag("inclusiveCandidateSecondaryVertices"));
   desc.add<edm::InputTag>("jets", edm::InputTag("ak4PFJetsCHS"));
+  desc.add<edm::InputTag>("unsubJets", edm::InputTag("unsubPatJets"));
   desc.add<edm::InputTag>("candidates", edm::InputTag("packedPFCandidates"));
   desc.add<edm::InputTag>("vertex_associator", edm::InputTag("primaryVertexAssociation", "original"));
   desc.add<bool>("fallback_puppi_weight", false);
@@ -179,6 +182,9 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
 
   edm::Handle<edm::View<reco::Jet>> jets;
   iEvent.getByToken(jet_token_, jets);
+
+  edm::Handle<edm::View<reco::Jet>> unsubJets;
+  iEvent.getByToken(unsubJet_token_, unsubJets);
 
   edm::Handle<VertexCollection> vtxs;
   iEvent.getByToken(vtx_token_, vtxs);
@@ -206,24 +212,24 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
                         .getParameter<edm::ParameterSet>("trackSelection"))
                        .getParameter<double>("sip3dSigMax");
   }
-
+  //std::cout<<" 1 "<<std::endl;
   edm::Handle<edm::ValueMap<float>> puppi_value_map;
   if (use_puppi_value_map_) {
     iEvent.getByToken(puppi_value_map_token_, puppi_value_map);
   }
-
+  //std::cout<<" 2 "<<std::endl;
   edm::Handle<edm::ValueMap<int>> pvasq_value_map;
   edm::Handle<edm::Association<VertexCollection>> pvas;
   if (use_pvasq_value_map_) {
     iEvent.getByToken(pvasq_value_map_token_, pvasq_value_map);
     iEvent.getByToken(pvas_token_, pvas);
   }
-
+  //std::cout<<" 3 "<<std::endl;
   edm::ESHandle<TransientTrackBuilder> track_builder = iSetup.getHandle(track_builder_token_);
 
   std::vector<reco::TransientTrack> selectedTracks;
   std::vector<float> masses;
-
+  //std::cout<<" 4 "<<std::endl;
   if (run_deepVertex_)  //make a collection of selected transient tracks for deepvertex outside of the jet loop
   {
     for (typename edm::View<reco::Candidate>::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
@@ -247,6 +253,24 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
     const auto* pf_jet = dynamic_cast<const reco::PFJet*>(&jet);
     const auto* pat_jet = dynamic_cast<const pat::Jet*>(&jet);
     edm::RefToBase<reco::Jet> jet_ref(jets, jet_n);
+
+    float mDist = 999;
+    int mIdx = -1;
+    for (std::size_t unsubJet_n = 0; unsubJet_n < unsubJets->size(); unsubJet_n++) {
+      const auto &unsubJet = (*unsubJets)[unsubJet_n];
+      float mPhi = acos(cos(jet.phi()-unsubJet.phi()));
+      float mEta = jet.eta()-unsubJet.eta();
+      float mDr = mPhi*mPhi + mEta*mEta;
+      if(mDr < mDist){
+	mDist = mDr;
+	mIdx = unsubJet_n;
+      }
+    }
+    if(mIdx <0 ) continue;
+
+    const auto &unsubJet = (*unsubJets)[mIdx];
+    edm::RefToBase<reco::Jet> unsubJet_ref(unsubJets, mIdx);
+
     // TagInfoCollection not in an associative container so search for matchs
     const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
     edm::Ptr<reco::ShallowTagInfo> match;
@@ -266,7 +290,7 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
     if (match.isNonnull()) {
       tag_info = *match;
     }  // will be default values otherwise
-
+    //std::cout<<" 5 "<<std::endl;
     // fill basic jet features
     btagbtvdeep::JetConverter::jetToFeatures(jet, features.jet_features);
 
@@ -296,25 +320,30 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
         btagbtvdeep::svToFeatures(sv, pv, jet, sv_features, flip_);
       }
     }
-
+    //std::cout<<" 6 "<<std::endl;
     // stuff required for dealing with pf candidates
 
     std::vector<btagbtvdeep::SortingClass<size_t>> c_sorted, n_sorted;
 
     // to cache the TrackInfo
     std::map<unsigned int, btagbtvdeep::TrackInfoBuilder> trackinfos;
-
+    //std::cout<<" 7 "<<std::endl;
     // unsorted reference to sv
     const auto& svs_unsorted = *svs;
     // fill collection, from DeepTNtuples plus some styling
-    for (unsigned int i = 0; i < jet.numberOfDaughters(); i++) {
-      auto cand = jet.daughter(i);
+    //std::cout<<" number of daughters "<<jet.numberOfDaughters()<<std::endl;
+    for (unsigned int i = 0; i < unsubJet.numberOfDaughters(); i++) {
+      //std::cout<<" i "<<i<<std::endl;
+      auto cand = unsubJet.daughter(i);
+      //std::cout<<" got cand "<<std::endl;
       if (cand) {
+	//std::cout<<" cand valid "<<std::endl;
         // candidates under 950MeV (configurable) are not considered
         // might change if we use also white-listing
         if (cand->pt() < min_candidate_pt_)
           continue;
         if (cand->charge() != 0) {
+	  //std::cout<<" doing something "<<std::endl;
           auto& trackinfo = trackinfos.emplace(i, track_builder).first->second;
           trackinfo.buildTrackInfo(cand, jet_dir, jet_ref_track_dir, pv);
           c_sorted.emplace_back(
@@ -324,7 +353,7 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
         }
       }
     }
-
+    //std::cout<<" 8 "<<std::endl;
     // sort collections (open the black-box if you please)
     std::sort(c_sorted.begin(), c_sorted.end(), btagbtvdeep::SortingClass<std::size_t>::compareByABCInv);
     std::sort(n_sorted.begin(), n_sorted.end(), btagbtvdeep::SortingClass<std::size_t>::compareByABCInv);
@@ -340,10 +369,10 @@ void DeepFlavourTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSet
     features.c_pf_features.resize(c_sorted.size());
     features.n_pf_features.clear();
     features.n_pf_features.resize(n_sorted.size());
-
-    for (unsigned int i = 0; i < jet.numberOfDaughters(); i++) {
+    //std::cout<<" 9 "<<std::endl;
+    for (unsigned int i = 0; i < unsubJet.numberOfDaughters(); i++) {
       // get pointer and check that is correct
-      auto cand = dynamic_cast<const reco::Candidate*>(jet.daughter(i));
+      auto cand = dynamic_cast<const reco::Candidate*>(unsubJet.daughter(i));
       if (!cand)
         continue;
       // candidates under 950MeV are not considered

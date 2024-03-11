@@ -1,0 +1,257 @@
+DEBUG 2023-12-20 11:57:23.497 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2023-12-20 11:57:23.497 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2023-12-20 11:57:23.497 UTC: 	 Executing command: 'submit'
+DEBUG 2023-12-20 11:57:23.498 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2023-12-20 11:57:23.501 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2023-12-20 11:57:23.501 UTC: 	 Loading CRAB configuration file.
+DEBUG 2023-12-20 11:57:23.506 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2023-12-20 11:57:23.506 UTC: 	 Task requests 20000 MB of memory, above the allowed maximum of 5000 for a 1 core(s) job.
+
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2023-12-20 11:57:23.506 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 318, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 95, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Task requests 20000 MB of memory, above the allowed maximum of 5000 for a 1 core(s) job.
+
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+INFO 2023-12-20 11:57:23.548 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2023-12-20 11:57:52.839 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2023-12-20 11:57:52.840 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2023-12-20 11:57:52.840 UTC: 	 Executing command: 'submit'
+DEBUG 2023-12-20 11:57:52.841 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2023-12-20 11:57:52.843 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2023-12-20 11:57:52.843 UTC: 	 Loading CRAB configuration file.
+DEBUG 2023-12-20 11:57:52.848 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2023-12-20 11:57:52.849 UTC: 	 Invalid CRAB configuration: A local DBS instance 'phys03' was specified for reading an input dataset of tier MINIAODSIM.
+Datasets of tier different than USER must be read from the global DBS instance; this is, set Data.inputDBS = 'global'.
+If Data.inputDBS would not be specified, the default 'global' ('https://cmsweb.cern.ch/dbs/prod/global/DBSReader') would be used.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+ERROR 2023-12-20 11:57:52.849 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 318, in __init__
+    self.loadConfig(self.options.config, self.args)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 95, in loadConfig
+    raise ConfigurationException(configmsg)
+ConfigurationException: Invalid CRAB configuration: A local DBS instance 'phys03' was specified for reading an input dataset of tier MINIAODSIM.
+Datasets of tier different than USER must be read from the global DBS instance; this is, set Data.inputDBS = 'global'.
+If Data.inputDBS would not be specified, the default 'global' ('https://cmsweb.cern.ch/dbs/prod/global/DBSReader') would be used.
+The documentation about the CRAB configuration file can be found in https://twiki.cern.ch/twiki/bin/view/CMSPublic/CRAB3ConfigurationFile
+INFO 2023-12-20 11:57:52.854 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2023-12-20 12:22:37.412 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2023-12-20 12:22:37.412 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2023-12-20 12:22:37.412 UTC: 	 Executing command: 'submit'
+DEBUG 2023-12-20 12:22:37.413 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2023-12-20 12:22:37.415 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2023-12-20 12:22:37.415 UTC: 	 Loading CRAB configuration file.
+DEBUG 2023-12-20 12:22:37.420 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2023-12-20 12:22:37.420 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_Bjet_pThat15' already exists 
+Please change the requestName in the config file
+ERROR 2023-12-20 12:22:37.421 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 322, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_Bjet_pThat15' already exists 
+Please change the requestName in the config file
+INFO 2023-12-20 12:22:37.424 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2023-12-20 13:44:47.680 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2023-12-20 13:44:47.680 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2023-12-20 13:44:47.680 UTC: 	 Executing command: 'status'
+DEBUG 2023-12-20 13:44:47.680 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+ERROR 2023-12-20 13:44:47.709 UTC: 	 Cannot find .requestcache file in CRAB project directory /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_Bjet_pThat15
+ERROR 2023-12-20 13:44:47.709 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/status.py", line 48, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 277, in __init__
+    SubCommand.validateOptions(self)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 648, in validateOptions
+    self.loadLocalCache()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 510, in loadLocalCache
+    raise ex
+CachefileNotFoundException: Cannot find .requestcache file in CRAB project directory /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_Bjet_pThat15
+INFO 2023-12-20 13:44:47.713 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-01-26 07:03:24.654 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2024-01-26 07:03:24.654 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-01-26 07:03:24.654 UTC: 	 Executing command: 'submit'
+DEBUG 2024-01-26 07:03:24.655 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2024-01-26 07:03:24.679 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2024-01-26 07:03:24.679 UTC: 	 Loading CRAB configuration file.
+DEBUG 2024-01-26 07:03:24.683 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2024-01-26 07:03:24.683 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_PNET_bjet_pThat15' already exists 
+Please change the requestName in the config file
+ERROR 2024-01-26 07:03:24.684 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.00/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.00/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.00/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.00/lib/CRABClient/Commands/SubCommand.py", line 322, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.00/lib/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_PNET_bjet_pThat15' already exists 
+Please change the requestName in the config file
+INFO 2024-01-26 07:03:24.686 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-01-29 20:31:39.246 UTC: 	 CRAB Client version: v3.240110
+DEBUG 2024-01-29 20:31:39.247 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-01-29 20:31:39.247 UTC: 	 Executing command: 'submit'
+DEBUG 2024-01-29 20:31:39.247 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2024-01-29 20:31:39.250 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2024-01-29 20:31:39.250 UTC: 	 Loading CRAB configuration file.
+DEBUG 2024-01-29 20:31:39.252 UTC: 	 Will use CRAB plugin ANALYSIS (i.e. will run an analysis job type).
+ERROR 2024-01-29 20:31:39.253 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_signalJets_bjet_pThat15' already exists 
+Please change the requestName in the config file
+ERROR 2024-01-29 20:31:39.253 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.00/bin/crab.py", line 152, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.00/bin/crab.py", line 135, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.00/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.00/lib/CRABClient/Commands/SubCommand.py", line 329, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.00/lib/CRABClient/ClientUtilities.py", line 392, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_signalJets_bjet_pThat15' already exists 
+Please change the requestName in the config file
+INFO 2024-01-29 20:31:39.258 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-02-14 11:38:53.213 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2024-02-14 11:38:53.213 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-02-14 11:38:53.214 UTC: 	 Executing command: 'submit'
+DEBUG 2024-02-14 11:38:53.214 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2024-02-14 11:38:53.217 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2024-02-14 11:38:53.217 UTC: 	 Loading CRAB configuration file.
+DEBUG 2024-02-14 11:38:53.219 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2024-02-14 11:38:53.220 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+ERROR 2024-02-14 11:38:53.220 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/SubCommand.py", line 322, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+INFO 2024-02-14 11:38:53.225 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-02-15 12:45:17.326 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2024-02-15 12:45:17.327 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-02-15 12:45:17.327 UTC: 	 Executing command: 'submit'
+DEBUG 2024-02-15 12:45:17.328 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2024-02-15 12:45:17.329 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2024-02-15 12:45:17.329 UTC: 	 Loading CRAB configuration file.
+DEBUG 2024-02-15 12:45:17.334 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2024-02-15 12:45:17.335 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+ERROR 2024-02-15 12:45:17.335 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/SubCommand.py", line 322, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+INFO 2024-02-15 12:45:17.337 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-02-15 18:37:29.823 UTC: 	 CRAB Client version: v3.240110
+DEBUG 2024-02-15 18:37:29.824 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-02-15 18:37:29.824 UTC: 	 Executing command: 'status'
+DEBUG 2024-02-15 18:37:29.824 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+ERROR 2024-02-15 18:37:29.826 UTC: 	 Error: crab_projects/crab_DeepNtuples_bjet_pThat15 is not a valid CRAB project directory.
+ERROR 2024-02-15 18:37:29.826 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.01/bin/crab.py", line 152, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.01/bin/crab.py", line 135, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.01/lib/CRABClient/Commands/status.py", line 48, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.01/lib/CRABClient/Commands/SubCommand.py", line 280, in __init__
+    SubCommand.validateOptions(self)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-prod/v3.240110.01/lib/CRABClient/Commands/SubCommand.py", line 674, in validateOptions
+    raise ConfigurationException(msg)
+CRABClient.ClientExceptions.ConfigurationException: [91mError[0m: crab_projects/crab_DeepNtuples_bjet_pThat15 is not a valid CRAB project directory.
+INFO 2024-02-15 18:37:29.828 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-02-15 18:37:39.835 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2024-02-15 18:37:39.835 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-02-15 18:37:39.835 UTC: 	 Executing command: 'status'
+DEBUG 2024-02-15 18:37:39.836 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+ERROR 2024-02-15 18:37:39.838 UTC: 	 Error: crab_projects/crab_DeepNtuples_bjet_pThat15 is not a valid CRAB project directory.
+ERROR 2024-02-15 18:37:39.838 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/status.py", line 48, in __init__
+    SubCommand.__init__(self, logger, cmdargs)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/SubCommand.py", line 277, in __init__
+    SubCommand.validateOptions(self)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/SubCommand.py", line 644, in validateOptions
+    raise ConfigurationException(msg)
+ConfigurationException: [91mError[0m: crab_projects/crab_DeepNtuples_bjet_pThat15 is not a valid CRAB project directory.
+INFO 2024-02-15 18:37:39.856 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log
+DEBUG 2024-02-20 20:47:09.311 UTC: 	 CRAB Client version: v3.231010
+DEBUG 2024-02-20 20:47:09.312 UTC: 	 Running on: Linux llruicms01.in2p3.fr 3.10.0-1160.36.2.el7.x86_64 #1 SMP Wed Jul 21 11:57:15 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux - CentOS Linux 7 (Core)
+DEBUG 2024-02-20 20:47:09.312 UTC: 	 Executing command: 'submit'
+DEBUG 2024-02-20 20:47:09.313 UTC: 	 Found CRAB cache file /home/llr/cms/mnguyen/.crab3
+INFO 2024-02-20 20:47:09.315 UTC: 	 Will use CRAB configuration file crabConfig.py
+DEBUG 2024-02-20 20:47:09.315 UTC: 	 Loading CRAB configuration file.
+DEBUG 2024-02-20 20:47:09.345 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+ERROR 2024-02-20 20:47:09.347 UTC: 	 Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+ERROR 2024-02-20 20:47:09.347 UTC: 	 Caught ClientException exception
+Traceback (most recent call last):
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 159, in <module>
+    client()
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/bin/crab.py", line 144, in __call__
+    self.cmd = sub_cmd(self.logger, args[1:])
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/submit.py", line 36, in __init__
+    SubCommand.__init__(self, logger, cmdargs, disable_interspersed_args=True)
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/Commands/SubCommand.py", line 322, in __init__
+    getattr(self.configuration.General, 'requestName', None))
+  File "/cvmfs/cms.cern.ch/share/cms/crab-pre/v3.231010.01/lib/CRABClient/ClientUtilities.py", line 387, in createWorkArea
+    raise ConfigException("Working area '%s' already exists \nPlease change the requestName in the config file" % fullpath)
+ConfigException: Working area '/grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab_projects/crab_DeepNtuples_nanFix_bjet_pThat80' already exists 
+Please change the requestName in the config file
+INFO 2024-02-20 20:47:09.483 UTC: 	 Log file is /grid_mnt/vol_home/llr/cms/mnguyen/prod/deepNTuples/CMSSW_11_2_5_patch2/src/DeepNTuples/DeepNtuplizer/test/crab.log

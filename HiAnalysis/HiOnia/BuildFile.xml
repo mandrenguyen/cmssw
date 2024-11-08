@@ -1,0 +1,15 @@
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/PluginManager"/>
+<use   name="FWCore/ParameterSet"/>
+<use   name="PhysicsTools/PatUtils"/>
+<use   name="PhysicsTools/UtilAlgos"/>
+<use   name="PhysicsTools/Utilities"/>
+<use   name="DataFormats/HeavyIonEvent"/>
+<use   name="DataFormats/HLTReco"/>
+<use   name="HLTrigger/HLTcore"/>
+<use   name="CommonTools/UtilAlgos"/>
+<use   name="TrackingTools/IPTools"/>
+<use   name="MuonAnalysis/MuonAssociators"/>
+<export>
+  <lib   name="1"/>
+</export>

@@ -28,7 +28,7 @@ process.source = cms.Source("PoolSource",
     ),
 )
 if doRun2:
-    process.source.fileNames = '/store/himc/HINPbPbSpring21MiniAOD/Bjet_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/MINIAODSIM/FixL1CaloGT_New_Release_112X_upgrade2018_realistic_HI_v9-v1/260000/6700a2b8-9c0d-4e1a-a774-2463e1e57785.root'
+    process.source.fileNames = cms.untracked.vstring('/store/himc/HINPbPbSpring21MiniAOD/Bjet_pThat-15_TuneCP5_HydjetDrumMB_5p02TeV_Pythia8/MINIAODSIM/FixL1CaloGT_New_Release_112X_upgrade2018_realistic_HI_v9-v1/260000/6700a2b8-9c0d-4e1a-a774-2463e1e57785.root')
 
 # number of events to process, set to -1 to process all events
 process.maxEvents = cms.untracked.PSet(
@@ -47,6 +47,8 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '132X_mcRun3_2023_realistic_HI_v10', '')
+if doRun2: 
+    process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc_hi', '')
 process.HiForestInfo.GlobalTagLabel = process.GlobalTag.globaltag
 process.GlobalTag.snapshotTime = cms.string("9999-12-31 23:59:59.000")
 process.GlobalTag.toGet.extend([
@@ -101,21 +103,9 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 #process.hltobject.triggerNames = trigger_list_mc
 
 ################################
-# electrons, photons, muons
-process.load('HeavyIonsAnalysis.EGMAnalysis.ggHiNtuplizer_cfi')
-process.ggHiNtuplizer.doGenParticles = cms.bool(True)
-process.ggHiNtuplizer.doMuons = cms.bool(False)
-process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
-################################
 # jet reco sequence
 process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFJetSequence_pponPbPb_mc_cff')
-################################
-# tracks
-process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
-#muons
-process.load("HeavyIonsAnalysis.MuonAnalysis.unpackedMuons_cfi")
-process.load("HeavyIonsAnalysis.MuonAnalysis.muonAnalyzer_cfi")
-process.muonAnalyzer.doGen = cms.bool(True)
+#process.muonAnalyzer.doGen = cms.bool(True)
 
 ###############################################################################
 
@@ -155,7 +145,6 @@ process.forest = cms.Path(
 
 #customisation
 process.particleFlowAnalyser.ptMin = 0.0
-process.ggHiNtuplizer.muonPtMin = 0.0
 
 # Gen
 process.load("GeneratorInterface.RivetInterface.mergedGenParticles_cfi")

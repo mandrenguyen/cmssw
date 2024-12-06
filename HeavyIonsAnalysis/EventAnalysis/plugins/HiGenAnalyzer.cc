@@ -63,6 +63,8 @@ struct HydjetEvent {
   Float_t ptav[ETABINS];
 
   Int_t mult;
+  std::vector<Float_t> E;
+  std::vector<Float_t> mass;
   std::vector<Float_t> pt;
   std::vector<Float_t> eta;
   std::vector<Float_t> phi;
@@ -113,9 +115,11 @@ private:
   Double_t ptMin_;
   Bool_t chargedOnly_;
   Bool_t stableOnly_;
+  Bool_t useRefVector_;
 
   edm::EDGetTokenT<edm::HepMCProduct> src_;
   edm::EDGetTokenT<std::vector<pat::PackedGenParticle>> genParticleSrc_;
+  edm::EDGetTokenT<reco::GenParticleRefVector> genParticleRVSrc_;
   edm::EDGetTokenT<edm::View<pat::PackedGenParticle>> signalPackedGenParticleSrc_;
   edm::EDGetTokenT<edm::GenHIEvent> genHIsrc_;
   edm::ESGetToken<HepPDT::ParticleDataTable, PDTRecord> tok_pdt_;
@@ -143,11 +147,14 @@ HiGenAnalyzer::HiGenAnalyzer(const edm::ParameterSet& iConfig) {
   ptMin_ = iConfig.getUntrackedParameter<Double_t>("ptMin", 0);
   chargedOnly_ = iConfig.getUntrackedParameter<Bool_t>("chargedOnly", false);
   stableOnly_ = iConfig.getUntrackedParameter<Bool_t>("stableOnly", false);
+  useRefVector_ = iConfig.getUntrackedParameter<Bool_t>("useRefVector", false);
   if (useHepMCProduct_) {
     src_ = consumes<edm::HepMCProduct>(iConfig.getUntrackedParameter<edm::InputTag>("src", edm::InputTag("generator")));
   } else {
     genParticleSrc_ =
         consumes<std::vector<pat::PackedGenParticle>>(iConfig.getParameter<edm::InputTag>("genParticleSrc"));
+    genParticleRVSrc_ = 
+      consumes<reco::GenParticleRefVector>(iConfig.getUntrackedParameter<edm::InputTag>("genParticleRVSrc",edm::InputTag("hiGenParticles")));
     signalPackedGenParticleSrc_ =
         consumes<edm::View<pat::PackedGenParticle>>(iConfig.getParameter<edm::InputTag>("signalGenParticleSrc"));
   }
@@ -337,71 +344,102 @@ void HiGenAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSe
       ++(hev_.mult);
     }
   } else {
-    edm::Handle<std::vector<pat::PackedGenParticle>> parts;
-    iEvent.getByToken(genParticleSrc_, parts);
 
-    edm::Handle<edm::View<pat::PackedGenParticle>> signalPackedGenParticles;
-    bool hasSignalPackedGen = iEvent.getByToken(signalPackedGenParticleSrc_, signalPackedGenParticles);
+    if(useRefVector_){
+      edm::Handle<reco::GenParticleRefVector> parts;
+      iEvent.getByToken(genParticleRVSrc_,parts);
+      
+      for (reco::GenParticleRefVector::const_iterator it = parts->begin(); it != parts->end(); ++it) {
+	
+        if (stableOnly_ && (*it)->status()!=1) continue;
+        if ((*it)->pt()<ptMin_) continue;
+        if (fabs((*it)->eta())>etaMax_) continue;
+        if (chargedOnly_&&(*it)->charge()==0) continue;
+        if(fabs( (*it)->pdgId())   == 11 ) continue;
+        if(fabs( (*it)->pdgId())   == 15 ) continue;
 
-    for (UInt_t i = 0; i < parts->size(); ++i) {
-      //const reco::GenParticle& p = (*parts)[i];
-      const pat::PackedGenParticle& p = (*parts)[i];
-      if (stableOnly_ && p.status() != 1)
-        continue;
-      if (p.pt() < ptMin_)
-        continue;
-      if (fabs(p.eta()) > etaMax_)
-        continue;
-      if (chargedOnly_ && p.charge() == 0)
-        continue;
-      hev_.pt.push_back(p.pt());
-      hev_.eta.push_back(p.eta());
-      hev_.phi.push_back(p.phi());
-      hev_.pdg.push_back(p.pdgId());
-      hev_.chg.push_back(p.charge());
-      // collisionId_ is not kept in pat::PackedGenParticle, use "packedGenParticlesSignal" (added by https://github.com/cms-sw/cmssw/pull/32668/) to tag particles from signal process
-      if (hasSignalPackedGen) {
-        int tmpSube = 1;
-        for (auto pSig = signalPackedGenParticles->begin(); pSig != signalPackedGenParticles->end(); ++pSig) {
-          if (&(*pSig) == &(*parts)[i]) {
-            tmpSube = 0;
-            break;
-          }
-        }
-        hev_.sube.push_back(tmpSube);
-      } else {
-        hev_.sube.push_back(-999);
+        hev_.E.push_back( (*it)->energy());
+        hev_.mass.push_back( (*it)->mass());
+        hev_.pt.push_back( (*it)->pt());
+        hev_.eta.push_back( (*it)->eta());
+        hev_.phi.push_back( (*it)->phi());
+        hev_.pdg.push_back( (*it)->pdgId());
+        //hev_.chg.push_back( (*it)->charge());                                                                                                                             
+        //hev_.sube.push_back( (*it)->collisionId());                                                                                                                       
+        //hev_.sta.push_back( (*it)->status());                                                                                                                             
+        ++(hev_.mult);
+
+
       }
-      hev_.sta.push_back(p.status());
-      hev_.matchingID.push_back(i);
-      hev_.nMothers.push_back(p.numberOfMothers());
-      vector<int> tempMothers = getMotherIdx(parts, p);
-      hev_.motherIndex.push_back(tempMothers);
-      hev_.nDaughters.push_back(p.numberOfDaughters());
-      vector<int> tempDaughters = getDaughterIdx(parts, p);
-      hev_.daughterIndex.push_back(tempDaughters);
-      Double_t eta = fabs(p.eta());
-
-      Int_t etabin = 0;
-      if (eta > 0.5)
-        etabin = 1;
-      if (eta > 1.)
-        etabin = 2;
-      if (eta < 2.) {
-        hev_.ptav[etabin] += p.pt();
-        ++(hev_.n[etabin]);
-      }
-      ++(hev_.mult);
     }
-    if (doHI_) {
-      edm::Handle<edm::GenHIEvent> higen;
-      iEvent.getByToken(genHIsrc_, higen);
-
-      b = higen->b();
+    else{
+      
+      edm::Handle<std::vector<pat::PackedGenParticle>> parts;
+      iEvent.getByToken(genParticleSrc_, parts);
+      
+      edm::Handle<edm::View<pat::PackedGenParticle>> signalPackedGenParticles;
+      bool hasSignalPackedGen = iEvent.getByToken(signalPackedGenParticleSrc_, signalPackedGenParticles);
+      
+      for (UInt_t i = 0; i < parts->size(); ++i) {
+	//const reco::GenParticle& p = (*parts)[i];
+	const pat::PackedGenParticle& p = (*parts)[i];
+	if (stableOnly_ && p.status() != 1)
+	  continue;
+	if (p.pt() < ptMin_)
+	  continue;
+	if (fabs(p.eta()) > etaMax_)
+	  continue;
+	if (chargedOnly_ && p.charge() == 0)
+	  continue;
+	hev_.pt.push_back(p.pt());
+	hev_.eta.push_back(p.eta());
+	hev_.phi.push_back(p.phi());
+	hev_.pdg.push_back(p.pdgId());
+	hev_.chg.push_back(p.charge());
+	// collisionId_ is not kept in pat::PackedGenParticle, use "packedGenParticlesSignal" (added by https://github.com/cms-sw/cmssw/pull/32668/) to tag particles from signal process
+	if (hasSignalPackedGen) {
+	  int tmpSube = 1;
+	  for (auto pSig = signalPackedGenParticles->begin(); pSig != signalPackedGenParticles->end(); ++pSig) {
+	    if (&(*pSig) == &(*parts)[i]) {
+	      tmpSube = 0;
+	      break;
+	    }
+	  }
+	  hev_.sube.push_back(tmpSube);
+	} else {
+	  hev_.sube.push_back(-999);
+	}
+	hev_.sta.push_back(p.status());
+	hev_.matchingID.push_back(i);
+	hev_.nMothers.push_back(p.numberOfMothers());
+	vector<int> tempMothers = getMotherIdx(parts, p);
+	hev_.motherIndex.push_back(tempMothers);
+	hev_.nDaughters.push_back(p.numberOfDaughters());
+	vector<int> tempDaughters = getDaughterIdx(parts, p);
+	hev_.daughterIndex.push_back(tempDaughters);
+	Double_t eta = fabs(p.eta());
+	
+	Int_t etabin = 0;
+	if (eta > 0.5)
+	  etabin = 1;
+	if (eta > 1.)
+	  etabin = 2;
+	if (eta < 2.) {
+	  hev_.ptav[etabin] += p.pt();
+	  ++(hev_.n[etabin]);
+	}
+	++(hev_.mult);
+      }
+      if (doHI_) {
+	edm::Handle<edm::GenHIEvent> higen;
+	iEvent.getByToken(genHIsrc_, higen);
+	
+	b = higen->b();
       npart = higen->Npart();
       ncoll = higen->Ncoll();
       nhard = higen->Nhard();
       phi0 = higen->evtPlane();
+      }
     }
   }
 

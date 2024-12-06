@@ -115,6 +115,24 @@ process.zdcanalyzer.zdcDigiSrc = cms.InputTag("hcalDigis", "ZDC")
 process.zdcanalyzer.calZDCDigi = False
 process.zdcanalyzer.verbose = False
 
+
+#process.HiGenParticleAna.doHI = False
+#process.HiGenParticleAna.etaMax = cms.untracked.double(2.5) # default is 2                                                                                             
+#process.HiGenParticleAna.stableOnly = False
+#process.HiGenParticleAna.useRefVector = cms.untracked.bool(True)
+
+process.bHadronAna = process.HiGenParticleAna.clone(
+    genParticleRVSrc = cms.untracked.InputTag("selectedHadronsAndPartons","bHadrons"),
+    useRefVector = cms.untracked.bool(True),
+    doHI = False,
+    ptMin = cms.untracked.double(0.),
+    etaMax = 2.5,
+    stableOnly = False
+)
+process.cHadronAna = process.bHadronAna.clone(
+    genParticleRVSrc = cms.untracked.InputTag("selectedHadronsAndPartons","cHadrons")
+)
+
 ###############################################################################
 # main forest sequence
 process.forest = cms.Path(
@@ -147,7 +165,7 @@ jetAbsEtaMax = 2.5
 # Choose which additional information is added to jet trees
 doHIJetID = True             # Fill jet ID and composition information branches
 doWTARecluster = False        # Add jet phi and eta for WTA axis
-doBtagging  =  False         # Note that setting to True increases computing time a lot
+doBtagging  =  True         # Note that setting to True increases computing time a lot
 
 # 0 means use original mini-AOD jets, otherwise use R value, e.g., 3,4,8
 jetLabel = "0"
@@ -221,3 +239,4 @@ process.load('HeavyIonsAnalysis.EventAnalysis.hffilter_cfi')
 process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
 
+process.forest += process.bHadronAna + process.cHadronAna 

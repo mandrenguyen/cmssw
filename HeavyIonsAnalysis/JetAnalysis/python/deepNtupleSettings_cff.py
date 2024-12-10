@@ -102,7 +102,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
                 rParam = jetR
             )
     )
-    
+
 
     if isMC:
         from PhysicsTools.JetMCAlgos.HadronAndPartonSelector_cfi import selectedHadronsAndPartons
@@ -110,7 +110,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         process.selectedHadronsAndPartons = selectedHadronsAndPartons.clone(particles = "prunedGenParticles")
         setattr(process,"ak"+labelR+"PFUnsubJetFlavourInfos",
                 ak4JetFlavourInfos.clone(
-                    jets = "ak"+labelR+"PFUnsubJets",
+                    jets = "ak"+labelR+"PFUnsubJetsWithMuon",
+                    #jets = "ak"+labelR+"PFUnsubJets",
                     partons = "selectedHadronsAndPartons:algorithmicPartons",
                     hadronFlavourHasPriority = True,
                     rParam = jetR
@@ -131,7 +132,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         process,
         postfix            = "UnsubJets",
         labelName          = str("AK"+labelR+"PF"),
-        jetSource          = cms.InputTag("ak"+labelR+"PFUnsubJets"),
+        jetSource          = cms.InputTag("ak"+labelR+"PFUnsubJetsWithMuon"),
+        #jetSource          = cms.InputTag("ak"+labelR+"PFUnsubJets"),
         algo               = "ak", #name of algo must be in this format
         rParam             = jetR,
         pvSource           = cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -150,6 +152,18 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
 
     process.patAlgosToolsTask.add(getattr(process,"ak"+labelR+"PFUnsubJets"))
 
+    #filter out jets with muons                                                                                                                                                                              
+    setattr(process,"ak"+labelR+"PFUnsubJetsWithMuon",
+            cms.EDProducer("PFJetXSelector",
+                           src = cms.InputTag("ak"+labelR+"PFUnsubJets"),
+                           offPV = cms.InputTag("offlineSlimmedPrimaryVertices"),
+                           cut = cms.string("abs(rapidity()) < 3.0"),
+                           dummy = cms.bool(False) )
+    )
+
+    process.patAlgosToolsTask.add(getattr(process,"ak"+labelR+"PFUnsubJetsWithMuon"))
+
+
     # Create HIN subtracted reco jets
     from PhysicsTools.PatAlgos.tools.jetTools import addJetCollection
     addJetCollection(
@@ -160,7 +174,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         algo               = "ak", #name of algo must be in this format
         rParam             = jetR,
         pvSource           = cms.InputTag("offlineSlimmedPrimaryVertices"),
-        pfCandidates       = cms.InputTag("packedPFCandidates"),
+        #pfCandidates       = cms.InputTag("packedPFCandidates"),
+        pfCandidates = cms.InputTag("ak"+labelR+"PFUnsubJetsWithMuon","constituents"),
         svSource           = svSource,
         muSource           = cms.InputTag("slimmedMuons"),
         elSource           = cms.InputTag("slimmedElectrons"),
@@ -189,7 +204,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
     from PhysicsTools.PatAlgos.producersLayer1.jetProducer_cff import akCs4PFJets
     setattr(process,"akCs"+labelR+"PFJets",
             akCs4PFJets.clone(
-                src = 'packedPFCandidates',
+                #src = 'packedPFCandidates',
+                src = cms.InputTag("ak"+labelR+"PFUnsubJetsWithMuon","constituents"),
                 jetPtMin = jetPtMin,
                 rParam = jetR
             )
@@ -204,7 +220,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         labelName = "DeepFlavour",
         jetSource = cms.InputTag("slimmedJets" if labelR == "0" else "patJetsAKCs"+labelR+"PF"), 
         jetCorrections = jetCorrectionsAK4,
-        pfCandidates = cms.InputTag('packedPFCandidates'),
+        #pfCandidates = cms.InputTag('packedPFCandidates'),
+        pfCandidates = cms.InputTag("ak"+labelR+"PFUnsubJetsWithMuon","constituents"),
         pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
         svSource = svSource,
         muSource = cms.InputTag('slimmedMuons'),
@@ -232,8 +249,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
             raise ValueError('I could not find updatedPatJetsTransientCorrectedDeepFlavour to embed the tagInfos, please check the cfg')
 
             # Remove PUPPI
-        process.patAlgosToolsTask.remove(process.packedpuppi)
-        process.patAlgosToolsTask.remove(process.packedpuppiNoLep)
+        #process.patAlgosToolsTask.remove(process.packedpuppi)
+        #process.patAlgosToolsTask.remove(process.packedpuppiNoLep)
         process.pfInclusiveSecondaryVertexFinderTagInfosDeepFlavour.weights = ""
         for taginfo in ["pfDeepFlavourTagInfosDeepFlavour", "pfParticleTransformerAK4TagInfosDeepFlavour", "pfUnifiedParticleTransformerAK4TagInfosDeepFlavour"]:
             getattr(process, taginfo).fallback_puppi_weight = True

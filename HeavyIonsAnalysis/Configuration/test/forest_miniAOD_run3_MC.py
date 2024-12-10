@@ -24,7 +24,7 @@ process.source = cms.Source("PoolSource",
 
 # number of events to process, set to -1 to process all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
     )
 
 ###############################################################################
@@ -168,7 +168,7 @@ doWTARecluster = False        # Add jet phi and eta for WTA axis
 doBtagging  =  True         # Note that setting to True increases computing time a lot
 
 # 0 means use original mini-AOD jets, otherwise use R value, e.g., 3,4,8
-jetLabel = "0"
+jetLabel = "3"
 
 # add candidate tagging, copy/paste to add other jet radii
 from HeavyIonsAnalysis.JetAnalysis.deepNtupleSettings_cff import candidateBtaggingMiniAOD
@@ -240,3 +240,5 @@ process.pphfCoincFilter2Th4 = cms.Path(process.phfCoincFilter2Th4)
 process.pAna = cms.EndPath(process.skimanalysis)
 
 process.forest += process.bHadronAna + process.cHadronAna 
+
+process.pfImpactParameterTagInfosDeepFlavour.candidates = 'packedPFCandidates'

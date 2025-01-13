@@ -56,6 +56,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         process.allPartons = allPartons.clone(
             src = 'hiSignalGenParticles'
         )
+
         from RecoJets.JetProducers.ak4GenJets_cfi import ak4GenJets
         setattr(process,"ak"+labelR+"GenJetsWithNu",
                 ak4GenJets.clone(
@@ -63,10 +64,19 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
                     rParam = jetR
                 )
         )
+        '''
         process.packedGenParticlesForJetsNoNu = cms.EDFilter("CandPtrSelector",
             src = cms.InputTag("packedGenParticles"),
             cut = cms.string("abs(pdgId) != 12 && abs(pdgId) != 14 && abs(pdgId) != 16")
         )
+        '''
+
+        from RecoJets.Configuration.GenJetParticles_cff import genParticlesForJets
+        process.packedGenParticlesForJetsNoNu = genParticlesForJets.clone(src = 'packedGenParticles')
+        process.packedGenParticlesForJetsNoNu.ignoreParticleIDs += [12,14,16]  # no neutrinos
+        process.packedGenParticlesForJetsNoNu.storeJMM = cms.untracked.bool(True)
+
+
         setattr(process,"ak"+labelR+"GenJetsRecluster",
                 ak4GenJets.clone(
                     src = 'packedGenParticlesForJetsNoNu'
@@ -105,7 +115,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
     matchedGenJets = ""
     if isMC:
         if labelR == "0": matchedGenJets = "slimmedGenJets"
-        else: matchedGenJets  = "ak"+labelR+"GenJetsWithNu"
+        else: matchedGenJets  = "ak"+labelR+"GenJetsRecluster"
+        #else: matchedGenJets  = "ak"+labelR+"GenJetsWithNu"
 
 
     svSource = cms.InputTag("slimmedSecondaryVertices")

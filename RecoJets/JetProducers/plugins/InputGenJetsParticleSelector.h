@@ -71,11 +71,17 @@ private:
   void setExcludeFromResonancePids(const std::vector<unsigned int> &particleIDs);
   void setIgnoredParticles(const std::vector<unsigned int> &particleIDs);
   bool isExcludedFromResonance(int pdgId) const;
+  bool isJMM(const reco::Candidate *particle) const;
+  bool isFromJMM(const reco::Candidate *particle) const;
+  bool isDKPi(const reco::Candidate *particle) const;
+  bool isFromDKPi(const reco::Candidate *particle) const;
 
   bool partonicFinalState;
   bool excludeResonances;
   bool tausAsJets;
   bool isMiniAOD;
+  bool storeJMM;
+  bool storeDKPi;
   double ptMin;
 
   edm::EDGetTokenT<reco::CandidateView> input_genpartcoll_token_;

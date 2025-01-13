@@ -71,8 +71,11 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         )
         '''
 
+        from GeneratorInterface.RivetInterface.mergedGenParticles_cfi import mergedGenParticles
+        process.mergedGenParticles = mergedGenParticles.clone()
+
         from RecoJets.Configuration.GenJetParticles_cff import genParticlesForJets
-        process.packedGenParticlesForJetsNoNu = genParticlesForJets.clone(src = 'packedGenParticles')
+        process.packedGenParticlesForJetsNoNu = genParticlesForJets.clone(src = 'mergedGenParticles')
         process.packedGenParticlesForJetsNoNu.ignoreParticleIDs += [12,14,16]  # no neutrinos
         process.packedGenParticlesForJetsNoNu.storeJMM = cms.untracked.bool(True)
 
@@ -82,7 +85,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
                     src = 'packedGenParticlesForJetsNoNu'
                 )
         )
-        process.genTask = cms.Task(process.hiSignalGenParticles, process.allPartons, getattr(process,"ak"+labelR+"GenJetsWithNu"), process.packedGenParticlesForJetsNoNu, getattr(process,"ak"+labelR+"GenJetsRecluster"))
+        process.genTask = cms.Task(process.hiSignalGenParticles, process.allPartons, getattr(process,"ak"+labelR+"GenJetsWithNu"), process.mergedGenParticles, process.packedGenParticlesForJetsNoNu, getattr(process,"ak"+labelR+"GenJetsRecluster"))
 
 
     # Create unsubtracted reco jets

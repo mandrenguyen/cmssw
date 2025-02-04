@@ -1,0 +1,3 @@
+Fail to parse DAS record=map[das:map[expire:1588418166 instance:prod/global primary_key:lumi.number record:1 services:[dbs3:runsummaries]] lumi:[map[max_lumi:5]] qhash:82c44fb7181efb4882c0a221902a98eb], keys=[lumi [0] number], error=Key path not found
+Fail to parse DAS record=map[das:map[expire:1588418166 instance:prod/global primary_key:lumi.number record:1 services:[dbs3:runsummaries]] lumi:[map[max_lumi:5]] qhash:82c44fb7181efb4882c0a221902a98eb], keys=[lumi [0] number], error=Key path not found
+[1,5,2,3,4]

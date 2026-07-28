@@ -51,7 +51,8 @@ namespace pat {
           pdgId_(c.pdgId()),
           charge_(c.charge()),
           mother_(c.motherRef(0)),
-          statusFlags_(c.statusFlags()) {
+	  status_(c.status()),
+	  statusFlags_(c.statusFlags()) {
       pack();
     }
     explicit PackedGenParticle(const reco::GenParticle& c, const edm::Ref<reco::GenParticleCollection>& mother)
@@ -61,6 +62,7 @@ namespace pat {
           pdgId_(c.pdgId()),
           charge_(c.charge()),
           mother_(mother),
+	  status_(c.status()),
           statusFlags_(c.statusFlags()) {
       pack();
     }
@@ -79,6 +81,7 @@ namespace pat {
           pdgId_(iOther.pdgId_),
           charge_(iOther.charge_),
           mother_(iOther.mother_),
+          status_(iOther.status_),
           statusFlags_(iOther.statusFlags_) {
       if (iOther.p4c_) {
         p4_.store(new PolarLorentzVector(*iOther.p4_));
@@ -100,7 +103,8 @@ namespace pat {
           pdgId_(iOther.pdgId_),
           charge_(iOther.charge_),
           mother_(iOther.mother_),
-          statusFlags_(iOther.statusFlags_) {
+          status_(iOther.status_),
+	  statusFlags_(iOther.statusFlags_) {
       if (iOther.p4c_) {
         p4_.store(p4_.exchange(nullptr));
         p4c_.store(p4c_.exchange(nullptr));
@@ -127,6 +131,7 @@ namespace pat {
         pdgId_ = iOther.pdgId_;
         charge_ = iOther.charge_;
         mother_ = iOther.mother_;
+        status_ = iOther.status_;
         statusFlags_ = iOther.statusFlags_;
       }
       return *this;
@@ -364,9 +369,9 @@ namespace pat {
     // set PDG identifier
     void setPdgId(int pdgId) override { pdgId_ = pdgId; }
     /// status word
-    int status() const override { return 1; } /*FIXME*/
+    int status() const override { return status_; } /*FIXME*/  // Fixed by Lida
     /// set status word
-    void setStatus(int status) override {} /*FIXME*/
+    void setStatus(int status) override { status_ =  status; } /*FIXME*/ // Fixed by Lida
     /// long lived flag
     static const unsigned int longLivedTag = 0; /*FIXME*/
     /// set long lived flag
@@ -490,9 +495,11 @@ namespace pat {
     int8_t charge_;
     ///Ref to first mother
     reco::GenParticleRef mother_;
+    /// Status -- Addition by Lida
+    int status_;
     //status flags
     reco::GenStatusFlags statusFlags_;
-
+    
     /// check overlap with another Candidate
     bool overlap(const reco::Candidate&) const override;
     template <typename, typename, typename>

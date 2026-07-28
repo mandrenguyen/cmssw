@@ -449,16 +449,16 @@ void HiGenAnalyzer::endRun(const edm::Run& run, const edm::EventSetup& iSetup) {
 void HiGenAnalyzer::beginJob() {
   hydjetTree_ = f->make<TTree>("hi", "Tree of Hi gen Event");
   hydjetTree_->Branch("event", &hev_.event, "event/I");
+  /*
   hydjetTree_->Branch("b", &hev_.b, "b/F");
   hydjetTree_->Branch("npart", &hev_.npart, "npart/F");
   hydjetTree_->Branch("ncoll", &hev_.ncoll, "ncoll/F");
   hydjetTree_->Branch("nhard", &hev_.nhard, "nhard/F");
   hydjetTree_->Branch("phi0", &hev_.phi0, "phi0/F");
   hydjetTree_->Branch("scale", &hev_.scale, "scale/F");
-
   hydjetTree_->Branch("n", hev_.n, "n[3]/I");
   hydjetTree_->Branch("ptav", hev_.ptav, "ptav[3]/F");
-
+  */
   if (doParticles_) {
     hydjetTree_->Branch("mult", &hev_.mult, "mult/I");
     hydjetTree_->Branch("pt", &hev_.pt);
@@ -466,15 +466,17 @@ void HiGenAnalyzer::beginJob() {
     hydjetTree_->Branch("phi", &hev_.phi);
     hydjetTree_->Branch("pdg", &hev_.pdg);
     hydjetTree_->Branch("chg", &hev_.chg);
+    /*
     hydjetTree_->Branch("matchingID", &hev_.matchingID);
     hydjetTree_->Branch("nMothers", &hev_.nMothers);
     hydjetTree_->Branch("motherIdx", &hev_.motherIndex);
     hydjetTree_->Branch("nDaughters", &hev_.nDaughters);
     hydjetTree_->Branch("daughterIdx", &hev_.daughterIndex);
+    */
     if (!stableOnly_) {
       hydjetTree_->Branch("sta", &hev_.sta);
     }
-    hydjetTree_->Branch("sube", &hev_.sube);
+    //hydjetTree_->Branch("sube", &hev_.sube);
 
     hydjetTree_->Branch("vx", &hev_.vx, "vx/F");
     hydjetTree_->Branch("vy", &hev_.vy, "vy/F");

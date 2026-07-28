@@ -20,12 +20,11 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 141X, mc")
 #####################################################################################
 
 process.source = cms.Source("PoolSource",
-    duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
-    fileNames = cms.untracked.vstring(
-#        '/store/user/bharikri/Run3MC_pp/MINIAOD/2024_Mar_21_Pythia8_ppRef_QCDPhoton30_PU10_TuneCP5_14_0_0_LLR/Pythia8_ppRef_QCDPhoton30_TuneCP5/2024_Mar_21_step3_RAW2DIGI_MINIAODSIM_Pythia8_ppRef_QCDPhoton30_PU10_TuneCP5_14_0_0/240326_082338/0000/step3_pp_673.root'
-        '/store/mc/RunIIIpp5p36Winter24MiniAOD/QCD_pThat-15to1200_TuneCP5_5p36TeV_pythia8/MINIAODSIM/141X_mcRun3_2024_realistic_ppRef5TeV_v7-v2/140000/e391a0bf-69c8-4630-a51e-eb3bcf042365.root',
-    )
-)
+                            duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
+                            fileNames = cms.untracked.vstring(
+                                '/store/mc/RunIIIpp5p36Winter24MiniAOD/QCD_pThat-15to1200_TuneCP5_5p36TeV_pythia8/MINIAODSIM/141X_mcRun3_2024_realistic_ppRef5TeV_v7-v2/140000/e391a0bf-69c8-4630-a51e-eb3bcf042365.root',
+                            )
+                            )
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
@@ -47,14 +46,20 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '141X_mcRun3_2024_realistic_ppRef5TeV_v7', '')
 process.HiForestInfo.GlobalTagLabel = process.GlobalTag.globaltag
 
-# TODO: Old calibration here, might need to update
 process.GlobalTag.toGet.extend([
-    cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
-             tag = cms.string("JPcalib_MC94X_2017pp_v2"),
-             connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS")
+    cms.PSet(
+        record = cms.string("BTagTrackProbability3DRcd"),
+        tag = cms.string("probBTagPDF3D_tag_mc_2024ppRef_Pythia8_v1"),
+        connect = cms.string("sqlite_file:JPcalib_MC141X_2024ppRef_Pythia8_v1.db")
+    ),
+    #overload 2D version with the "wrong" calibration
+    cms.PSet(
+        record = cms.string("BTagTrackProbability2DRcd"),
+        tag = cms.string("probBTagPDF3D_tag_data_2024ppRef_HardProbes0_v1"),
+        connect = cms.string("sqlite_file:JPcalib_Data141X_2024ppRef_HardProbes0_v1.db")
+    )
 
-         )
-      ])
+])
 
 #####################################################################################
 # Define tree output
@@ -130,11 +135,12 @@ process.forest = cms.Path(
     process.HiForestInfo +
     process.hltanalysis *
     process.hiEvtAnalyzer *
-    process.hltobject +
-    process.l1object +
-    process.HiGenParticleAna +
-    process.ggHiNtuplizer +
-    process.trackSequencePP +
+    #process.hltobject +
+    #process.l1object +
+    #process.HiGenParticleAna +
+    #process.ggHiNtuplizer +
+    #process.trackSequencePP +
+    process.unpackedTracksAndVertices +
     process.unpackedMuons +
     process.muonAnalyzer
 )
@@ -148,7 +154,7 @@ jetAbsEtaMax = 2.5
 # Choose which additional information is added to jet trees
 doHIJetID = True             # Fill jet ID and composition information branches
 doWTARecluster = False        # Add jet phi and eta for WTA axis
-doBtagging  =  False         # Note that setting to True increases computing time a lot
+doBtagging  =  True         # Note that setting to True increases computing time a lot
 
 # 0 means use original mini-AOD jets, otherwise use R value, e.g., 3,4,8
 # Generator level jets in original miniAOD jets contain neutrinos
@@ -159,9 +165,85 @@ jetLabels = ["4"]
 # add candidate tagging for all selected jet radii
 from HeavyIonsAnalysis.JetAnalysis.setupJets_ppRef_cff import candidateBtaggingMiniAOD
 
+    
+                                                                                         
+
+
+
 for jetLabel in jetLabels:
     candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = jetPtMin, jetCorrLevels = ['L2Relative', 'L3Absolute'], doBtagging = doBtagging, labelR = jetLabel)
 
+
+    
+#extra stuff for aggregation
+doDeclustering = True
+doAggregation = True
+doChargedOnly = True
+doLatekt_ = False
+
+tmva_variables = ["trkIp3dSig", "trkIp2dSig", "trkDistToAxis",
+                  "svtxdls", "svtxdls2d", "svtxm", "svtxmcorr",
+                  "svtxnormchi2", "svtxNtrk", "svtxTrkPtOverSv",
+                  "jtpt"]
+
+taggedGenParticlesName_ = "HFdecayProductTagger"    
+
+process.load("RecoHI.HiJetAlgos.TrackToGenParticleMapProducer_cfi")
+process.TrackToGenParticleMapProducer.jetSrc = cms.InputTag("selectedUpdatedPatJetsAK4PFCHSBtag")
+process.TrackToGenParticleMapProducer.genParticleSrc = cms.InputTag(taggedGenParticlesName_, "patPackedGenParticles")
+process.TrackToGenParticleMapProducer.chargedOnly = doChargedOnly
+process.forest += process.TrackToGenParticleMapProducer
+## Creates the genConstitToGenParticleMap and trackToGenParticleMap
+
+process.load("RecoHI.HiJetAlgos.dynGroomedPATJets_cfi")
+process.dynGroomedGenJets = process.dynGroomedPATJets.clone(
+    chargedOnly = cms.bool(doChargedOnly),
+    aggregateHF = cms.bool(doAggregation),
+    # aggregateHF = cms.bool(True),
+    jetSrc = cms.InputTag("selectedUpdatedPatJetsAK4PFCHSBtag"),
+    constitSrc = cms.InputTag("packedGenParticles"),
+    doGenJets = cms.bool(True),
+    candToGenParticleMap = cms.InputTag("TrackToGenParticleMapProducer", "genConstitToGenParticleMap"),
+    doLateKt = cms.bool(doLatekt_),
+)
+process.forest += process.dynGroomedGenJets
+
+process.dynGroomedPFJets = process.dynGroomedPATJets.clone(
+    chargedOnly = cms.bool(doChargedOnly),
+    aggregateHF = cms.bool(doAggregation),
+    # aggregateHF = cms.bool(False),
+    jetSrc = cms.InputTag("selectedUpdatedPatJetsAK4PFCHSBtag"),
+    constitSrc = cms.InputTag("packedPFCandidates"),
+    doGenJets = cms.bool(False),
+    candToGenParticleMap = cms.InputTag("TrackToGenParticleMapProducer", "trackToGenParticleMap"),
+    aggregateWithTruthInfo = cms.bool(False),
+    aggregateWithTMVA = cms.bool(True),
+    aggregateWithCuts = cms.bool(False),
+    #xgb_path = cms.FileInPath("RecoHI/HiJetAlgos/data/sig_vs_bkg.model"),
+    tmva_path = cms.FileInPath("RecoHI/HiJetAlgos/data/TMVAClassification_BDTG.weights.xml"),
+    tmva_variables = cms.vstring(tmva_variables),
+    doLateKt = cms.bool(doLatekt_),
+    trkInefRate = cms.double(0)
+)
+process.forest += process.dynGroomedPFJets
+
+ipTagInfoLabel_ = "pfImpactParameter"
+svTagInfoLabel_ = "pfInclusiveSecondaryVertexFinder"
+svNegTagInfoLabel_ = "pfInclusiveSecondaryVertexFinderNegative"
+
+doTracks = True
+if doTracks:    
+    process.ak4PFJetAnalyzer.doTracks = cms.untracked.bool(True)    
+    process.ak4PFJetAnalyzer.ipTagInfoLabel = cms.untracked.string(ipTagInfoLabel_)
+    
+doSvtx = True
+if doSvtx:    
+    process.ak4PFJetAnalyzer.doSvtx = cms.untracked.bool(True)    
+    process.ak4PFJetAnalyzer.svTagInfoLabel = cms.untracked.string(svTagInfoLabel_)
+    process.ak4PFJetAnalyzer.svNegTagInfoLabel = cms.untracked.string(svNegTagInfoLabel_)  
+
+
+for jetLabel in jetLabels:
     # setup jet analyzer
     setattr(process,"ak"+jetLabel+"PFJetAnalyzer",process.ak4PFJetAnalyzer.clone())
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetTag = "selectedUpdatedPatJetsAK"+jetLabel+"PFCHSBtag"
@@ -177,6 +259,63 @@ for jetLabel in jetLabels:
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetFlavourInfos = "ak"+jetLabel+"PFFlavourInfos"
     if jetLabel != "0": getattr(process,"ak"+jetLabel+"PFJetAnalyzer").genjetTag = "ak"+jetLabel+"GenJetsReclusterNoNu"
     if doBtagging:
-        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfJetProbabilityBJetTag = cms.untracked.string("pfJetProbabilityBJetTagsAK"+jetLabel+"PFCHSBtag")
+        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfJetProbabilityBJetTags = cms.untracked.string("pfJetProbabilityBJetTagsAK"+jetLabel+"PFCHSBtag")
+        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfWrongJetProbabilityBJetTags = cms.untracked.string("pfWrongJetProbabilityBJetTagsAK"+jetLabel+"PFCHSBtag")
         getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfUnifiedParticleTransformerAK4JetTags = cms.untracked.string("pfUnifiedParticleTransformerAK4JetTagsAK"+jetLabel+"PFCHSBtag")
+        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfNegativeUnifiedParticleTransformerAK4JetTags = cms.untracked.string("pfNegativeUnifiedParticleTransformerAK4JetTagsAK"+jetLabel+"PFCHSBtag")
     process.forest += getattr(process,"ak"+jetLabel+"PFJetAnalyzer")
+
+
+
+## Impact parameter tag infos
+process.load("RecoBTag.ImpactParameter.pfImpactParameterTagInfos_cfi")
+process.pfImpactParameterTagInfos.candidates  = "packedPFCandidates"
+process.pfImpactParameterTagInfos.primaryVertex = "offlineSlimmedPrimaryVertices"
+#process.pfImpactParameterTagInfos.jets = "patJetsAK4PFCHS"
+process.pfImpactParameterTagInfos.jets = "updatedPatJetsAK4PFCHSBtag"
+
+## Secondary vertex tag infos
+process.load("RecoBTag.SecondaryVertex.pfInclusiveSecondaryVertexFinderTagInfos_cfi")
+process.pfInclusiveSecondaryVertexFinderTagInfos.extSVCollection = "slimmedSecondaryVertices"
+
+process.patAlgosToolsTask.replace(process.pfImpactParameterTagInfosAK4PFCHSBtag, process.pfImpactParameterTagInfos)
+process.patAlgosToolsTask.replace(process.pfInclusiveSecondaryVertexFinderTagInfosAK4PFCHSBtag, process.pfInclusiveSecondaryVertexFinderTagInfos)
+
+
+
+
+process.pfJetProbabilityBJetTagsAK4PFCHSBtag.tagInfos = cms.VInputTag("pfImpactParameterTagInfos")
+process.pfWrongJetProbabilityBJetTagsAK4PFCHSBtag.tagInfos = cms.VInputTag("pfImpactParameterTagInfos")
+process.pfWrongJetProbabilityBJetTagsAK4PFCHSBtag.jetTagComputer = cms.string('wrongCandidateJetProbabilityComputer')
+process.updatedPatJetsTransientCorrectedAK4PFCHSBtag.tagInfoSources = cms.VInputTag(
+    cms.InputTag("pfImpactParameterTagInfos"), cms.InputTag("pfInclusiveSecondaryVertexFinderTagInfos"), cms.InputTag("pfParticleTransformerAK4TagInfosAK4PFCHSBtag"), cms.InputTag("pfUnifiedParticleTransformerAK4TagInfosAK4PFCHSBtag"), cms.InputTag("pfInclusiveSecondaryVertexFinderNegativeTagInfos")
+)
+
+    
+#more stuff for aggregation
+process.ak4PFJetAnalyzer.genParticles = cms.untracked.InputTag(taggedGenParticlesName_, "patPackedGenParticles") 
+process.ak4PFJetAnalyzer.bHadrons = cms.untracked.InputTag(taggedGenParticlesName_, "bHadrons")
+process.ak4PFJetAnalyzer.groomedJets = cms.untracked.InputTag("dynGroomedPFJets")
+process.ak4PFJetAnalyzer.groomedGenJets = cms.untracked.InputTag("dynGroomedGenJets")
+
+process.bDecayAna = process.HiGenParticleAna.clone(
+    genParticleSrc = cms.InputTag(taggedGenParticlesName_, "patPackedGenParticles"),
+    useRefVector = cms.untracked.bool(False),
+    partonMEOnly = cms.untracked.bool(False),
+    chargedOnly = doChargedOnly,
+    doHI = False,
+    etaMax = cms.untracked.double(10),
+    ptMin = cms.untracked.double(0),
+    stableOnly = False
+)
+process.forest += process.bDecayAna
+# Creates the gen particle ntuple bDecayAna/hi
+    
+process.bHadronAna = process.bDecayAna.clone(
+    genParticleSrc = cms.InputTag(taggedGenParticlesName_, "bHadrons"),
+    chargedOnly = False
+)
+process.forest += process.bHadronAna
+
+#save some space  # for MC just limit track and SV storage to 70
+#process.ak4PFJetAnalyzer.jetPtMin = 70.

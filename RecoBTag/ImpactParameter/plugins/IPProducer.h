@@ -392,9 +392,10 @@ void IPProducer<Container, Base, Helper>::produce(edm::Event& iEvent, const edm:
             m_useTrackQuality, 0, ipData.back().ip3d.significance(), track, *(it->jet()), *pv);
         prob3D.push_back(probability.first ? probability.second : -1.);
 
-        //probability with 2D ip
+        //probability with 2D ip  //  Nasty hack from Matt !!!! Swapping out 2D calcualation for 3D one.
         probability = m_probabilityEstimator->probability(
-            m_useTrackQuality, 1, ipData.back().ip2d.significance(), track, *(it->jet()), *pv);
+							  //m_useTrackQuality, 1, ipData.back().ip2d.significance(), track, *(it->jet()), *pv);
+							  m_useTrackQuality, 1, ipData.back().ip3d.significance(), track, *(it->jet()), *pv);
         prob2D.push_back(probability.first ? probability.second : -1.);
       }
     }

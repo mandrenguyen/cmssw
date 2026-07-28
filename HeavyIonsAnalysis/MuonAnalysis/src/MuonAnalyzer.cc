@@ -27,11 +27,11 @@ MuonAnalyzer::MuonAnalyzer(const edm::ParameterSet& ps) {
   usesResource(TFileService::kSharedResource);
   edm::Service<TFileService> fs;
   tree_ = fs->make<TTree>("MuonTree", "muon tree");
-
+  /*
   tree_->Branch("run", &run_);
   tree_->Branch("event", &event_);
   tree_->Branch("lumi", &lumi_);
-
+  */
   tree_->Branch("nGen", &nGen_);
   tree_->Branch("genVtx_x", &genVtx_x_);
   tree_->Branch("genVtx_y", &genVtx_y_);
@@ -50,8 +50,8 @@ MuonAnalyzer::MuonAnalyzer(const edm::ParameterSet& ps) {
   tree_->Branch("recoPt", &recoPt_);
   tree_->Branch("recoEta", &recoEta_);
   tree_->Branch("recoPhi", &recoPhi_);
-  tree_->Branch("recoL1Eta", &recoL1Eta_);
-  tree_->Branch("recoL1Phi", &recoL1Phi_);
+  //tree_->Branch("recoL1Eta", &recoL1Eta_);
+  //tree_->Branch("recoL1Phi", &recoL1Phi_);
   tree_->Branch("recoCharge", &recoCharge_);
   tree_->Branch("recoType", &recoType_);
   tree_->Branch("recoIsGood", &recoIsGood_);
@@ -66,6 +66,7 @@ MuonAnalyzer::MuonAnalyzer(const edm::ParameterSet& ps) {
   tree_->Branch("recoIP3D", &recoIP3D_);
   tree_->Branch("recoIP3DErr", &recoIP3DErr_);
   tree_->Branch("recoNMatchedStations", &recoNMatchedStations_);
+  /*
   tree_->Branch("recoIsoTrk", &recoIsoTrk_);
   tree_->Branch("recoPFChIso", &recoPFChIso_);
   tree_->Branch("recoPFPhoIso", &recoPFPhoIso_);
@@ -74,11 +75,12 @@ MuonAnalyzer::MuonAnalyzer(const edm::ParameterSet& ps) {
   tree_->Branch("recoMVAIso", &recoMVAIso_);
   for (auto& w : recoMVAIsoWP_)
     tree_->Branch(("recoMVAIso"+w.first).c_str(), &(w.second));
+  */
   tree_->Branch("recoIDHybridSoft", &recoIDHybridSoft_);
   tree_->Branch("recoIDSoft", &recoIDSoft_);
-  tree_->Branch("recoIDLoose", &recoIDLoose_);
-  tree_->Branch("recoIDMedium", &recoIDMedium_);
-  tree_->Branch("recoIDMediumPrompt", &recoIDMediumPrompt_);
+  //tree_->Branch("recoIDLoose", &recoIDLoose_);
+  //tree_->Branch("recoIDMedium", &recoIDMedium_);
+  //tree_->Branch("recoIDMediumPrompt", &recoIDMediumPrompt_);
   tree_->Branch("recoIDTight", &recoIDTight_);
   tree_->Branch("recoIDGlobalHighPt", &recoIDGlobalHighPt_);
   tree_->Branch("recoIDTrkHighPt", &recoIDTrkHighPt_);

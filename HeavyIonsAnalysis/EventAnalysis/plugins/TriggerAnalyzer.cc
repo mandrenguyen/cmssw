@@ -135,11 +135,26 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
     edm::TriggerNames const& triggerNames = iEvent.triggerNames(*hltresults);
 
     // 1st event : Book as many branches as trigger paths provided in the input...
+    std::vector<TString> select_triggers = {
+      "HLT_AK4PFJet30_v", "HLT_AK4PFJet40_v", "HLT_AK4PFJet60_v", 
+      "HLT_AK4PFJet80_v", "HLT_AK4PFJet100_v", "HLT_AK4PFJet120_v" 
+    };
+
+    // 1st event : Book as many branches as trigger paths provided in the input...
     if (HltEvtCnt == 0) {
       int itdum = 0;
       for (auto const& dummy : hltdummies) {
         TString dummyname(dummy.data());
-        t_->Branch(dummyname, hltflag + itdum, dummyname + "/I");
+
+        // Select triggers
+        bool keep = false;
+        for (TString trig : select_triggers) {
+          if (dummyname.Contains(trig)) keep = true;
+        }
+        if (!keep) continue;
+
+
+	t_->Branch(dummyname, hltflag + itdum, dummyname + "/I");
         t_->Branch(dummyname + "_PrescaleNumerator", hltPrescaleNumerator + itdum, dummyname + "_PrescaleNumerator/I");
         t_->Branch(dummyname + "_PrescaleDenominator", hltPrescaleDenominator + itdum, dummyname + "_PrescaleDenominator/I");
         pathtoindex[dummy] = itdum;
@@ -150,7 +165,15 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
         const std::string& trigname = triggerNames.triggerName(itrig);
         if (pathtoindex.find(trigname) == pathtoindex.end()) {
           TString hltname = trigname;
-          t_->Branch(hltname, hltflag + itdum + itrig, hltname + "/I");
+
+          // Select triggers
+          bool keep = false;
+          for (TString trig : select_triggers) {
+            if (hltname.Contains(trig)) keep = true;
+          }
+          if (!keep) continue;
+
+	  t_->Branch(hltname, hltflag + itdum + itrig, hltname + "/I");
           t_->Branch(hltname + "_PrescaleNumerator", hltPrescaleNumerator + itdum + itrig, hltname + "_PrescaleNumerator/I");
           t_->Branch(hltname + "_PrescaleDenominator", hltPrescaleDenominator + itdum + itrig, hltname + "_PrescaleDenominator/I");
           pathtoindex[trigname] = itdum + itrig;
@@ -176,23 +199,23 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
   } else {
     edm::LogInfo("TriggerAnalyzer") << "-- No Trigger Result" << std::endl;
   }
-
+  /*
   auto& l1GtUtils = const_cast<l1t::L1TGlobalUtil&>(hltPrescaleProvider_->l1tGlobalUtil());
-
+  
   l1GtUtils.retrieveL1(iEvent, iSetup);
-
+  
   //edm::ESHandle<L1TUtmTriggerMenu> menu;
   //auto const& menu = iSetup.getData(l1GtMenuToken_);
   auto const& menu = iSetup.getHandle(l1GtMenuToken_);
   //iSetup.get<L1TUtmTriggerMenuRcd>().get(menu);
 
   if (l1results.isValid() && l1results->size() != 0) {
-    /* reset accept status to -1 */
+  // reset accept status to -1 
     for (int i = 0; i < kMaxL1Flag; ++i) {
       l1flag[i] = -1;
       l1Prescl[i] = -1;
     }
-
+    
     // 1st event : Book as many branches as trigger paths provided in the input...
     if (L1EvtCnt == 0) {
       int itdum = 0;
@@ -237,12 +260,13 @@ void TriggerAnalyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& i
       l1GtUtils.getPrescaleByBit(l1index, prescale);
       l1Prescl[index] = prescale;
     }
-
+    
     // l1results.isValid
   } else {
     edm::LogWarning("TriggerAnalyzer") << "%L1Results -- No L1 Results" << std::endl;
   }
-
+  
+  */
   // After analysis, fill the variables tree
   t_->Fill();
 }

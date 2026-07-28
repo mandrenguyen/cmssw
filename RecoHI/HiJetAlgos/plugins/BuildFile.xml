@@ -6,6 +6,8 @@
 <use name="CondFormats/DataRecord"/>
 <use name="CondFormats/HIObjects"/>
 <use name="CondCore/DBOutputService"/>
+<use   name="PhysicsTools/JetMCUtils"/>
+<use   name="AnalysisDataFormats/TrackInfo"/> 
 <flags EDM_PLUGIN="1"/>
 <library file="*.cc" name="HiJetAlgosPlugins">
 </library>

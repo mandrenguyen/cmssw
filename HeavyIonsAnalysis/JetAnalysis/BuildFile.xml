@@ -13,6 +13,7 @@
 <use name="RecoJets/JetProducers"/>
 <use name="RecoHI/HiJetAlgos"/>
 <use name="DataFormats/HeavyIonEvent"/>
+<use name="AnalysisDataFormats/TrackInfo"/>
 <use name="CondFormats/JetMETObjects"/>
 <use name="SimDataFormats/GeneratorProducts"/>
 <use name="CalibFormats/HcalObjects"/>

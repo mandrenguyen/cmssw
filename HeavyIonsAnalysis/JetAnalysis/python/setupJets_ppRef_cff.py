@@ -14,6 +14,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
             'pfDeepFlavourTagInfos',
             'pfImpactParameterTagInfos',
             'pfInclusiveSecondaryVertexFinderTagInfos',
+            'pfInclusiveSecondaryVertexFinderNegativeTagInfos',
             'pfParticleTransformerAK4TagInfos',
             'pfUnifiedParticleTransformerAK4TagInfos'
         ]
@@ -48,6 +49,15 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
 
     # Create gen-level information
     if isMC:
+
+        process.load("GeneratorInterface.RivetInterface.mergedGenParticles_cfi")
+
+        process.load("RecoHI.HiJetAlgos.HFdecayProductTagger_cfi")        
+        process.HFdecayProductTagger.genParticles = cms.InputTag("mergedGenParticles")        
+        process.HFdecayProductTagger.tagBorC = cms.bool(True) # tag B        
+        
+    ## Produces a std::vector<pat::PackedGenParticle> named HFdecayProductTagger  
+        
         from RecoHI.HiJetAlgos.hiSignalParticleProducer_cfi import hiSignalParticleProducer as hiSignalGenParticles
         process.hiSignalGenParticles = hiSignalGenParticles.clone(
             src = "prunedGenParticles"
@@ -75,8 +85,8 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
         if hasattr(process, "genTask"):
             process.genTask.add( getattr(process,"ak"+labelR+"GenJetsReclusterNoNu"))
         else:
-            process.genTask = cms.Task(process.hiSignalGenParticles, process.allPartons, process.packedGenParticlesForJetsNoNu, getattr(process,"ak"+labelR+"GenJetsReclusterNoNu"))
-
+            process.genTask = cms.Task(process.mergedGenParticles, process.HFdecayProductTagger, process.hiSignalGenParticles, process.allPartons, process.packedGenParticlesForJetsNoNu, getattr(process,"ak"+labelR+"GenJetsReclusterNoNu"))
+            
 
     # Create unsubtracted reco jets
 
@@ -206,8 +216,10 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
     process.patAlgosToolsTask.add(getattr(process,"unsubUpdatedPatJetsAK"+labelR+"PFCHS"))
 
     if doBtagging:
-        getattr(process,"pfUnifiedParticleTransformerAK4JetTagsAK"+labelR+"PFCHSBtag").model_path = 'RecoBTag/Combined/data/UParTAK4/HIN/V00/UParTAK4_PbPb_2023.onnx'
-        getattr(process,"pfUnifiedParticleTransformerAK4TagInfosAK"+labelR+"PFCHSBtag").sort_cand_by_pt = True 
+        #getattr(process,"pfUnifiedParticleTransformerAK4JetTagsAK"+labelR+"PFCHSBtag").model_path = 'RecoBTag/Combined/data/UParTAK4/HIN/V00/UParTAK4_PbPb_2023.onnx'
+        #getattr(process,"pfUnifiedParticleTransformerAK4TagInfosAK"+labelR+"PFCHSBtag").sort_cand_by_pt = True 
+        # for V2 and for heavy-ion traingin need "fix_lt_sorting".  For v1 for pp, remove it!
+        getattr(process,"pfUnifiedParticleTransformerAK4JetTagsAK"+labelR+"PFCHSBtag").model_path = 'RecoBTag/Combined/data/UParTAK4/PUPPI/V01/UParTAK4_v2.onnx'
         getattr(process,"pfUnifiedParticleTransformerAK4TagInfosAK"+labelR+"PFCHSBtag").fix_lt_sorting = True
 
         if hasattr(process,'updatedPatJetsTransientCorrectedAK'+labelR+'PFCHSBtag'):
@@ -217,6 +229,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
             raise ValueError('I could not find updatedPatJetsTransientCorrected to embed the tagInfos, please check the cfg')
 
             # Remove PUPPI
+        '''
         process.patAlgosToolsTask.remove(process.packedpuppi)
         process.patAlgosToolsTask.remove(process.packedpuppiNoLep)
         getattr(process,"pfInclusiveSecondaryVertexFinderTagInfosAK"+labelR+"PFCHSBtag").weights = ""
@@ -224,7 +237,7 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
             getattr(process, taginfo).fallback_puppi_weight = True
             getattr(process, taginfo).fallback_vertex_association = True
             getattr(process, taginfo).puppi_value_map = ""
-
+        '''
     # Match with unsubtracted jets
     setattr(process,"unsubAK"+labelR+"JetMap",
             getattr(process,"unsubUpdatedPatJetsAK"+labelR+"PFCHS").clone(
@@ -239,10 +252,56 @@ def candidateBtaggingMiniAOD(process, isMC = True, jetPtMin = 15, jetCorrLevels 
     setattr(process,"pfJetProbabilityBJetTagsAK"+labelR+"PFCHSBtag",
             pfJetProbabilityBJetTags.clone(tagInfos = ["pfImpactParameterTagInfosAK"+labelR+"PFCHSBtag"])
         )
+    from RecoBTag.ImpactParameter.candidateJetProbabilityComputer_cfi import candidateJetProbabilityComputer
+    process.wrongCandidateJetProbabilityComputer = candidateJetProbabilityComputer.clone(impactParameterType = 1)
+    setattr(process,"pfWrongJetProbabilityBJetTagsAK"+labelR+"PFCHSBtag",
+            pfJetProbabilityBJetTags.clone(tagInfos = ["pfImpactParameterTagInfosAK"+labelR+"PFCHSBtag"],
+                                           jetTagComputer = cms.string('wrongCandidateJetProbabilityComputer')
+                                           )
+            )
+     
     if doBtagging:
-        process.patAlgosToolsTask.add(getattr(process,"pfJetProbabilityBJetTagsAK"+labelR+"PFCHSBtag"))
+        process.patAlgosToolsTask.add(getattr(process,"pfJetProbabilityBJetTagsAK"+labelR+"PFCHSBtag"), getattr(process,"pfWrongJetProbabilityBJetTagsAK"+labelR+"PFCHSBtag"))
 
+
+# Add negative secondary vertices
+    process.svTask = cms.Task()
+    if doBtagging:
+        from RecoVertex.AdaptiveVertexFinder.inclusiveNegativeVertexing_cff import inclusiveCandidateNegativeVertexFinder, candidateNegativeVertexMerger, candidateNegativeVertexArbitrator, inclusiveCandidateNegativeSecondaryVertices
+        process.inclusiveCandidateNegativeVertexFinder = inclusiveCandidateNegativeVertexFinder.clone(
+            tracks = "packedPFCandidates",
+            primaryVertices = "offlineSlimmedPrimaryVertices",
+        )
+        process.candidateNegativeVertexMerger = candidateNegativeVertexMerger.clone()
+        process.candidateNegativeVertexArbitrator = candidateNegativeVertexArbitrator.clone(
+            tracks = "packedPFCandidates",
+            primaryVertices = "offlineSlimmedPrimaryVertices"
+        )
+        process.inclusiveCandidateNegativeSecondaryVertices = inclusiveCandidateNegativeSecondaryVertices.clone()
+        from RecoBTag.SecondaryVertex.pfInclusiveSecondaryVertexFinderNegativeTagInfos_cfi import pfInclusiveSecondaryVertexFinderNegativeTagInfos
+        process.pfInclusiveSecondaryVertexFinderNegativeTagInfos = pfInclusiveSecondaryVertexFinderNegativeTagInfos.clone()
+
+        for mod in ["inclusiveCandidateNegativeVertexFinder","candidateNegativeVertexMerger","candidateNegativeVertexArbitrator","inclusiveCandidateNegativeSecondaryVertices", "pfInclusiveSecondaryVertexFinderNegativeTagInfos"]:
+            process.svTask.add(getattr(process, mod))
+
+        setattr(process,'pfNegativeUnifiedParticleTransformerAK4TagInfosAK4PFCHSBtag', getattr(process,'pfUnifiedParticleTransformerAK4TagInfosAK4PFCHSBtag').clone(
+            flip = True,
+            secondary_vertices = 'inclusiveCandidateNegativeSecondaryVertices',
+        ))
+        setattr(process,'pfNegativeUnifiedParticleTransformerAK4JetTagsAK4PFCHSBtag', getattr(process,'pfUnifiedParticleTransformerAK4JetTagsAK4PFCHSBtag').clone(
+            src = 'pfNegativeUnifiedParticleTransformerAK4TagInfosAK4PFCHSBtag',
+        ))
+        process.patAlgosToolsTask.add(getattr(process,'pfNegativeUnifiedParticleTransformerAK4TagInfosAK4PFCHSBtag'))
+        process.patAlgosToolsTask.add(getattr(process,'pfNegativeUnifiedParticleTransformerAK4JetTagsAK4PFCHSBtag'))
+
+
+
+
+
+            
     # Associate to forest sequence
     if isMC:
         process.forest.associate(process.genTask)
     process.forest.associate(process.patAlgosToolsTask)
+    if doBtagging:
+        process.forest.associate(process.svTask)

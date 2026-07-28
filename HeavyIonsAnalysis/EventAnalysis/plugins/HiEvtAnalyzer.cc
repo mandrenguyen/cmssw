@@ -532,6 +532,7 @@ void HiEvtAnalyzer::beginJob() {
   }
 
   // Centrality
+  /*
   thi_->Branch("hiBin", &hiBin, "hiBin/I");
   thi_->Branch("hiHF", &hiHF, "hiHF/F");
   thi_->Branch("hiHFplus", &hiHFplus, "hiHFplus/F");
@@ -598,6 +599,8 @@ void HiEvtAnalyzer::beginJob() {
   thi_->Branch("numMinHFTower3", &numMinHFTower3, "numMinHFTower3/I");
   thi_->Branch("numMinHFTower4", &numMinHFTower4, "numMinHFTower4/I");
   thi_->Branch("numMinHFTower5", &numMinHFTower5, "numMinHFTower5/I");
+  */
+
 }
 
 // ------------ method called once each job just after ending the event loop  ------------

@@ -1,0 +1,464 @@
+26-Aug-2026 09:21:29 CEST  Initiating request to open file root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 09:21:32 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?xrdcl.requuid=e96079d0-0522-43ba-a47b-ec1514d1f5bd.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 09:21:32 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?tried=&xrdcl.requuid=9cf148c7-6474-4a1e-8179-f60d8f862d0b.
+%MSG
+26-Aug-2026 09:21:32 CEST  Initiating request to open file root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 09:21:33 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?xrdcl.requuid=9d246fb5-34eb-43e7-a6ee-6ec6069d8b98.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 09:21:33 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?tried=&xrdcl.requuid=45ea5325-ccfa-492b-ae21-22575757ec0c.
+%MSG
+26-Aug-2026 09:21:33 CEST  Initiating request to open file root://xrootd-cms.infn.it//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-f XrdAdaptor:  file_open 26-Aug-2026 09:22:36 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=6e650081-6211-4e38-bc4d-69525c66566b&org.dcache.xrootd.client=mnguyen.1196441@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=374de124-c893-4f35-925c-ca23b0106c03
+%MSG
+26-Aug-2026 09:22:38 CEST  Successfully opened file root://xrootd-cms.infn.it//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 09:22:43 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=2390d5b9-69d3-4621-9c89-dda131ad5cff&org.dcache.xrootd.client=mnguyen.1196441@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site3.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=e0167bc2-e0b9-4c6a-a316-ce2190000e9a
+%MSG
+NTRIGGERS_DBL = 9	 NTRIGGERS_SGL = 11	 NTRIGGERS = 21
+ Trigger 1	HLT_PPRefL1DoubleMu0_Open_v
+ Trigger 2	HLT_PPRefL1DoubleMu0_v
+ Trigger 3	HLT_PPRefL1DoubleMu0_SQ_v
+ Trigger 4	HLT_PPRefL1DoubleMu2_v
+ Trigger 5	HLT_PPRefL1DoubleMu2_SQ_v
+ Trigger 6	HLT_PPRefL2DoubleMu0_Open_v
+ Trigger 7	HLT_PPRefL2DoubleMu0_v
+ Trigger 8	HLT_PPRefL3DoubleMu0_Open_v
+ Trigger 9	HLT_PPRefL3DoubleMu0_v
+ Trigger 10	HLT_PPRefL1SingleMu7_v
+ Trigger 11	HLT_PPRefL1SingleMu12_v
+ Trigger 12	HLT_PPRefL2SingleMu7_v
+ Trigger 13	HLT_PPRefL2SingleMu12_v
+ Trigger 14	HLT_PPRefL2SingleMu15_v
+ Trigger 15	HLT_PPRefL3SingleMu3_v
+ Trigger 16	HLT_PPRefL3SingleMu5_v
+ Trigger 17	HLT_PPRefL3SingleMu7_v
+ Trigger 18	HLT_PPRefL3SingleMu12_v
+ Trigger 19	HLT_PPRefL3SingleMu15_v
+ Trigger 20	HLT_PPRefL3SingleMu20_v
+%MSG-w TriggerAnalyzer:  TriggerAnalyzer:hltanalysis@beginRun  26-Aug-2026 09:22:54 CEST Run: 397954
+HLT config change
+%MSG
+Begin processing the 1st record. Run 397954, Event 4731710, LumiSection 106 on stream 0 at 26-Aug-2026 09:22:55.560 CEST
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2561
+#--------------------------------------------------------------------------
+#                         FastJet release 3.4.1
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2342
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3345
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3866
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2618
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3384
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3066
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1100 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1064 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=40.0312/0.512528/1.96705
+  candidate 0 muon1: innerTrack pt/eta/phi=40.0426/0.512587/1.96709, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.0113712/-5.90795e-05/-4.21949e-05/7.26002e-05; closest PF p4: pdgId=-13 dpt/dR=-0.0113712/7.2597e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1155 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1354 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.04102/1.74432/-2.44899
+  candidate 0 muon2: innerTrack pt/eta/phi=1.04061/1.74433/-2.44902, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000410435/-1.0477e-05/2.41063e-05/2.62846e-05; closest PF p4: pdgId=13 dpt/dR=0.000410435/2.63606e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2416
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2297
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1454 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1282 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=43.6562/-2.02264/1.85035
+  candidate 0 muon1: innerTrack pt/eta/phi=43.6487/-2.0226/1.85033, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00759217/-4.4418e-05/2.25179e-05/4.97998e-05; closest PF p4: pdgId=-13 dpt/dR=0.00759217/4.97931e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=788 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1434 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.08789/-1.77746/0.329511
+  candidate 0 muon2: innerTrack pt/eta/phi=1.08835/-1.77743/0.329511, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.000457627/-3.14613e-05/5.93437e-07/3.14669e-05; closest PF p4: pdgId=13 dpt/dR=-0.000457627/3.1467e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2757
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2456
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1168 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1173 pointsToPackedPF=1 pdgId=13 pt/eta/phi=35.6875/0.849818/-1.08626
+  candidate 0 muon1: innerTrack pt/eta/phi=35.6737/0.849829/-1.08623, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.0138201/-1.08217e-05/-3.27522e-05/3.44937e-05; closest PF p4: pdgId=13 dpt/dR=0.0138201/3.44602e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1074 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1442 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.70215/2.00104/-0.851692
+  candidate 0 muon2: innerTrack pt/eta/phi=1.70191/2.00108/-0.851691, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.000235304/-4.51553e-05/-7.33423e-07/4.51612e-05; closest PF p4: pdgId=-13 dpt/dR=0.000235304/4.51615e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2543
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3080
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3044
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1232 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1175 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=29.25/0.409986/2.63582
+  candidate 0 muon1: innerTrack pt/eta/phi=29.2434/0.410004/2.63583, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.0065991/-1.83521e-05/-5.25702e-06/1.90902e-05; closest PF p4: pdgId=-13 dpt/dR=0.0065991/1.90642e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1373 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1559 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.23438/1.56725/0.0433686
+  candidate 0 muon2: innerTrack pt/eta/phi=1.22057/1.56729/0.0427562, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000182468/-4.31465e-05/2.64963e-05/5.06327e-05; closest PF p4: pdgId=13 dpt/dR=0.0138086/0.000613968 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2682
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3206
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2150
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3399
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1681 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1516 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=36.8125/0.520402/1.32543
+  candidate 0 muon1: innerTrack pt/eta/phi=36.8031/0.520319/1.32545, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00941504/8.3086e-05/-1.58656e-05/8.45872e-05; closest PF p4: pdgId=-13 dpt/dR=0.00941504/8.45822e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=569 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1699 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.18066/1.69616/2.8535
+  candidate 0 muon2: innerTrack pt/eta/phi=1.18038/1.69617/2.85349, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000287333/-1.55849e-05/1.04926e-05/1.87878e-05; closest PF p4: pdgId=13 dpt/dR=0.000287333/1.88287e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3044
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1246 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1201 pointsToPackedPF=1 pdgId=13 pt/eta/phi=30.4219/1.72234/1.66109
+  candidate 0 muon1: innerTrack pt/eta/phi=30.4149/1.72229/1.66107, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.00695896/5.4181e-05/1.81187e-05/5.71302e-05; closest PF p4: pdgId=13 dpt/dR=0.00695896/5.71186e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1355 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1251 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=2.61328/1.73058/2.79071
+  candidate 0 muon2: innerTrack pt/eta/phi=2.61259/1.73058/2.79068, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00069483/4.56334e-06/3.38709e-05/3.41769e-05; closest PF p4: pdgId=-13 dpt/dR=0.00069483/3.41e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2606
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1166 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1154 pointsToPackedPF=1 pdgId=13 pt/eta/phi=27.75/1.6458/0.204498
+  candidate 0 muon1: innerTrack pt/eta/phi=27.755/1.64576/0.204461, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.00502469/4.1109e-05/3.73442e-05/5.55386e-05; closest PF p4: pdgId=13 dpt/dR=-0.00502469/5.55424e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1014 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1450 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.07812/2.23084/-1.89917
+  candidate 0 muon2: innerTrack pt/eta/phi=1.07827/2.23079/-1.89923, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.000146511/5.10044e-05/5.57928e-05/7.5593e-05; closest PF p4: pdgId=-13 dpt/dR=-0.000146511/7.55917e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2525
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1141 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1301 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=37.4062/1.47203/0.152642
+  candidate 0 muon1: innerTrack pt/eta/phi=37.4169/1.47206/0.152611, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.0106691/-3.49557e-05/3.03898e-05/4.63189e-05; closest PF p4: pdgId=-13 dpt/dR=-0.0106691/4.63142e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=896 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1555 pointsToPackedPF=1 pdgId=13 pt/eta/phi=3.6582/1.36619/0.845634
+  candidate 0 muon2: innerTrack pt/eta/phi=3.65787/1.36619/0.845674, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000330157/-3.12341e-06/-3.96659e-05/3.97887e-05; closest PF p4: pdgId=13 dpt/dR=0.000330157/3.98013e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2716
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2438
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1283 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1044 pointsToPackedPF=1 pdgId=13 pt/eta/phi=35.4688/-0.490921/-1.1389
+  candidate 0 muon1: innerTrack pt/eta/phi=35.4574/-0.490842/-1.13886, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.0113166/-7.82969e-05/-4.30097e-05/8.93322e-05; closest PF p4: pdgId=13 dpt/dR=0.0113166/8.93144e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1177 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1375 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.00195/-2.13581/-0.168941
+  candidate 0 muon2: innerTrack pt/eta/phi=1.00186/-2.13575/-0.168919, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=9.71352e-05/-5.54957e-05/-2.16056e-05/5.95531e-05; closest PF p4: pdgId=-13 dpt/dR=9.71352e-05/5.95525e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2415
+found duplicates
+ muon # 0 is a duplicate 
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1419 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1321 pointsToPackedPF=1 pdgId=13 pt/eta/phi=32.2188/-0.608478/-0.308115
+  candidate 0 muon1: innerTrack pt/eta/phi=32.2106/-0.608387/-0.308097, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.00818717/-9.14935e-05/-1.77861e-05/9.32063e-05; closest PF p4: pdgId=13 dpt/dR=0.00818717/9.32053e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1417 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1438 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=4.39453/-0.0208747/-1.36547
+  candidate 0 muon2: innerTrack pt/eta/phi=4.39522/-0.0208275/-1.36552, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.000683915/-4.72037e-05/4.49547e-05/6.51852e-05; closest PF p4: pdgId=-13 dpt/dR=-0.000683915/6.52147e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2773
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2488
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2459
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1070 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1084 pointsToPackedPF=1 pdgId=13 pt/eta/phi=29.6875/-1.52165/-0.245417
+  candidate 0 muon1: innerTrack pt/eta/phi=29.6799/-1.52169/-0.245411, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.00755804/3.73748e-05/-5.8948e-06/3.78368e-05; closest PF p4: pdgId=13 dpt/dR=0.00755804/3.78366e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=470 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1251 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.5918/-1.8908/-1.61588
+  candidate 0 muon2: innerTrack pt/eta/phi=1.59139/-1.89077/-1.61586, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.000405902/-3.61072e-05/-1.46636e-05/3.89712e-05; closest PF p4: pdgId=-13 dpt/dR=0.000405902/3.89921e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2403
+OniaPFCandidateProducer: selected 2 onium candidate(s), removed 4 PF candidate(s), output size 3229
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2480
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3146
+found duplicates
+ muon # 0 is a duplicate 
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2994
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1657 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1381 pointsToPackedPF=1 pdgId=13 pt/eta/phi=42.1875/0.35139/-0.983038
+  candidate 0 muon1: innerTrack pt/eta/phi=42.1981/0.351421/-0.983038, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.0106399/-3.05434e-05/-2.27602e-07/3.05443e-05; closest PF p4: pdgId=13 dpt/dR=-0.0106399/3.05442e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1519 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1371 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=2.11719/1.35612/-0.487324
+  candidate 0 muon2: innerTrack pt/eta/phi=2.11702/1.35607/-0.487295, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.000171903/5.00166e-05/-2.87595e-05/5.76955e-05; closest PF p4: pdgId=-13 dpt/dR=0.000171903/5.76922e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2962
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1820 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1725 pointsToPackedPF=1 pdgId=13 pt/eta/phi=65.5/-0.942656/-0.970733
+  candidate 0 muon1: innerTrack pt/eta/phi=65.4725/-0.942695/-0.970755, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.0274971/3.87741e-05/2.18289e-05/4.44964e-05; closest PF p4: pdgId=13 dpt/dR=0.0274971/4.4511e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1217 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1812 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.30371/-2.07447/-1.0644
+  candidate 0 muon2: innerTrack pt/eta/phi=1.30349/-2.07444/-1.06441, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.000217008/-2.5507e-05/9.89364e-06/2.73586e-05; closest PF p4: pdgId=-13 dpt/dR=0.000217008/2.73656e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3348
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3480
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=76 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1892 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=46.5312/-1.4788/2.64373
+  candidate 0 muon1: innerTrack pt/eta/phi=46.5371/-1.4788/2.64376, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.00585225/-7.165e-06/-2.71856e-05/2.81139e-05; closest PF p4: pdgId=-13 dpt/dR=-0.00585225/2.80863e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=693 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1458 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.02734/-2.37935/0.820347
+  candidate 0 muon2: innerTrack pt/eta/phi=1.02699/-2.3794/0.820363, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000349623/5.81656e-05/-1.60244e-05/6.03326e-05; closest PF p4: pdgId=13 dpt/dR=0.000349623/6.03249e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2964
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1240 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1260 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=33.625/0.896695/-0.918289
+  candidate 0 muon1: innerTrack pt/eta/phi=33.6137/0.896762/-0.918282, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.0113249/-6.73107e-05/-7.75144e-06/6.77555e-05; closest PF p4: pdgId=-13 dpt/dR=0.0113249/6.77564e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=455 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1361 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.21582/1.97613/3.04659
+  candidate 0 muon2: innerTrack pt/eta/phi=1.21546/1.97609/3.0466, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000360449/4.06437e-05/-9.77757e-06/4.18032e-05; closest PF p4: pdgId=13 dpt/dR=0.000360449/4.18205e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2637
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2349
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1204 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1270 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=26.3281/1.62767/-2.53182
+  candidate 0 muon1: innerTrack pt/eta/phi=26.322/1.6276/-2.53184, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00616304/7.27158e-05/2.02659e-05/7.54871e-05; closest PF p4: pdgId=-13 dpt/dR=0.00616304/7.55156e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=414 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1332 pointsToPackedPF=1 pdgId=13 pt/eta/phi=2.57812/1.87469/-1.16957
+  candidate 0 muon2: innerTrack pt/eta/phi=2.57772/1.87475/-1.16955, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000408028/-5.70962e-05/-2.4562e-05/6.21552e-05; closest PF p4: pdgId=13 dpt/dR=0.000408028/6.21446e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2664
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=1 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=1 ProductID=2:2538 key=151 pointsToPackedPF=0 pdgId=-13 pt/eta/phi=3.39453/1.41966/-2.8204
+  candidate 0 muon1: innerTrack pt/eta/phi=3.39466/1.41971/-2.82037, strictMatches=0; closest track-bearing PF: pdgId=211 dpt/deta/dphi/dR=-2.93568/0.0310781/-0.0588193/0.0665249; closest PF p4: pdgId=211 dpt/dR=-2.93568/0.0665249 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=760 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1797 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.10938/-2.32698/1.86499
+  candidate 0 muon2: innerTrack pt/eta/phi=1.10957/-2.3269/1.86504, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.000197068/-7.76179e-05/-5.1143e-05/9.29524e-05; closest PF p4: pdgId=13 dpt/dR=-0.000197068/9.29423e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3130
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3206
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1369 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1389 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=41.0312/-1.01975/-1.40961
+  candidate 0 muon1: innerTrack pt/eta/phi=41.0164/-1.0197/-1.40965, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.0148841/-4.32883e-05/3.29003e-05/5.43719e-05; closest PF p4: pdgId=-13 dpt/dR=0.0148841/5.43717e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1650 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1438 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.19824/-1.69781/2.70632
+  candidate 0 muon2: innerTrack pt/eta/phi=1.19777/-1.69787/2.70635, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000470995/6.5686e-05/-2.45601e-05/7.01273e-05; closest PF p4: pdgId=13 dpt/dR=0.000470995/7.01428e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2860
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3161
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3292
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3236
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2970
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3183
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2638
+OniaPFCandidateProducer: selected 2 onium candidate(s), removed 4 PF candidate(s), output size 2667
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2413
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2941
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3045
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2848
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1719 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1406 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=29.3906/-0.436171/2.99404
+  candidate 0 muon1: innerTrack pt/eta/phi=29.398/-0.436125/2.99399, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.00733495/-4.51148e-05/4.43459e-05/6.32606e-05; closest PF p4: pdgId=-13 dpt/dR=-0.00733495/6.31949e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=455 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1392 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.22852/-2.0155/-2.69275
+  candidate 0 muon2: innerTrack pt/eta/phi=1.36313/-2.01875/-2.6566, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=3.35611e-05/5.31272e-05/-1.38136e-05/5.48937e-05; closest PF p4: pdgId=13 dpt/dR=-0.13461/0.0362934 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2918
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2562
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3242
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1048 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1047 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=45.1562/-1.92541/-0.357921
+  candidate 0 muon1: innerTrack pt/eta/phi=45.1692/-1.92535/-0.357906, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.0129065/-6.23701e-05/-1.57374e-05/6.43249e-05; closest PF p4: pdgId=-13 dpt/dR=-0.0129065/6.43268e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=675 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1268 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.33594/-2.25538/0.797185
+  candidate 0 muon2: innerTrack pt/eta/phi=1.33608/-2.25546/0.797182, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.00014389/7.72889e-05/3.23837e-06/7.73567e-05; closest PF p4: pdgId=13 dpt/dR=-0.00014389/7.73576e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2355
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3918
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3264
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=838 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1016 pointsToPackedPF=1 pdgId=13 pt/eta/phi=38.5625/2.21876/-0.704026
+  candidate 0 muon1: innerTrack pt/eta/phi=38.5532/2.21875/-0.704016, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.00934969/6.04956e-06/-9.85874e-06/1.15668e-05; closest PF p4: pdgId=13 dpt/dR=0.00934969/1.15795e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=355 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1193 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.20117/2.31379/0.85521
+  candidate 0 muon2: innerTrack pt/eta/phi=1.20085/2.3138/0.855154, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00032176/-6.7728e-06/5.61598e-05/5.65667e-05; closest PF p4: pdgId=-13 dpt/dR=0.00032176/5.65907e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2235
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2804
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3058
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3262
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3003
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3219
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2663
+found duplicates
+ muon # 0 is a duplicate 
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3013
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=1 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=1 ProductID=2:2538 key=157 pointsToPackedPF=0 pdgId=-13 pt/eta/phi=30.3125/-2.112/1.30043
+  candidate 0 muon1: innerTrack pt/eta/phi=30.319/-2.11208/1.30039, strictMatches=0; closest track-bearing PF: pdgId=211 dpt/deta/dphi/dR=-29.3229/-0.00120982/0.00022532/0.00123062; closest PF p4: pdgId=211 dpt/dR=-29.3229/0.00123063 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1749 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1772 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.3418/-1.50426/-0.620339
+  candidate 0 muon2: innerTrack pt/eta/phi=1.34201/-1.50428/-0.620345, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.000213748/2.48763e-05/5.91895e-06/2.55708e-05; closest PF p4: pdgId=13 dpt/dR=-0.000213748/2.55693e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2942
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2453
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3355
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=257 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1258 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=43.9688/2.33668/1.71519
+  candidate 0 muon1: innerTrack pt/eta/phi=43.9596/2.33669/1.71518, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00918498/-8.97637e-06/1.12044e-05/1.43566e-05; closest PF p4: pdgId=-13 dpt/dR=0.00918498/1.43694e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=389 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1498 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.46582/2.35701/2.79472
+  candidate 0 muon2: innerTrack pt/eta/phi=1.46618/2.35699/2.79474, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=-0.000355656/1.83247e-05/-1.55086e-05/2.40065e-05; closest PF p4: pdgId=13 dpt/dR=-0.000355656/2.40151e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2647
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3753
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=2076 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1716 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=38.4688/-0.980193/-2.39939
+  candidate 0 muon1: innerTrack pt/eta/phi=38.4607/-0.980156/-2.39943, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00806806/-3.74041e-05/3.67236e-05/5.24184e-05; closest PF p4: pdgId=-13 dpt/dR=0.00806806/5.24292e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1629 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1847 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.13965/-1.63884/2.60925
+  candidate 0 muon2: innerTrack pt/eta/phi=1.13959/-1.63892/2.60927, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=5.8645e-05/7.58808e-05/-1.49969e-05/7.73486e-05; closest PF p4: pdgId=13 dpt/dR=5.8645e-05/7.73459e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3326
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3022
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2843
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2623
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2761
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3935
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer: selected 2 onium candidate(s), removed 4 PF candidate(s), output size 4464
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 09:23:56 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=bcfeee6b-5a16-422f-8835-15102a8778d8&org.dcache.xrootd.client=mnguyen.1196441@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site3.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=622bd1e2-99c6-4b6e-b533-79adfe62870b
+%MSG
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 09:24:03 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=68c2f381-6aee-4d39-8cc3-9f9ad16e08e9&org.dcache.xrootd.client=mnguyen.1196441@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site3.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=6057f781-3d43-43fa-8932-17c8cba20154
+%MSG
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2599
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2708
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2495
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1704 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1609 pointsToPackedPF=1 pdgId=13 pt/eta/phi=35.6562/-0.14008/2.66668
+  candidate 0 muon1: innerTrack pt/eta/phi=35.6436/-0.140068/2.6667, strictMatches=0; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.0126756/-1.23733e-05/-1.95394e-05/2.31277e-05; closest PF p4: pdgId=13 dpt/dR=0.0126756/2.30977e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1700 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1952 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=1.25879/-1.81939/2.82353
+  candidate 0 muon2: innerTrack pt/eta/phi=1.25842/-1.81947/2.82352, strictMatches=1; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.000373316/7.80993e-05/9.52853e-06/7.86784e-05; closest PF p4: pdgId=-13 dpt/dR=0.000373316/7.86652e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3126
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2338
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=557 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1211 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=55.0625/2.19788/0.967315
+  candidate 0 muon1: innerTrack pt/eta/phi=55.0569/2.19783/0.967313, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.00560113/5.28259e-05/1.48775e-06/5.28469e-05; closest PF p4: pdgId=-13 dpt/dR=0.00560113/5.28468e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=640 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1199 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.25586/2.1836/-0.924044
+  candidate 0 muon2: innerTrack pt/eta/phi=1.25541/2.1836/-0.924058, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000453857/2.02074e-07/1.44502e-05/1.44516e-05; closest PF p4: pdgId=13 dpt/dR=0.000453857/1.44793e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2576
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2997
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2709
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2273
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 3024
+found duplicates
+ muon # 0 is a duplicate 
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=1 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=1 ProductID=2:2538 key=197 pointsToPackedPF=0 pdgId=-13 pt/eta/phi=15.0234/-0.564531/0.294443
+  candidate 0 muon1: innerTrack pt/eta/phi=15.0223/-0.564536/0.294412, strictMatches=0; closest track-bearing PF: pdgId=-211 dpt/deta/dphi/dR=-14.075/0.077644/0.0332258/0.0844544; closest PF p4: pdgId=-211 dpt/dR=-14.075/0.0844544 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=334 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1676 pointsToPackedPF=1 pdgId=13 pt/eta/phi=3.39062/-1.96936/0.405381
+  candidate 0 muon2: innerTrack pt/eta/phi=3.38977/-1.96927/0.405352, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000858048/-8.88841e-05/2.88532e-05/9.345e-05; closest PF p4: pdgId=13 dpt/dR=0.000858048/9.34532e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 3176
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=756 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1428 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=29.3125/-1.13565/-1.21166
+  candidate 0 muon1: innerTrack pt/eta/phi=29.318/-1.13574/-1.2117, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=-0.0054584/8.98298e-05/4.02703e-05/9.84434e-05; closest PF p4: pdgId=-13 dpt/dR=-0.0054584/9.84534e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=588 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1828 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.08887/-1.56084/1.79391
+  candidate 0 muon2: innerTrack pt/eta/phi=1.08866/-1.5609/1.79387, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000208732/6.16786e-05/4.33878e-05/7.54105e-05; closest PF p4: pdgId=13 dpt/dR=0.000208732/7.54267e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2928
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2914
+OniaPFCandidateProducer MATCH DEBUG: expected 2 removed PF candidates but found 1
+  candidate 0 muon1 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1448 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1305 pointsToPackedPF=1 pdgId=-13 pt/eta/phi=54/1.44475/-0.311533
+  candidate 0 muon1: innerTrack pt/eta/phi=53.9853/1.44471/-0.31152, strictMatches=0; closest track-bearing PF: pdgId=-13 dpt/deta/dphi/dR=0.0147277/3.85835e-05/-1.24706e-05/4.05488e-05; closest PF p4: pdgId=-13 dpt/dR=0.0147277/4.05482e-05 hasTrackDetails=1
+  candidate 0 muon2 sourceCandidatePtrs=2 packedPFCandidates ProductID=2:2540
+    source[0]: nonnull=1 available=0 ProductID=2:3997 key=1094 pointsToPackedPF=0
+    source[1]: nonnull=1 available=1 ProductID=2:2540 key=1436 pointsToPackedPF=1 pdgId=13 pt/eta/phi=1.54688/1.74743/0.749333
+  candidate 0 muon2: innerTrack pt/eta/phi=1.54647/1.74739/0.749341, strictMatches=1; closest track-bearing PF: pdgId=13 dpt/deta/dphi/dR=0.000401915/3.8283e-05/-7.56304e-06/3.90229e-05; closest PF p4: pdgId=13 dpt/dR=0.000401915/3.90219e-05 hasTrackDetails=1
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 1 PF candidate(s), output size 2737
+OniaPFCandidateProducer: selected 1 onium candidate(s), removed 2 PF candidate(s), output size 2672
+
+
+A fatal system signal has occurred: segmentation violation
+The following is the call stack containing the origin of the signal.
+
+Wed Aug 26 09:26:48 CEST 2026
+
+Current Modules:
+
+Module: none (crashed)
+
+A fatal system signal has occurred: segmentation violation

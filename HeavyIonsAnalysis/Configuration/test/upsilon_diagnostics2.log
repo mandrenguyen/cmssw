@@ -1,0 +1,264 @@
+26-Aug-2026 10:55:26 CEST  Initiating request to open file root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 10:55:29 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?xrdcl.requuid=4fd732fc-506f-44c8-bb47-47cae4f33ad3.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 10:55:29 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/grif/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?tried=&xrdcl.requuid=695c5484-51e6-4429-9458-0c8357c41555.
+%MSG
+26-Aug-2026 10:55:29 CEST  Initiating request to open file root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 10:55:30 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?xrdcl.requuid=266d47f3-63ad-4837-b875-915abb5a4224.
+%MSG
+%MSG-w XrdAdaptorInternal:  file_open 26-Aug-2026 10:55:30 CEST pre-events
+Failed to open file at URL root://eos.grif.fr:1094//eos/grif/cms/llr/store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?tried=&xrdcl.requuid=c69b7af7-e73d-46d0-9289-344bce21a1de.
+%MSG
+26-Aug-2026 10:55:30 CEST  Initiating request to open file root://xrootd-cms.infn.it//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-f XrdAdaptor:  file_open 26-Aug-2026 10:55:34 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=3d362484-d0d5-4035-a7b9-849af8f19302&org.dcache.xrootd.client=mnguyen.1289586@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=28685d10-1f60-4f7d-aa9c-d63f1eda7ad8
+%MSG
+26-Aug-2026 10:55:36 CEST  Successfully opened file root://xrootd-cms.infn.it//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 10:55:41 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=aa7c9eb5-155e-4fb6-a85d-8e5ea1b2a4ca&org.dcache.xrootd.client=mnguyen.1289586@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site1.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=ed485352-bca2-42cc-9004-bebadcd9df7f
+%MSG
+NTRIGGERS_DBL = 9	 NTRIGGERS_SGL = 11	 NTRIGGERS = 21
+ Trigger 1	HLT_PPRefL1DoubleMu0_Open_v
+ Trigger 2	HLT_PPRefL1DoubleMu0_v
+ Trigger 3	HLT_PPRefL1DoubleMu0_SQ_v
+ Trigger 4	HLT_PPRefL1DoubleMu2_v
+ Trigger 5	HLT_PPRefL1DoubleMu2_SQ_v
+ Trigger 6	HLT_PPRefL2DoubleMu0_Open_v
+ Trigger 7	HLT_PPRefL2DoubleMu0_v
+ Trigger 8	HLT_PPRefL3DoubleMu0_Open_v
+ Trigger 9	HLT_PPRefL3DoubleMu0_v
+ Trigger 10	HLT_PPRefL1SingleMu7_v
+ Trigger 11	HLT_PPRefL1SingleMu12_v
+ Trigger 12	HLT_PPRefL2SingleMu7_v
+ Trigger 13	HLT_PPRefL2SingleMu12_v
+ Trigger 14	HLT_PPRefL2SingleMu15_v
+ Trigger 15	HLT_PPRefL3SingleMu3_v
+ Trigger 16	HLT_PPRefL3SingleMu5_v
+ Trigger 17	HLT_PPRefL3SingleMu7_v
+ Trigger 18	HLT_PPRefL3SingleMu12_v
+ Trigger 19	HLT_PPRefL3SingleMu15_v
+ Trigger 20	HLT_PPRefL3SingleMu20_v
+%MSG-w TriggerAnalyzer:  TriggerAnalyzer:hltanalysis@beginRun  26-Aug-2026 10:55:50 CEST Run: 397954
+HLT config change
+%MSG
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 10:55:51 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=acd2c98c-1717-4159-b44e-79941a542ec4&org.dcache.xrootd.client=mnguyen.1289586@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site1.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=84016a33-c184-431a-aaae-c406832cedae
+%MSG
+Begin processing the 1st record. Run 397954, Event 4731710, LumiSection 106 on stream 0 at 26-Aug-2026 10:55:52.085 CEST
+OniaPFCandidateProducer: selected 1 onium candidate(s), found 2 daughter candidate(s) in the PF jet input, removed 2, output size 2456
+%MSG-f XrdAdaptor:  (NoModuleName) 26-Aug-2026 10:56:01 CEST pre-events
+Opened a file at URL root://cmsstor336.fnal.gov:28544//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root?org.dcache.uuid=557e0da0-8186-4061-8549-b0cf22d20883&org.dcache.xrootd.client=mnguyen.1289586@llruicms01.in2p3.fr&tried=+1213xrootd-redic.pi.infn.it,cmsxrootd-site1.fnal.gov&triedrc=resel&xrd.logintoken=org.dcache.door=2620:6a:0:8420:0:0:0:101:1095&xrdcl.requuid=41e1ebea-19fd-4dd7-a4cb-f1ae9d56aeb3
+%MSG
+#--------------------------------------------------------------------------
+#                         FastJet release 3.4.1
+#                 M. Cacciari, G.P. Salam and G. Soyez                  
+#     A software package for jet finding and analysis at colliders      
+#                           http://fastjet.fr                           
+#	                                                                      
+# Please cite EPJC72(2012)1896 [arXiv:1111.6097] if you use this package
+# for scientific work and optionally PLB641(2006)57 [hep-ph/0512210].   
+#                                                                       
+# FastJet is provided without warranty under the GNU GPL v2 or higher.  
+# It uses T. Chan's closest pair algorithm, S. Fortune's Voronoi code
+# and 3rd party plugin jet algorithms. See COPYING file for details.
+#--------------------------------------------------------------------------
+Begin processing the 1001st record. Run 397954, Event 4779350, LumiSection 106 on stream 0 at 26-Aug-2026 10:56:48.247 CEST
+26-Aug-2026 10:57:14 CEST  Closed file root://xrootd-cms.infn.it//store/data/Run2025G/Muon0/MINIAOD/PromptReco-v1/000/397/954/00000/0afd6830-f9ab-468d-bec4-7e135dfca49d.root
+Total number of events = 1
+Total number of passed candidates = 0
+
+TrigReport ---------- Event  Summary ------------
+TrigReport Events total = 2000 passed = 1998 failed = 2
+
+TrigReport ---------- Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+TrigReport     1    0       2000       1998          2          0 pprimaryVertexFilter
+TrigReport     1    1       2000          1       1999          0 forest
+
+
+TrigReport -------End-Path   Summary ------------
+TrigReport  Trig Bit#   Executed     Passed     Failed      Error Name
+
+
+TrigReport ---------- Modules in Path: pprimaryVertexFilter ------------
+TrigReport  Trig Bit#    Visited     Passed     Failed      Error Name
+TrigReport     1    0       2000       1998          2          0 primaryVertexFilter
+
+
+TrigReport ---------- Modules in Path: forest ------------
+TrigReport  Trig Bit#    Visited     Passed     Failed      Error Name
+TrigReport     1    0       2000       2000          0          0 unpackedTracksAndVertices
+TrigReport     1    1       2000       2000          0          0 unpackedMuons
+TrigReport     1    2       2000       2000          0          0 patTriggerFull
+TrigReport     1    3       2000       2000          0          0 patTrigger
+TrigReport     1    4       2000       2000          0          0 muonMatchHLTL2
+TrigReport     1    5       2000       2000          0          0 muonMatchHLTL1
+TrigReport     1    6       2000       2000          0          0 muonMatchHLTL3
+TrigReport     1    7       2000       2000          0          0 muonMatchHLTL3T
+TrigReport     1    8       2000       2000          0          0 muonMatchHLTL3fromL2
+TrigReport     1    9       2000       2000          0          0 muonMatchHLTTkMu
+TrigReport     1   10       2000       2000          0          0 muonMatchHLTCtfTrack
+TrigReport     1   11       2000       2000          0          0 muonMatchHLTCtfTrack2
+TrigReport     1   12       2000       2000          0          0 muonMatchHLTTrackMu
+TrigReport     1   13       2000       2000          0          0 muonMatchHLTTrackIt
+TrigReport     1   14       2000       2000          0          0 patMuonsWithTrigger
+TrigReport     1   15       2000       2000          0          0 onia2MuMuPatGlbGlb
+TrigReport     1   16       2000       2000          0          0 oniaPFCandidates
+TrigReport     1   17       2000       2000          0          0 oniaJetInputCandidates
+TrigReport     1   18       2000          1       1999          0 oniaJetInputFilter
+TrigReport     1   19          1          1          0          0 HiForestInfo
+TrigReport     1   20          1          1          0          0 hltanalysis
+TrigReport     1   21          1          1          0          0 hiEvtAnalyzer
+TrigReport     1   22          1          1          0          0 unpackedTracksAndVertices
+TrigReport     1   23          1          1          0          0 particleFlowAnalyser
+TrigReport     1   24          1          1          0          0 hionia
+TrigReport     1   25          1          1          0          0 ak4OniaPFJets
+TrigReport     1   26          1          1          0          0 ak4OniaPFpatJetCorrFactors
+TrigReport     1   27          1          1          0          0 ak4OniaPFpatJets
+TrigReport     1   28          1          1          0          0 ak4OniaPFpatJetsWithOnia
+TrigReport     1   29          1          1          0          0 dynGroomedPatJets
+TrigReport     1   30          1          1          0          0 ak4OniaPFJetAnalyzer
+
+
+TrigReport ---------- Module Summary ------------
+TrigReport    Visited   Executed     Passed     Failed      Error Name
+TrigReport          1          1          1          0          0 HiForestInfo
+TrigReport       2000       2000       2000          0          0 TriggerResults
+TrigReport          1          1          1          0          0 ak4OniaPFJetAnalyzer
+TrigReport          1          1          1          0          0 ak4OniaPFJets
+TrigReport          1          1          1          0          0 ak4OniaPFpatJetCorrFactors
+TrigReport          1          1          1          0          0 ak4OniaPFpatJets
+TrigReport          1          1          1          0          0 ak4OniaPFpatJetsWithOnia
+TrigReport          1          1          1          0          0 dynGroomedPatJets
+TrigReport       2000       2000       2000          0          0 forest
+TrigReport          1          1          1          0          0 hiEvtAnalyzer
+TrigReport          1          1          1          0          0 hionia
+TrigReport          1          1          1          0          0 hltanalysis
+TrigReport       2000       2000       2000          0          0 muonMatchHLTCtfTrack
+TrigReport       2000       2000       2000          0          0 muonMatchHLTCtfTrack2
+TrigReport       2000       2000       2000          0          0 muonMatchHLTL1
+TrigReport       2000       2000       2000          0          0 muonMatchHLTL2
+TrigReport       2000       2000       2000          0          0 muonMatchHLTL3
+TrigReport       2000       2000       2000          0          0 muonMatchHLTL3T
+TrigReport       2000       2000       2000          0          0 muonMatchHLTL3fromL2
+TrigReport       2000       2000       2000          0          0 muonMatchHLTTkMu
+TrigReport       2000       2000       2000          0          0 muonMatchHLTTrackIt
+TrigReport       2000       2000       2000          0          0 muonMatchHLTTrackMu
+TrigReport       2000       2000       2000          0          0 onia2MuMuPatGlbGlb
+TrigReport       2000       2000       2000          0          0 oniaJetInputCandidates
+TrigReport       2000       2000          1       1999          0 oniaJetInputFilter
+TrigReport       2000       2000       2000          0          0 oniaPFCandidates
+TrigReport          1          1          1          0          0 particleFlowAnalyser
+TrigReport       2000       2000       2000          0          0 patMuonsWithTrigger
+TrigReport       2000       2000       2000          0          0 patTrigger
+TrigReport       2000       2000       2000          0          0 patTriggerFull
+TrigReport       2000       2000       2000          0          0 pprimaryVertexFilter
+TrigReport       2000       2000       1998          2          0 primaryVertexFilter
+TrigReport       2000       2000       2000          0          0 unpackedMuons
+TrigReport       2001       2000       2000          0          0 unpackedTracksAndVertices
+
+
+TimeReport ---------- Event  Summary ---[sec]----
+TimeReport       event loop CPU/event = 0.026187
+TimeReport      event loop Real/event = 0.042566
+TimeReport     sum Streams Real/event = 0.040468
+TimeReport efficiency CPU/Real/thread = 0.615205
+
+TimeReport ---------- Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+TimeReport   0.028861     0.028861  pprimaryVertexFilter
+TimeReport   0.040426     0.040426  forest
+
+TimeReport  per event     per exec  Name
+
+TimeReport -------End-Path   Summary ---[Real sec]----
+TimeReport  per event     per exec  Name
+
+TimeReport  per event     per exec  Name
+
+TimeReport ---------- Modules in Path: pprimaryVertexFilter ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport   0.000053     0.000053  primaryVertexFilter
+
+
+TimeReport ---------- Modules in Path: forest ---[Real sec]----
+TimeReport  per event    per visit  Name
+TimeReport   0.005421     0.005421  unpackedTracksAndVertices
+TimeReport   0.004021     0.004021  unpackedMuons
+TimeReport   0.000352     0.000352  patTriggerFull
+TimeReport   0.000019     0.000019  patTrigger
+TimeReport   0.000092     0.000092  muonMatchHLTL2
+TimeReport   0.004075     0.004075  muonMatchHLTL1
+TimeReport   0.000078     0.000078  muonMatchHLTL3
+TimeReport   0.000077     0.000077  muonMatchHLTL3T
+TimeReport   0.000080     0.000080  muonMatchHLTL3fromL2
+TimeReport   0.000079     0.000079  muonMatchHLTTkMu
+TimeReport   0.000083     0.000083  muonMatchHLTCtfTrack
+TimeReport   0.000087     0.000087  muonMatchHLTCtfTrack2
+TimeReport   0.000090     0.000090  muonMatchHLTTrackMu
+TimeReport   0.000090     0.000090  muonMatchHLTTrackIt
+TimeReport   0.000094     0.000094  patMuonsWithTrigger
+TimeReport   0.000112     0.000112  onia2MuMuPatGlbGlb
+TimeReport   0.000584     0.000584  oniaPFCandidates
+TimeReport   0.001195     0.001195  oniaJetInputCandidates
+TimeReport   0.000002     0.000002  oniaJetInputFilter
+TimeReport   0.000000     0.000002  HiForestInfo
+TimeReport   0.000033     0.066396  hltanalysis
+TimeReport   0.000000     0.000423  hiEvtAnalyzer
+TimeReport   0.000000     0.000000  unpackedTracksAndVertices
+TimeReport   0.000000     0.000288  particleFlowAnalyser
+TimeReport   0.000003     0.005071  hionia
+TimeReport   0.000010     0.019986  ak4OniaPFJets
+TimeReport   0.000001     0.001448  ak4OniaPFpatJetCorrFactors
+TimeReport   0.000001     0.001330  ak4OniaPFpatJets
+TimeReport   0.000000     0.000332  ak4OniaPFpatJetsWithOnia
+TimeReport   0.000000     0.000044  dynGroomedPatJets
+TimeReport   0.000001     0.001403  ak4OniaPFJetAnalyzer
+
+TimeReport  per event    per visit  Name
+
+TimeReport ---------- Module Summary ---[Real sec]----
+TimeReport  per event     per exec    per visit  Name
+TimeReport   0.000000     0.000002     0.000002  HiForestInfo
+TimeReport   0.000001     0.000001     0.000001  TriggerResults
+TimeReport   0.000001     0.001403     0.001403  ak4OniaPFJetAnalyzer
+TimeReport   0.000010     0.019986     0.019986  ak4OniaPFJets
+TimeReport   0.000001     0.001448     0.001448  ak4OniaPFpatJetCorrFactors
+TimeReport   0.000001     0.001330     0.001330  ak4OniaPFpatJets
+TimeReport   0.000000     0.000332     0.000332  ak4OniaPFpatJetsWithOnia
+TimeReport   0.000000     0.000044     0.000044  dynGroomedPatJets
+TimeReport   0.000002     0.000002     0.000002  forest
+TimeReport   0.000000     0.000423     0.000423  hiEvtAnalyzer
+TimeReport   0.000003     0.005071     0.005071  hionia
+TimeReport   0.000033     0.066396     0.066396  hltanalysis
+TimeReport   0.000083     0.000083     0.000083  muonMatchHLTCtfTrack
+TimeReport   0.000087     0.000087     0.000087  muonMatchHLTCtfTrack2
+TimeReport   0.004075     0.004075     0.004075  muonMatchHLTL1
+TimeReport   0.000092     0.000092     0.000092  muonMatchHLTL2
+TimeReport   0.000078     0.000078     0.000078  muonMatchHLTL3
+TimeReport   0.000077     0.000077     0.000077  muonMatchHLTL3T
+TimeReport   0.000080     0.000080     0.000080  muonMatchHLTL3fromL2
+TimeReport   0.000079     0.000079     0.000079  muonMatchHLTTkMu
+TimeReport   0.000090     0.000090     0.000090  muonMatchHLTTrackIt
+TimeReport   0.000090     0.000090     0.000090  muonMatchHLTTrackMu
+TimeReport   0.000112     0.000112     0.000112  onia2MuMuPatGlbGlb
+TimeReport   0.001195     0.001195     0.001195  oniaJetInputCandidates
+TimeReport   0.000002     0.000002     0.000002  oniaJetInputFilter
+TimeReport   0.000584     0.000584     0.000584  oniaPFCandidates
+TimeReport   0.000000     0.000288     0.000288  particleFlowAnalyser
+TimeReport   0.000094     0.000094     0.000094  patMuonsWithTrigger
+TimeReport   0.000019     0.000019     0.000019  patTrigger
+TimeReport   0.000352     0.000352     0.000352  patTriggerFull
+TimeReport   0.000001     0.000001     0.000001  pprimaryVertexFilter
+TimeReport   0.000053     0.000053     0.000053  primaryVertexFilter
+TimeReport   0.004021     0.004021     0.004021  unpackedMuons
+TimeReport   0.005421     0.005421     0.005418  unpackedTracksAndVertices
+
+TimeReport  per event     per exec    per visit  Name
+
+T---Report end!
+
+

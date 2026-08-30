@@ -31,6 +31,8 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
 
+#include <cmath>
+
 template <class T, typename C = std::vector<typename T::ConstituentTypeFwdPtr>>
 class OniaJetSelector : public edm::one::EDFilter<> {
 
@@ -42,7 +44,8 @@ public:
       : srcToken_(consumes<typename edm::View<T>>(
             params.getParameter<edm::InputTag>("src"))),
         cut_(params.getParameter<std::string>("cut")), filter_(false),
-        selector_(cut_) {
+        selector_(cut_), oniaMass_(params.getParameter<double>("oniaMass")),
+        oniaMassTolerance_(params.getParameter<double>("oniaMassTolerance")) {
     produces<JetsOutput>();
     produces<ConstituentsOutput>("constituents");
   }
@@ -89,11 +92,8 @@ public:
             continue;
           const int pfCandidateId = daughter->pdgId();
           const float pfCandidateMass = daughter->mass();
-          // if(pfCandidateType == 1 )         {
-          //  j/Psi or Psi(2S)
           if (pfCandidateId == 1 &&
-              ((pfCandidateMass > 3.096 && pfCandidateMass < 3.098) ||
-               (pfCandidateMass > 3.685 && pfCandidateMass < 3.687))) {
+              std::abs(pfCandidateMass - oniaMass_) < oniaMassTolerance_) {
             // std::cout<<" hooray!  "<<daughter->pt()<<std::endl;
             isJetPlusX = true;
             break;
@@ -125,6 +125,8 @@ protected:
   std::string cut_;
   bool filter_;
   StringCutObjectSelector<T> selector_;
+  double oniaMass_;
+  double oniaMassTolerance_;
 };
 
 // typedef JetXSelector<reco::PFJet, std::vector< edm::FwdPtr<reco::PFCandidate>

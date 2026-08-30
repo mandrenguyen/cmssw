@@ -310,6 +310,8 @@ process.ak4OniaPFpatJetsWithOnia = cms.EDFilter(
     "OniaPatJetSelector",
     src=cms.InputTag("ak4OniaPFpatJets"),
     cut=cms.string("pt > 0.0 && abs(rapidity()) < 3.0"),
+    oniaMass=cms.double(oniaMass),
+    oniaMassTolerance=cms.double(0.001),
 )
 
 # Dynamic grooming of both reco and generator Onia jets.

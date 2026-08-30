@@ -28,7 +28,7 @@ process.source = cms.Source("PoolSource",
 
 # Number of events we want to process, -1 = all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(2000)
 )
 
 #####################################################################################
@@ -335,6 +335,8 @@ process.ak4OniaPFpatJetsWithOnia = cms.EDFilter(
     "OniaPatJetSelector",
     src=cms.InputTag("ak4OniaPFpatJets"),
     cut=cms.string("pt > 0.0 && abs(rapidity()) < 3.0"),
+    oniaMass=cms.double(oniaMass),
+    oniaMassTolerance=cms.double(0.001),
 )
 process.forest += (
     process.oniaJetSequence

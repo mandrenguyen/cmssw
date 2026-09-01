@@ -13,7 +13,7 @@ process.options = cms.untracked.PSet()
 #####################################################################################
 
 process.load("HeavyIonsAnalysis.EventAnalysis.HiForestInfo_cfi")
-process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 141X, mc")
+process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 150X, mc")
 
 #####################################################################################
 # Input source
@@ -23,7 +23,8 @@ process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
 #        '/store/user/bharikri/Run3MC_pp/MINIAOD/2024_Mar_21_Pythia8_ppRef_QCDPhoton30_PU10_TuneCP5_14_0_0_LLR/Pythia8_ppRef_QCDPhoton30_TuneCP5/2024_Mar_21_step3_RAW2DIGI_MINIAODSIM_Pythia8_ppRef_QCDPhoton30_PU10_TuneCP5_14_0_0/240326_082338/0000/step3_pp_673.root'
-        '/store/mc/RunIIIpp5p36Winter24MiniAOD/QCD_pThat-15to1200_TuneCP5_5p36TeV_pythia8/MINIAODSIM/141X_mcRun3_2024_realistic_ppRef5TeV_v7-v2/140000/e391a0bf-69c8-4630-a51e-eb3bcf042365.root',
+#        '/store/mc/RunIIIpp5p36Winter24MiniAOD/QCD_pThat-15to1200_TuneCP5_5p36TeV_pythia8/MINIAODSIM/141X_mcRun3_2024_realistic_ppRef5TeV_v7-v2/140000/e391a0bf-69c8-4630-a51e-eb3bcf042365.root',
+        'file:/grid_mnt/vol_home/llr/cms/mnguyen/test/CMSSW_15_0_20/src/step3_RAW2DIGI_L1Reco_RECO_RECOSIM_PAT.root'
     )
 )
 
@@ -42,19 +43,11 @@ process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 
-# TODO: Global tag complete guess from the list. Probably wrong. But does not crash
+# Match the conditions used to produce the input MINIAODSIM.
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '141X_mcRun3_2024_realistic_ppRef5TeV_v7', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '150X_mcRun3_2025_realistic_v12', '')
 process.HiForestInfo.GlobalTagLabel = process.GlobalTag.globaltag
 
-# TODO: Old calibration here, might need to update
-process.GlobalTag.toGet.extend([
-    cms.PSet(record = cms.string("BTagTrackProbability3DRcd"),
-             tag = cms.string("JPcalib_MC94X_2017pp_v2"),
-             connect = cms.string("frontier://FrontierProd/CMS_CONDITIONS")
-
-         )
-      ])
 
 #####################################################################################
 # Define tree output
@@ -128,10 +121,10 @@ process.load("HeavyIonsAnalysis.MuonAnalysis.muonAnalyzer_cfi")
 #####################
 # Select the reconstructed and generated onium species used throughout this
 # workflow.  Supported values are "JPsi" and "Y" (Upsilon(1S)).
-oniaMode = "JPsi"
+oniaMode = "Y"
 # Candidate quality used for the jet-input replacement.  "Soft" reproduces
 # the historical hybrid-soft choice; "Tight" uses CutBasedIdTight.
-oniaMuonID = "Soft"
+oniaMuonID = "Tight"
 applyOniaMuonAcceptance = True
 if oniaMode == "JPsi":
     oniaPdgId = 443
@@ -201,6 +194,7 @@ process.hionia.mom4format = cms.string("array")
 from HiSkim.HiOnia2MuMu.onia2MuMuPAT_cff import changeToMiniAOD
 changeToMiniAOD(process)
 process.unpackedMuons.addPropToMuonSt = cms.bool(True)
+process.hionia.primaryVertexTag = cms.InputTag("unpackedTracksAndVertices")
 
 # Construct the same muon-replaced PF jet input used for data.  The nominal
 # mass test identifies the injected onium, not the reconstructed dimuon mass,
@@ -249,7 +243,7 @@ process.forest = cms.Path(
     process.HiForestInfo +
     process.hltanalysis *
     process.hiEvtAnalyzer *
-    process.hltobject +
+    # process.hltobject +  # Disabled: trigger-object list does not match this MC HLT menu.
     #process.l1object +
     process.HiGenParticleAna +
     #process.ggHiNtuplizer +
